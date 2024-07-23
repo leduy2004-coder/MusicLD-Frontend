@@ -2,7 +2,11 @@ import { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { publicRoutes } from '~/routes/routes';
 import DefaultLayout from '~/layouts';
+
 function App() {
+    // localStorage.removeItem('user-id');
+    // localStorage.removeItem('token');
+    console.log(localStorage.getItem('token'))
     return (
         <Router>
             <div className="App">

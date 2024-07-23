@@ -5,6 +5,7 @@ const routes = {
     upload: '/upload',
     search: '/search',
     live: '/live',
+    oauth2: '/oauth2/callback',
 };
 
 export default routes;

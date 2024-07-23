@@ -6,12 +6,23 @@
     --black: #000;
     --text-color: #161823;
     --white : #fff;
+    --background-header: #fff;
+    --focus: rgba(22, 24, 35, 0.2);
 
     --font-family: 'ProximaNova', sans-serif;
     //Default Layout
     --default-layout-header-height: 60px;
-    --default-layout-width: 1150px;
+    --default-layout-width: 1350px;
     --default-layout-horizontal-spacer: 24px;
+}
+    [data-theme='dark'] {
+        --primary: #fe2c55;
+        --black: #fff;
+        --text-color: #fff;
+        --white: #161823;
+        --background: #161823;
+        --background-header: #231b2e;
+        --focus: #c0b2b2;
 }
 * {
     margin: 0;

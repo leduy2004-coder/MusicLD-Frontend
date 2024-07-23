@@ -1,5 +1,22 @@
 .wrapper {
-    width: 356px;
+    width: 250px;
     padding: 20px 0 26px 8px;
-    margin-left: -18px;
+    position: relative;
 }
+
+.action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary);
+    border-radius: 5px;
+    margin: 20px 0;
+    cursor: pointer;
+    position: absolute;
+    transition: right 0.5s ease; 
+}
+
+.action--hover {
+    right: 10px; 
+}
+

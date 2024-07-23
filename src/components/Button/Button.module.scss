@@ -2,14 +2,12 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 100px;
     padding: 9px 16px;
     border-radius: 4px;
     font-size: 1.6rem;
     font-weight: 700;
     font-family: var(--font-family);
     cursor: pointer;
-    background-color: var(--white);
     border: 1px solid transparent;
     user-select: none;
 
@@ -32,6 +30,7 @@
     display: inline-block;
     width: 24px;
     text-align: center;
+    margin-right: 8px;
 }
 
 // Button types
@@ -47,7 +46,7 @@
 }
 
 .primary {
-    color: var(--white);
+    color: #fff;
     background-color: var(--primary);
     border-color: var(--primary);
 
@@ -82,4 +81,8 @@
 .large {
     padding: 14px 16px;
     min-width: 140px;
+}
+.medium {
+    min-width: 100px;
+    padding: 9px 16px;
 }

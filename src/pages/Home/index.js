@@ -1,5 +1,12 @@
+import ActionsApp from '~/components/ActionsApp';
+
 function Home() {
-    return <h2>Home Page</h2>
+    return (
+        <div>
+            <h2>Home Page</h2>
+            <ActionsApp />
+        </div>
+    );
 }
 
 export default Home;

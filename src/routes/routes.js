@@ -10,6 +10,7 @@ import Profile from '~/pages/Profile';
 import Upload from '~/pages/Upload';
 import Search from '~/pages/Search';
 import Live from '~/pages/Live';
+import OAuth2Success from '~/pages/Oauth2';
 
 const publicRoutes = [
     { path: config.routes.home, component: Home },
@@ -18,6 +19,8 @@ const publicRoutes = [
     { path: config.routes.upload, component: Upload, layout: HeaderOnly },
     { path: config.routes.search, component: Search, layout: null },
     { path: config.routes.live, component: Live },
+    { path: config.routes.oauth2, component: OAuth2Success },
+   
 ];
 const privateRoutes = [];
 
