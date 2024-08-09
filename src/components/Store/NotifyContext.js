@@ -12,6 +12,7 @@ export function NotifyProvider({ children }) {
         content: '',
         delay: 3000,
         isNotify: false,
+        type : 'success'
     });
 
     const values = { infoNotify, setInfoNotify };

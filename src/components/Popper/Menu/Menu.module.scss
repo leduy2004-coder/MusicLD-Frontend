@@ -1,7 +1,6 @@
 // Menu wrapper
 .menu-list {
     width: 224px;
-
     .menu-item {
         margin-left: 0;
     }
@@ -12,8 +11,10 @@
 }
 
 .menu-body {
+    display: flex;
+    flex-direction: column;
     overflow-y: auto;
-    overscroll-behavior: contain
+    overscroll-behavior: contain;
 }
 
 // Menu items
@@ -21,10 +22,10 @@
     width: 100%;
     color: #000;
     justify-content: flex-start;
-    border-radius: 0;
     padding: 11px 16px;
     line-height: 1.8rem;
     font-weight: 600;
+    background-color: rgba(231, 233, 242, 0.03);
 
     &.separate {
         border-top: 1px solid rgba(22, 24, 35, 0.12);
@@ -33,6 +34,7 @@
     &:hover {
         background-color: rgba(22, 24, 35, 0.03);
     }
+
 }
 
 // Header

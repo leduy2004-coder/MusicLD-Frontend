@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './Notify.module.scss';
-
+import { Alert } from 'antd';
 import { UserNotify } from '../Store';
 import { useEffect, useState } from 'react';
 
@@ -25,24 +25,14 @@ function Notify() {
         };
     }, [infoNotify]);
 
-    const handleCloseNotify = () => {
-        setIsNotify(false);
-    };
 
     return (
         <>
             {isNotify && (
                 <div
-                    className={cx('wrapper-notify', {
-                        'hide-notify': isEndAnimate,
-                    })}
-                    onAnimationEnd={isEndAnimate ? handleCloseNotify : null}
+                    className={cx('wrapper-notify', {'hide-notify': isEndAnimate,})}
                 >
-                    <div className={cx('container-content')}>
-                        <div className={cx('notify-container')}>
-                            <span className={cx('text-content')}>{infoNotify.content || 'Có lỗi xảy ra!'}</span>
-                        </div>
-                    </div>
+                   <Alert className={cx('alert')} message={infoNotify.content || 'Có lỗi xảy ra!'} type={infoNotify.type} showIcon closable />
                 </div>
             )}
         </>

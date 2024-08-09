@@ -4,8 +4,7 @@ import { faCircleXmark, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HeadlessTippy from '@tippyjs/react/headless';
 import classNames from 'classnames/bind';
-
-import * as searchServices from '~/services/searchService';
+import config from '~/services';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import AccountItem from '~/components/AccountItem';
 import { SearchIcon } from '~/components/Icons';
@@ -33,8 +32,8 @@ function Search() {
         const fetchApi = async () => {
             setLoading(true);
 
-            const result = await searchServices.search(debouncedValue);
-
+            const result = await config.search(debouncedValue);
+            console.log(result)
             setSearchResult(result);
             setLoading(false);
         };
@@ -82,7 +81,7 @@ function Search() {
                     <input
                         ref={inputRef}
                         value={searchValue}
-                        placeholder="Search accounts and videos"
+                        placeholder="Tìm kiếm tài khoản"
                         spellCheck={false}
                         onChange={handleChange}
                         onFocus={() => setShowResult(true)}

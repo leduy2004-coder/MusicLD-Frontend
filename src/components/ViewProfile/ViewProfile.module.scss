@@ -1,0 +1,32 @@
+.nav-aside {
+    background-color: var(--background-header) !important;
+}
+
+.menu-item-selected {
+    background-color: var(--primary) !important;
+    color: white !important;
+}
+.logo {
+    display: flex;
+    margin: 16px;
+    background: var(--background-avatar);
+    border-radius: 6px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    &.collapsed {
+        height: 40px;
+    }
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: all 0.3s;
+    .collapsed & {
+        height: 28px;
+        width: 32px;
+    }
+}

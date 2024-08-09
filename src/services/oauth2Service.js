@@ -1,15 +1,10 @@
 import * as callPath from '../utils/httpRequest';
 
-const getUser = async (id,token) => {
+const oauth2 = async (id) => {
     try {
         const res = await callPath.post(
-            'users/get-user',
+            'v1/auth/oauth2',
             {id},
-            {
-                headers: {
-                    Authorization: token,
-                },
-            },
         );
 
         return res.data;
@@ -18,4 +13,4 @@ const getUser = async (id,token) => {
     }
 };
 
-export default getUser;
+export default oauth2;

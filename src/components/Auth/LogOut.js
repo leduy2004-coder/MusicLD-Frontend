@@ -29,6 +29,7 @@ function LogOut() {
                 content: 'Đăng xuất thất bại. Vui lòng thử lại!',
                 delay: 1500,
                 isNotify: true,
+                type: 'error'
             });
             setOpenFormLogout(false);
         } else {
@@ -36,20 +37,16 @@ function LogOut() {
                 content: 'Đăng xuất thành công!',
                 delay: 1500,
                 isNotify: true,
+                type: 'success'
             });
 
             setTimeout(() => {
-                localStorage.removeItem('user-id');
-                localStorage.removeItem('token');
+                localStorage.clear()
 
                 navigate('/');
                 window.location.reload();
             }, [300]);
         }
-
-
-        // navigate('/');
-        // window.location.reload();
     };
     
     return (

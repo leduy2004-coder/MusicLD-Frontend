@@ -52,6 +52,7 @@ function LoginWithDefault() {
                 content: 'Đăng nhập thất bại. Hãy thử lại !!',
                 delay: 1500,
                 isNotify: true,
+                type: 'error'
             });
 
             setTimeout(() => {
@@ -62,10 +63,12 @@ function LoginWithDefault() {
                 content: 'Đăng nhập thành công',
                 delay: 1500,
                 isNotify: true,
+                type: 'success'
             });
     
             localStorage.setItem('user-id', JSON.stringify(data.result.userResponse));
             localStorage.setItem('token', JSON.stringify(`Bearer ${data.result.access_token}`));
+            localStorage.setItem('avatar', JSON.stringify(data.result.avatar));
 
             
             setTimeout(() => {

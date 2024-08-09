@@ -1,19 +1,18 @@
 import * as callPath from '../utils/httpRequest';
 
-const register = async (username, password, fullName, dateOfBirth, code) => {
+const register = async (username, password, nickName, dateOfBirth, code) => {
     try {
         const res = await callPath.post('users/register', {
             username,
             password,
-            fullName,
+            nickName,
             dateOfBirth,
             authType: 'LOCAL', 
             roles: [{ code: code }], 
         });
-        
         return res.data;
     } catch (err) {
-        console.error('Error during registration:', err);
+        console.log(err);
         return { errCode: err.response.status }; 
     }
 };

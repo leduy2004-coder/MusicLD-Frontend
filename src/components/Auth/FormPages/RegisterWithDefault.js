@@ -16,7 +16,7 @@ function RegisterWithDefault() {
     const [formValues, setFormValues] = useState({
         account: '',
         password: '',
-        fullName: '',
+        nickName: '',
         date: '',
     });
     const [showPass, setShowPass] = useState(false);
@@ -41,14 +41,15 @@ function RegisterWithDefault() {
     const handleRegister = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        const { account, password,fullName,date } = formValues;
-        const data = await config.register(account, password,fullName,date,'USER');
+        const { account, password,nickName,date } = formValues;
+        const data = await config.register(account, password,nickName,date,'USER');
 
         if (data.errCode) {
             setInfoNotify({
                 content: 'Đăng kí thất bại. Vui lòng thử lại !!',
                 delay: 1500,
                 isNotify: true,
+                type: 'error'
             });
 
             setTimeout(() => {
@@ -59,10 +60,12 @@ function RegisterWithDefault() {
                 content: 'Đăng kí thành công',
                 delay: 1500,
                 isNotify: true,
+                type: 'success'
             });
 
             localStorage.setItem('user-id', JSON.stringify(data.result.userResponse));
             localStorage.setItem('token', JSON.stringify(`Bearer ${data.result.access_token}`));
+            localStorage.setItem('avatar', JSON.stringify(data.result.avatar));
 
             setTimeout(() => {
                 setIsLoading(false);
@@ -72,8 +75,8 @@ function RegisterWithDefault() {
     };
 
     useEffect(() => {
-        const { account, password, fullName, date } = formValues;
-        setDisabledSubmited(!account || !password || !fullName || !date);
+        const { account, password, nickName, date } = formValues;
+        setDisabledSubmited(!account || !password || !nickName || !date);
     }, [formValues]);
 
     return (
@@ -115,11 +118,11 @@ function RegisterWithDefault() {
                 <div className={cx('container-form')}>
                     <div className={cx('form-input')}>
                         <input
-                            name="fullName"
-                            value={formValues.fullName}
+                            name="nickName"
+                            value={formValues.nickName}
                             onChange={handleChange}
                             type="text"
-                            placeholder="Tên đầy đủ"
+                            placeholder="Tên người dùng"
                         />
                     </div>
                 </div>

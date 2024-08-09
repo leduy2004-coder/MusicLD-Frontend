@@ -1,7 +1,5 @@
 import classNames from 'classnames/bind';
 import Tippy from '@tippyjs/react/headless';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 import Image from '../Image';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
@@ -33,7 +31,7 @@ function AccountItem() {
                     <div className={cx('item-info')}>
                         <p className={cx('nickname')}>
                             <strong>quocnguyenphu</strong>
-                            <FontAwesomeIcon className={cx('check')} icon={faCheckCircle} />
+         
                         </p>
                         <p className={cx('name')}>Quốc Nguyễn Phú</p>
                     </div>

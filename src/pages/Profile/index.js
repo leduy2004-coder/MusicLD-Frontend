@@ -1,5 +1,12 @@
+import ActionsApp from "~/components/ActionsApp";
+import ViewProfile from "~/components/ViewProfile";
 function Profile() {
-    return <h2>Profile Page</h2>
-}
+    return (
+        <div style={{ height: '100%' }}>
+            <ViewProfile />
+            <ActionsApp />
+        </div>
+    );
+};
 
 export default Profile;

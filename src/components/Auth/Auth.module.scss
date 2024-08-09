@@ -16,7 +16,7 @@
     height: 100%;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 100000;
+    z-index: 100;
 }
 
 .form-wrapper {
@@ -178,7 +178,7 @@
 .items-title {
     min-width: 120px;
     margin-right: 20px;
-    
+
     h4 {
         font-weight: 600;
         font-size: 1.6rem;
@@ -190,7 +190,8 @@
     display: flex;
     flex-direction: column;
 
-    input, .textarea {
+    input,
+    .textarea {
         outline: none;
         border: none;
         height: 38px;
@@ -209,7 +210,9 @@
     }
 }
 
-.link-prfile, .des-policy, .des-maximum {
+.link-prfile,
+.des-policy,
+.des-maximum {
     line-height: 1.8rem;
     font-size: 1.2rem;
     max-width: 460px;
@@ -233,27 +236,23 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    height: 86px;
+    height: 96px;
     padding: 0 24px;
     border-top: 1px solid #16182333;
     gap: 16px;
 }
 
 .btn-form-update {
-    align-items: center;
     height: 36px;
-    min-width: 96px;
     color: #161823;
     border-color: #1618231f;
     font-weight: 600;
     font-size: 1.4rem;
 }
 
-.btn-form-save {
-    background-color: #fe2c55;
-    color: #fff;
+.button {
+    margin-top: 20px;
 }
-
 
 // FORM DELETE
 
@@ -261,7 +260,8 @@
     0% {
         opacity: 0;
         transform: scale(0.5);
-    } 100% {
+    }
+    100% {
         opacity: 1;
         transform: scale(1);
     }
@@ -314,7 +314,6 @@
     }
 }
 
-
 // DISCARD FORM
 
 .discard-form {
@@ -362,4 +361,12 @@
             border-color: #16182333;
         }
     }
+}
+
+//UPLOAD AVATAR
+.ant-upload {
+    height: 300px;
+    border: 2px dashed #d9d9d9;
+    background: #f5f5f5;
+    margin: 4rem 4rem,;
 }

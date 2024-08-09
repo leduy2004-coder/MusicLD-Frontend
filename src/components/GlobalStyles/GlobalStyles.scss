@@ -5,9 +5,10 @@
     --primary: #fe2c55;
     --black: #000;
     --text-color: #161823;
-    --white : #fff;
+    --white: #fff;
     --background-header: #fff;
     --focus: rgba(22, 24, 35, 0.2);
+    --background-avatar: rgba(70, 65, 65, 0.5);
 
     --font-family: 'ProximaNova', sans-serif;
     //Default Layout
@@ -15,14 +16,15 @@
     --default-layout-width: 1350px;
     --default-layout-horizontal-spacer: 24px;
 }
-    [data-theme='dark'] {
-        --primary: #fe2c55;
-        --black: #fff;
-        --text-color: #fff;
-        --white: #161823;
-        --background: #161823;
-        --background-header: #231b2e;
-        --focus: #c0b2b2;
+[data-theme='dark'] {
+    --primary: #fe2c55;
+    --black: #fff;
+    --text-color: #fff;
+    --white: #161823;
+    --background: #161823;
+    --background-header: #231b2e;
+    --background-avatar: rgba(255, 255, 255, .2);
+    --focus: #c0b2b2;
 }
 * {
     margin: 0;
@@ -42,6 +44,7 @@ body {
     text-rendering: optimizeLegibility;
     color: var(--text-color);
     overflow-y: overlay;
+    min-height: 500px;
 }
 
 // Scrollbar CSS
@@ -96,7 +99,6 @@ a {
     src: url('/assets/fonts/sofiapro-bold.woff');
     font-weight: 700;
 }
-
 
 // Custom tippy tooltip
 body {

@@ -1,8 +1,8 @@
-import * as httpRequest from '~/utils/httpRequest';
+import * as callPath from '~/utils/httpRequest';
 
 export const search = async (q, type = 'less') => {
     try {
-        const res = await httpRequest.get('users/search', {
+        const res = await callPath.get('users/search', {
             params: {
                 q,
                 type,
@@ -11,5 +11,6 @@ export const search = async (q, type = 'less') => {
         return res.data;
     } catch (error) {
         console.log(error);
+        return { errorCode: error.response.status };
     }
 };

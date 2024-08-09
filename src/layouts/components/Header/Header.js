@@ -25,18 +25,18 @@ const cx = classNames.bind(styles);
 
 function Header() {
     const navigate = useNavigate();
-    const { userAuth, tokenStr, setOpenFormLogin } = UserAuth();
-
+    const { userAuth, tokenStr, setOpenFormLogin, avatar } = UserAuth();
+// console.log(avatar)
     const MENU_ITEMS = [];
     const userMenu = [
         {
             icon: <FontAwesomeIcon icon={faUser} />,
-            title: 'View profile',
-            to: `/@${userAuth.fullName}`,
+            title: 'Trang cá nhân',
+            to: `/profile/${userAuth.id}`,
         },
         {
             icon: <FontAwesomeIcon icon={faSignOut} />,
-            title: 'Log out',
+            title: 'Đăng xuất',
             component: true,
             separate: true,
         },
@@ -57,7 +57,7 @@ function Header() {
                 <div className={cx('actions')}>
                     <Button onClick={handleFormLogin} className={cx('btn-upload')} outline medium>
                         <AddIcon className={cx('add-icon')} />
-                        Upload
+                        Đăng
                         
                     </Button>
                     {userAuth && tokenStr ? (
@@ -89,8 +89,8 @@ function Header() {
                         {userAuth && tokenStr ? (
                             <Image
                                 className={cx('user-avatar')}
-                                src={userAuth.avatar}
-                                alt={userAuth.fullName}
+                                src={avatar}
+                                alt={userAuth.nickName}
                             />
                         ) : (
                             <></>

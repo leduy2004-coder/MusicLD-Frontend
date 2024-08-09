@@ -39,27 +39,27 @@ function Sidebar() {
                     {hover && <SideBarIcon className={cx('action', 'action--hover')} onClick={handleChange} />}
                     <Menu>
                         <MenuItem
-                            title="For You"
+                            title="Trang chủ"
                             to={config.routes.home}
                             icon={<HomeIcon />}
                             activeIcon={<HomeActiveIcon />}
                         />
                         <MenuItem
-                            title="Following"
+                            title="Người theo dõi"
                             to={config.routes.following}
                             icon={<UserGroupIcon />}
                             activeIcon={<UserGroupActiveIcon />}
                         />
                         <MenuItem
-                            title="LIVE"
+                            title="Nhạc đã đăng"
                             to={config.routes.live}
                             icon={<LiveIcon />}
                             activeIcon={<LiveActiveIcon />}
                         />
                     </Menu>
 
-                    <SuggestedAccounts label="Suggested accounts" />
-                    <SuggestedAccounts label="Following accounts" />
+                    <SuggestedAccounts label="Lời mời theo dõi" />
+        
                 </aside>
             ) : (
                 <div className={cx('action')}>

@@ -4,8 +4,8 @@ import { publicRoutes } from '~/routes/routes';
 import DefaultLayout from '~/layouts';
 
 function App() {
-    // localStorage.removeItem('user-id');
-    // localStorage.removeItem('token');
+    // localStorage.clear()
+
     console.log(localStorage.getItem('token'))
     return (
         <Router>

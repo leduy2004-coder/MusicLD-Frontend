@@ -10,8 +10,8 @@ const cx = classNames.bind(styles);
 
 const defaultFn = () => {};
 
-function Menu({ children, items = [], hideOnClick = false, onChange = defaultFn }) {
-    const { setOpenFormLogout } = UserAuth();
+function Menu({ children,className, items = [], offset=[12,8],placement='bottom-end', hideOnClick = false, onChange = defaultFn }) {
+    const { setOpenFormLogout,setOpenFormAvatar } = UserAuth();
 
     const renderItems = () => {
         return items.map((item, index) => {
@@ -22,6 +22,8 @@ function Menu({ children, items = [], hideOnClick = false, onChange = defaultFn 
                     onClick={() => {
                         if (item.component) {
                             setOpenFormLogout(true);
+                        }else if(item.avatar){
+                            setOpenFormAvatar(true)
                         } else {
                             onChange(item);
                         }
@@ -32,7 +34,7 @@ function Menu({ children, items = [], hideOnClick = false, onChange = defaultFn 
     };
 
     const renderResult = (attrs) => (
-        <div className={cx('menu-list')} tabIndex="-1" {...attrs}>
+        <div className={cx('menu-list',className)} tabIndex="-1" {...attrs}>
             <PopperWrapper className={cx('menu-popper')}>
                 <div className={cx('menu-body')}>{renderItems()}</div>
             </PopperWrapper>
@@ -42,12 +44,11 @@ function Menu({ children, items = [], hideOnClick = false, onChange = defaultFn 
     return (
         <div>
             <Tippy
-            
                 interactive
                 delay={[0, 700]}
-                offset={[12, 8]}
+                offset={offset}
                 hideOnClick={hideOnClick}
-                placement="bottom-end"
+                placement={placement}
                 render={renderResult}
             >
                 {children}

@@ -18,9 +18,9 @@ const ThemeSwitcher = () => {
 
     return (
         <div style={{ margin: '20px' }}>
-            <span style={{ marginRight: '8px' }}>Light</span>
+            <span style={{ marginRight: '8px' }}>Sáng</span>
             <Switch onChange={toggleTheme} checked={theme === 'dark'} />
-            <span style={{ marginLeft: '8px' }}>Dark</span>
+            <span style={{ marginLeft: '8px' }}>Tối</span>
         </div>
     );
 };
