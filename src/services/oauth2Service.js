@@ -1,10 +1,14 @@
 import * as callPath from '../utils/httpRequest';
 
-const oauth2 = async (id) => {
+const oauth2 = async (code,provider) => {
     try {
         const res = await callPath.post(
-            'v1/auth/oauth2',
-            {id},
+            'v1/auth/oauth2',null,{
+                params: {
+                    code,
+                    provider,
+                },
+            }
         );
 
         return res.data;

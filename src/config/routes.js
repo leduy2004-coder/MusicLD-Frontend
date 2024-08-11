@@ -5,7 +5,7 @@ const routes = {
     upload: '/upload',
     search: '/search',
     live: '/live',
-    oauth2: '/oauth2/callback',
+    oauth2: '/login/oauth2/code/:provider',
 };
 
 export default routes;

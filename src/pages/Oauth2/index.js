@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import config from '~/services';
 import { UserNotify } from '~/components/Store';
 
@@ -7,24 +7,18 @@ function OAuth2Success() {
     const { setInfoNotify } = UserNotify();
     const navigate = useNavigate();
     const [id, setId] = useState(null);
-
+    const { provider } = useParams();
     useEffect(() => {
-        const handleOAuth2Callback = () => {
-            const pathname = window.location.pathname;
-            if (pathname.includes('/oauth2/callback')) {
-                const urlParams = new URLSearchParams(window.location.search);
-                const code = urlParams.get('id');
-                setId(code);
-            }
-        };
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
 
-        handleOAuth2Callback();
+        setId(code);
     }, []);
-
     useEffect(() => {
         const handleLogin = async (id) => {
             try {
-                const data = await config.oauth2(id);
+                const data = await config.oauth2(id, provider);
+
                 if (data.errCode) {
                     setInfoNotify({
                         content: 'Đăng nhập thất bại. Hãy thử lại!',
@@ -50,17 +44,17 @@ function OAuth2Success() {
                     isNotify: true,
                     type: 'error',
                 });
-            } 
+            }
 
             setTimeout(() => {
                 window.location.href = '/';
-            }, 500); 
+            }, 500);
         };
 
         if (id) {
             handleLogin(id);
         }
-    }, [id, navigate, setInfoNotify]);
+    }, [id, provider, navigate, setInfoNotify]);
 
     return null;
 }
