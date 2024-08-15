@@ -21,7 +21,8 @@ const cx = classNames.bind(styles);
 
 function ViewProfile() {
     const { id } = useParams();
-    const { userAuth, tokenStr, avatar } = UserAuth();
+    const { userAuth, tokenStr} = UserAuth();
+    const { profileUser, setProfileUser } = UserMusic();
 
     const [collapsed, setCollapsed] = useState(false);
     const [selectedKey, setSelectedKey] = useState('nav1');
@@ -48,14 +49,17 @@ function ViewProfile() {
             label: 'Người theo dõi',
             className: selectedKey === 'nav3' ? cx('menu-item-selected') : '',
         },
+        
+    ];
+    const menuMyItem = [
+        ...menuItems,
         {
             key: 'nav4',
             icon: <UploadOutlined />,
             label: 'Upload nhạc',
             className: selectedKey === 'nav4' ? cx('menu-item-selected') : '',
         },
-    ];
-
+    ]
     const handleMenuClick = (e) => {
         setSelectedKey(e.key);
     };
@@ -65,7 +69,7 @@ function ViewProfile() {
             case 'nav1':
                 return (
                     <div>
-                        <ItemProfile />
+                        <ItemProfile data={profileUser}/>
                     </div>
                 );
             case 'nav2':
@@ -78,25 +82,25 @@ function ViewProfile() {
     };
     // const [videosProfile, setVideosProfile] = useState([]);
 
-    // const { profileUser, setProfileUser, listVideos, setListVideos } = UserMusic();
 
     // useEffect(() => {
     //     setVideosProfile(listVideos);
     // }, [listVideos]);
 
-    // useEffect(() => {
-    //     setProfileUser({});
-    //     setListVideos([]);
+    useEffect(() => {
+        setProfileUser({});
+        // setListVideos([]);
 
-    //     const fetchApi = async () => {
-    //         const data = await config.getUser(id, tokenStr);
+        const fetchApi = async () => {
+            const data = await config.getUser(id, tokenStr);
+            console.log("ok")
+            console.log(data)
+            setProfileUser(data.result);
+            // setListVideos(data.videos);
+        };
 
-    //         setProfileUser(data);
-    //         setListVideos(data.videos);
-    //     };
-
-    //     fetchApi();
-    // }, [id]);
+        fetchApi();
+    }, [id]);
 
     // if (Object.keys(profileUser).length === 0 || videosProfile.length === 0) {
     //     return;
@@ -106,7 +110,7 @@ function ViewProfile() {
         <Layout>
             <Sider trigger={null} collapsible collapsed={collapsed} className={cx('nav-aside')}>
                 <div className={cx('logo', { collapsed, expanded: !collapsed })}>
-                    <Image className={cx('user-avatar')} src={avatar} alt={userAuth.nickName} />
+                    <Image className={cx('user-avatar')} src={profileUser?.avatar?.url} alt={userAuth.nickName} />
                 </div>
                 <Menu
                     className={cx('menu')}
@@ -114,7 +118,7 @@ function ViewProfile() {
                     mode="inline"
                     defaultSelectedKeys={['nav1']}
                     selectedKeys={[selectedKey]}
-                    items={menuItems}
+                    items={profileUser.id === userAuth.id ? menuMyItem: menuItems}
                     onClick={handleMenuClick}
                 />
             </Sider>

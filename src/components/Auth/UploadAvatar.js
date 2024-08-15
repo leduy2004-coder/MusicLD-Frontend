@@ -57,10 +57,13 @@ function UploadAvatar() {
                 isNotify: true,
                 type: 'success',
             });
-            localStorage.setItem('avatar', JSON.stringify(data.result.name));
+            localStorage.setItem('avatar', JSON.stringify(data.result));
         }
+        setTimeout(() => {
+            window.location.reload();
+        }, [300]);
     };
-
+  
     const props = {
         name: 'file',
         multiple: false,

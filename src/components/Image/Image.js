@@ -5,17 +5,22 @@ import images from '~/assets/images';
 import styles from './Image.module.scss';
 
 const Image = forwardRef(({ src, alt, className, fallback: customFallback = images.noImage, ...props }, ref) => {
-    const [fallback, setFallback] = useState('');
+    const [fallback, setFallback] = useState(customFallback);
 
     const handleError = () => {
-        setFallback(customFallback);
+        if (src !== fallback) {
+            setFallback(customFallback);
+        }
     };
+
+    // Nếu src không hợp lệ, hiển thị fallback ngay từ đầu
+    const imageSrc = src ? src : fallback;
 
     return (
         <img
             className={classNames(styles.wrapper, className)}
             ref={ref}
-            src={fallback || src}
+            src={imageSrc}
             alt={alt}
             {...props}
             onError={handleError}

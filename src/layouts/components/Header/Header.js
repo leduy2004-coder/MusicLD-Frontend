@@ -26,7 +26,6 @@ const cx = classNames.bind(styles);
 function Header() {
     const navigate = useNavigate();
     const { userAuth, tokenStr, setOpenFormLogin, avatar } = UserAuth();
-// console.log(avatar)
     const MENU_ITEMS = [];
     const userMenu = [
         {
@@ -44,7 +43,6 @@ function Header() {
     const handleFormLogin = () => {
         userAuth && tokenStr ? navigate('/upload') : setOpenFormLogin(true);
     };
-
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
@@ -89,7 +87,7 @@ function Header() {
                         {userAuth && tokenStr ? (
                             <Image
                                 className={cx('user-avatar')}
-                                src={avatar}
+                                src={avatar.url}
                                 alt={userAuth.nickName}
                             />
                         ) : (

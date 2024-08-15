@@ -22,25 +22,26 @@ function OAuth2Success() {
                 if (data.errCode) {
                     setInfoNotify({
                         content: 'Đăng nhập thất bại. Hãy thử lại!',
-                        delay: 1500,
+                        delay: 1300,
                         isNotify: true,
                         type: 'error',
                     });
                 } else {
                     setInfoNotify({
                         content: 'Đăng nhập thành công',
-                        delay: 1500,
+                        delay: 1300,
                         isNotify: true,
                         type: 'success',
                     });
                     localStorage.setItem('user-id', JSON.stringify(data.result.userResponse));
                     localStorage.setItem('token', JSON.stringify(`Bearer ${data.result.access_token}`));
+                    localStorage.setItem('avatar', JSON.stringify(data.result.userResponse.avatar));
                 }
             } catch (error) {
                 console.error('Login failed', error);
                 setInfoNotify({
                     content: 'Đăng nhập thất bại. Hãy thử lại!',
-                    delay: 1500,
+                    delay: 1300,
                     isNotify: true,
                     type: 'error',
                 });
@@ -48,7 +49,7 @@ function OAuth2Success() {
 
             setTimeout(() => {
                 window.location.href = '/';
-            }, 500);
+            }, 300);
         };
 
         if (id) {

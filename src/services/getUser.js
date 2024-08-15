@@ -1,20 +1,17 @@
 import * as callPath from '../utils/httpRequest';
 
-const getUser = async (id,token) => {
+const getUser = async (id, token) => {
     try {
-        const res = await callPath.post(
-            'users/get-user',
-            {id},
-            {
-                headers: {
-                    Authorization: token,
-                },
-            },
-        );
+        const res = await callPath.get('users/get-user', {
+            params: { id },
 
-        return res.data;
+            headers: {
+                Authorization: token,
+            },
+        });
+        return res;
     } catch (err) {
-        return {errCode: err.response.status};
+        return { errCode: err.response.status };
     }
 };
 

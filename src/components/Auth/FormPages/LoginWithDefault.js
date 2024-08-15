@@ -68,7 +68,7 @@ function LoginWithDefault() {
     
             localStorage.setItem('user-id', JSON.stringify(data.result.userResponse));
             localStorage.setItem('token', JSON.stringify(`Bearer ${data.result.access_token}`));
-            localStorage.setItem('avatar', JSON.stringify(data.result.avatar));
+            localStorage.setItem('avatar', JSON.stringify(data.result.userResponse.avatar));
 
             
             setTimeout(() => {

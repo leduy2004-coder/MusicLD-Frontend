@@ -7,7 +7,7 @@ export function UserMusic() {
     return useContext(VideoContext);
 }
 
-export function VideoProvider({ children }) {
+export function MusicProvider({ children }) {
     const [idVideo, setIdVideo] = useState();
     const [listVideos, setListVideos] = useState([]);
     const [listVideoHome, setListVideoHome] = useState([]);
@@ -45,6 +45,6 @@ export function VideoProvider({ children }) {
     return <VideoContext.Provider value={value}>{children}</VideoContext.Provider>;
 }
 
-VideoProvider.propTypes = {
+MusicProvider.propTypes = {
     children: PropTypes.node.isRequired,
 };

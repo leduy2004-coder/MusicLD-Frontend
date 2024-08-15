@@ -5,7 +5,7 @@ const uploadAvatar = async (file, token) => {
     formData.append('image', file);
 
     try {
-        const res = await callPath.post('avatar', formData, {
+        const res = await callPath.post('avatar/upload', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 Authorization: token,

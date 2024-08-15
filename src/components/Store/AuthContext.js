@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import config from '~/services';
 const AuthContext = React.createContext();
 
 export function UserAuth() {
@@ -39,23 +38,6 @@ export function AuthProvider({ children }) {
         setUserAuth(storedUserId && isJSON(storedUserId) ? JSON.parse(storedUserId) : '');
         setAvatar(avatarUser && isJSON(avatarUser) ? JSON.parse(avatarUser) : '');
     }, []);
-
-    useEffect(() => {
-        const fetchImage = async () => {
-            if (avatar && !avatar.startsWith('data:image/png;base64,')) { 
-                try {
-                    const data = await config.getAvatar(avatar);
-                    const base64Image = `data:image/png;base64,${data}`;
-                    if (avatar !== base64Image) { 
-                        setAvatar(base64Image);
-                    }
-                } catch (error) {
-                    console.error('Failed to load avatar', error);
-                }
-            }
-        };
-        fetchImage();
-    }, [avatar]);
 
     const value = {
         isFollowed,

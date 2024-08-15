@@ -1,11 +1,18 @@
 
-.avatar {
+.avatar,.avatar-hide {
     width: 100px;
     height: 100px;
     object-fit: cover;
     border-radius: 50%;
     transition: all 0.3s;
     top: 0;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.avatar-hide:hover {
+    cursor: auto;
 }
 .divider {
     position: relative;
