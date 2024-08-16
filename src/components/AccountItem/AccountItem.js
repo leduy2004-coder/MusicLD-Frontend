@@ -3,14 +3,12 @@ import classNames from 'classnames/bind';
 import styles from './AccountItem.module.scss';
 import { Link } from 'react-router-dom';
 import Image from '~/components/Image';
-import { UserAuth } from '~/components/Store';
 
 const cx = classNames.bind(styles);
 function AccountItem({ data }) {
-    const { avatar } = UserAuth();
     return (
-        <Link to={`/@${data.nickName}`} className={cx('wrapper')}>
-            <Image className={cx('avatar')} src={avatar} alt={data.nickName} />
+        <Link to={`/@${data.id}`} className={cx('wrapper')}>
+            <Image className={cx('avatar')} src={data?.avatar?.url} alt={data.nickName} />
             <div className={cx('info')}>
                 <p className={cx('name')}>
                     <span>{data.nickName}</span>

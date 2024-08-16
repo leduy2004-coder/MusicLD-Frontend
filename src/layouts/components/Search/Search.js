@@ -34,7 +34,7 @@ function Search() {
 
             const result = await config.search(debouncedValue);
             console.log(result)
-            setSearchResult(result);
+            setSearchResult(result.result);
             setLoading(false);
         };
 

@@ -10,7 +10,6 @@ export const search = async (q, type = 'less') => {
         });
         return res;
     } catch (error) {
-        console.log(error);
         return { errorCode: error.response.status };
     }
 };
