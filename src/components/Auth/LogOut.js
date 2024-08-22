@@ -42,8 +42,6 @@ function LogOut() {
 
             setTimeout(() => {
                 localStorage.clear()
-
-                navigate('/');
                 window.location.reload();
             }, [300]);
         }

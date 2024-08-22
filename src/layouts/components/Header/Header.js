@@ -25,7 +25,7 @@ const cx = classNames.bind(styles);
 
 function Header() {
     const navigate = useNavigate();
-    const { userAuth, tokenStr, setOpenFormLogin, avatar } = UserAuth();
+    const { userAuth, tokenStr, setOpenFormLogin, avatar } = UserAuth();    
     const MENU_ITEMS = [];
     const userMenu = [
         {

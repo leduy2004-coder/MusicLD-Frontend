@@ -10,19 +10,19 @@ import LogOut from '../../components/Auth/LogOut';
 import FormUpdate from '../../components/Auth/UpdateForm';
 import AuthForm from '../../components/Auth';
 import Notify from '~/components/Notify'
-
+import Login from '../../components/Auth/Login';
 
 const cx = classNames.bind(styles)
 
 function HeaderOnly({children}) {
-    const {openFormEdit,openFormAvatar,openFormLogout} = UserAuth();
+    const {openFormEdit,openFormAvatar,openFormLogout,openFormLogin} = UserAuth();
 
     useEffect(() => {
         document.body.style =
-         openFormEdit || openFormAvatar ||openFormLogout
+         openFormEdit || openFormAvatar ||openFormLogout ||openFormLogin
                 ? 'overflow-y: hidden'
                 : 'overflow-y: overlay';
-    }, [ openFormEdit,openFormAvatar,openFormLogout]);
+    }, [ openFormEdit,openFormAvatar,openFormLogout,openFormLogin]);
 
     return (
         <div className={cx('wrapper')}>
@@ -32,11 +32,12 @@ function HeaderOnly({children}) {
                 <div className={cx('content')}>{children}</div>
  
             </div>
-            {(openFormEdit || openFormAvatar || openFormLogout) && (
+            {(openFormEdit || openFormAvatar || openFormLogout || openFormLogin) && (
                 <AuthForm>
                     {openFormEdit && <FormUpdate />}
                     {openFormAvatar && <UploadAvatar />}
                     {openFormLogout && <LogOut />}
+                    {openFormLogin && <Login/>}
                 </AuthForm>
             )}
             

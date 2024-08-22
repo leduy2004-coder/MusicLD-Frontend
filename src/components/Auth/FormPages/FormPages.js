@@ -76,10 +76,11 @@ function FormPages() {
             setForm(value.children);
             setConvertForm(true);
         } else {
+            localStorage.setItem('prev-href', window.location.href);
             window.location.href = value.to;
         }
     };
-    
+
     const handleBackMenu = () => {
         setConvertForm(false);
     };

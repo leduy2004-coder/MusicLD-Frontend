@@ -48,7 +48,7 @@ function OAuth2Success() {
             }
 
             setTimeout(() => {
-                window.location.href = '/';
+                window.location.href = localStorage.getItem('prev-href');
             }, 300);
         };
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Divider, Row } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faUpload, faTrash, faCalendarDay, faVenusMars, faSignature } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
@@ -16,6 +16,7 @@ const cx = classNames.bind(styles);
 const style = {
     fontSize: 20,
     padding: '16px 8px',
+    textAlign: 'center',
 };
 function ItemProfile({ data = {} }) {
     const { userAuth, tokenStr, setOpenFormEdit, avatar } = UserAuth();
@@ -71,7 +72,7 @@ function ItemProfile({ data = {} }) {
                 {userAuth?.id === data?.id ? (
                     <Menu
                         className={cx('menu')}
-                        items={userMenu} // Ensure `userMenu` is defined and passed as a prop or imported
+                        items={userMenu}
                         offset={[-70, 0]}
                         placement="left"
                     >
@@ -83,45 +84,44 @@ function ItemProfile({ data = {} }) {
             </Divider>
 
             <Row gutter={[16, 32]}>
-                <Col className="gutter-row" span={5}>
+                <Col className="gutter-row" span={3}>
+                    <div className={cx('icon-info')}>
+                        <FontAwesomeIcon icon={faSignature} />
+                    </div>
+                </Col>
+                <Col className="gutter-row" span={3}>
                     <div style={style}>NickName:</div>
                 </Col>
-                <Col className="gutter-row" span={7}>
+                <Col className="gutter-row" span={9}>
                     <div style={style}>{data?.nickName || 'Chưa cập nhật'}</div>
                 </Col>
-                <Col className="gutter-row" span={4}>
-                    <div style={style}>col-12</div>
-                </Col>
-                <Col className="gutter-row" span={8}>
-                    <div style={style}>col-12</div>
-                </Col>
             </Row>
             <Row gutter={16}>
-                <Col className="gutter-row" span={5}>
+                <Col className="gutter-row" span={3}>
+                    <div className={cx('icon-info')}>
+                        <FontAwesomeIcon icon={faCalendarDay} />
+                    </div>
+                </Col>
+                <Col className="gutter-row" span={3}>
                     <div style={style}>Ngày sinh:</div>
                 </Col>
-                <Col className="gutter-row" span={7}>
+                <Col className="gutter-row" span={9}>
                     <div style={style}>{data?.dateOfBirth || 'Chưa cập nhật'}</div>
-                </Col>
-                <Col className="gutter-row" span={4}>
-                    <div style={style}>col-12</div>
-                </Col>
-                <Col className="gutter-row" span={8}>
-                    <div style={style}>col-12</div>
                 </Col>
             </Row>
             <Row gutter={16}>
-                <Col className="gutter-row" span={5}>
+                <Col className="gutter-row" span={3}>
+                    <div className={cx('icon-info')}>
+                        <FontAwesomeIcon icon={faVenusMars} />
+                    </div>
+                </Col>
+                <Col className="gutter-row" span={3}>
                     <div style={style}>Giới tính:</div>
                 </Col>
-                <Col className="gutter-row" span={7}>
-                    <div style={style}>Nam</div>
-                </Col>
-                <Col className="gutter-row" span={4}>
-                    <div style={style}>col-12</div>
-                </Col>
-                <Col className="gutter-row" span={8}>
-                    <div style={style}>col-12</div>
+                <Col className="gutter-row" span={9}>
+                    <div style={style}>
+                        {data?.gender !== undefined ? (data.gender ? 'Nam' : 'Nữ') : 'Chưa cập nhật'}
+                    </div>
                 </Col>
             </Row>
             <Divider orientation="right">

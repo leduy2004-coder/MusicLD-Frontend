@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import Header from '../components/Header';
-import styles from './DefaultLayout.module.scss'
-import Sidebar from '../components/Sidebar'
+import styles from './DefaultLayout.module.scss';
+import Sidebar from '../components/Sidebar';
 
 import { UserAuth } from '../../components/Store/AuthContext';
 // import DiscardForm from '../../components/Auth/DiscardForm';
@@ -12,11 +12,11 @@ import { UserAuth } from '../../components/Store/AuthContext';
 import LogOut from '../../components/Auth/LogOut';
 import Login from '../../components/Auth/Login';
 import AuthForm from '../../components/Auth';
-import Notify from '~/components/Notify'
+import Notify from '~/components/Notify';
 
-const cx = classNames.bind(styles)
+const cx = classNames.bind(styles);
 
-function DefaultLayout({children}) {
+function DefaultLayout({ children }) {
     const { openFormLogin, openFormLogout, openFormEdit, openFullVideo, openFormDelete, openFormDiscard } = UserAuth();
 
     useEffect(() => {
@@ -30,7 +30,6 @@ function DefaultLayout({children}) {
         <div className={cx('wrapper')}>
             <Header />
             <div className={cx('container')}>
-                
                 <div className={cx('content')}>{children}</div>
                 <Sidebar />
             </div>
@@ -43,7 +42,9 @@ function DefaultLayout({children}) {
                     {openFormDiscard && <DiscardForm />} */}
                 </AuthForm>
             )}
-            
+            {/* <div className="playmusic">
+                <Player setIsShow={setIsShow} />
+            </div> */}
             <Notify />
         </div>
     );

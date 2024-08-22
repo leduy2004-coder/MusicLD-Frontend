@@ -8,21 +8,24 @@ import {
     UploadOutlined,
     UserOutlined,
     VideoCameraOutlined,
-    UsergroupAddOutlined
+    UsergroupAddOutlined,
 } from '@ant-design/icons';
 import { Button, Layout, Menu, theme } from 'antd';
 import Image from '~/components/Image';
 import { UserAuth, UserMusic } from '~/components/Store';
 import ItemProfile from './ItemProfile/ItemProfile';
+import ItemFollow from './ItemFollow/ItemFollow';
 import config from '~/services';
+import ButtonFollow from '../Button/ButtonFollow';
 
 const { Header, Sider, Content } = Layout;
 const cx = classNames.bind(styles);
 
 function ViewProfile() {
     const { id } = useParams();
-    const { userAuth, tokenStr} = UserAuth();
+    const { userAuth, tokenStr, setOpenFormLogin } = UserAuth();
     const { profileUser, setProfileUser } = UserMusic();
+    // const { setInfoNotify } = UserNotify();
 
     const [collapsed, setCollapsed] = useState(false);
     const [selectedKey, setSelectedKey] = useState('nav1');
@@ -30,81 +33,50 @@ function ViewProfile() {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
 
-    const menuItems = [
-        {
-            key: 'nav1',
-            icon: <UserOutlined />,
-            label: 'Thông tin cá nhân',
-            className: selectedKey === 'nav1' ? cx('menu-item-selected') : '',
-        },
-        {
-            key: 'nav2',
-            icon: <VideoCameraOutlined />,
-            label: 'Nhạc của tôi',
-            className: selectedKey === 'nav2' ? cx('menu-item-selected') : '',
-        },
-        {
-            key: 'nav3',
-            icon: <UsergroupAddOutlined />,
-            label: 'Người theo dõi',
-            className: selectedKey === 'nav3' ? cx('menu-item-selected') : '',
-        },
-        
-    ];
-    const menuMyItem = [
-        ...menuItems,
-        {
-            key: 'nav4',
-            icon: <UploadOutlined />,
-            label: 'Upload nhạc',
-            className: selectedKey === 'nav4' ? cx('menu-item-selected') : '',
-        },
-    ]
-    const handleMenuClick = (e) => {
-        setSelectedKey(e.key);
+    useEffect(() => {
+        const fetchProfile = async () => {
+            const data = await config.getUser(id, tokenStr);
+            setProfileUser(data.result);
+        };
+        fetchProfile();
+    }, [id]);
+
+    useEffect(() => {
+        setSelectedKey('nav1');
+    }, [profileUser]);
+
+    const handleMenuClick = (e) => setSelectedKey(e.key);
+
+    const handleFollowAction = (status) => {
+        const userId = profileUser.id;
+        const updateFollowStatus = async () => {
+            const data = await config.updateRequestFollowUser(userId, tokenStr, status);
+            setProfileUser((prev) => ({ ...prev, statusFollower: data.result}));
+        };
+        updateFollowStatus();
     };
 
     const renderContent = () => {
         switch (selectedKey) {
             case 'nav1':
-                return (
-                    <div>
-                        <ItemProfile data={profileUser}/>
-                    </div>
-                );
+                return <ItemProfile data={profileUser} />;
             case 'nav2':
-                return <div>Content for Nav 2</div>;
+                return <ItemFollow data={profileUser} />;
             case 'nav3':
-                return <div>Content for Nav 3</div>;
+                return <ItemFollow data={profileUser} />;
             default:
                 return <div>Select a menu item</div>;
         }
     };
-    // const [videosProfile, setVideosProfile] = useState([]);
 
 
-    // useEffect(() => {
-    //     setVideosProfile(listVideos);
-    // }, [listVideos]);
+    const menuItems = [
+        { key: 'nav1', icon: <UserOutlined />, label: 'Thông tin cá nhân' },
+        { key: 'nav2', icon: <VideoCameraOutlined />, label: 'Nhạc của tôi' },
+        { key: 'nav3', icon: <UsergroupAddOutlined />, label: 'Người theo dõi' },
+    ];
 
-    useEffect(() => {
-        setProfileUser({});
-        // setListVideos([]);
-
-        const fetchApi = async () => {
-            const data = await config.getUser(id, tokenStr);
-            console.log("ok")
-            console.log(data)
-            setProfileUser(data.result);
-            // setListVideos(data.videos);
-        };
-
-        fetchApi();
-    }, [id]);
-
-    // if (Object.keys(profileUser).length === 0 || videosProfile.length === 0) {
-    //     return;
-    // }
+    const menuMyItem = [...menuItems, { key: 'nav4', icon: <UploadOutlined />, label: 'Upload nhạc' }];
 
     return (
         <Layout>
@@ -114,13 +86,20 @@ function ViewProfile() {
                 </div>
                 <Menu
                     className={cx('menu')}
-                    theme="dark" // Sử dụng state theme để cập nhật theme của Menu
+                    theme="dark"
                     mode="inline"
                     defaultSelectedKeys={['nav1']}
                     selectedKeys={[selectedKey]}
-                    items={profileUser.id === userAuth.id ? menuMyItem: menuItems}
+                    items={profileUser.id === userAuth.id ? menuMyItem : menuItems}
                     onClick={handleMenuClick}
                 />
+                <div className={cx('follow', { collapsed, expanded: !collapsed })}>
+                    <ButtonFollow
+                        followStatus={profileUser.statusFollower || null}
+                        profileUser={profileUser}
+                        handleFollowAction={handleFollowAction}
+                    />
+                </div>
             </Sider>
             <Layout>
                 <Header style={{ padding: 0, background: colorBgContainer }}>
@@ -128,11 +107,7 @@ function ViewProfile() {
                         type="text"
                         icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                         onClick={() => setCollapsed(!collapsed)}
-                        style={{
-                            fontSize: '16px',
-                            width: 64,
-                            height: 44,
-                        }}
+                        style={{ fontSize: '16px', width: 64, height: 44 }}
                     />
                 </Header>
                 <Content
@@ -141,7 +116,6 @@ function ViewProfile() {
                         minHeight: '70vh',
                         background: colorBgContainer,
                         borderRadius: borderRadiusLG,
-                        
                     }}
                 >
                     {renderContent()}

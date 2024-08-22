@@ -1,10 +1,11 @@
 .nav-aside {
-    background-color: var(--background-header) !important;
+    padding-bottom: 10rem;
 }
-
-.menu-item-selected {
-    background-color: var(--primary) !important;
-    color: white !important;
+:global {
+    .ant-menu-item-selected {
+        background-color: var(--primary) !important;
+        color: white !important;
+    }
 }
 .logo {
     display: flex;
@@ -28,5 +29,16 @@
     .collapsed & {
         height: 28px;
         width: 32px;
+    }
+}
+
+.follow {
+    margin: 3rem 0;
+    display: flex;
+    justify-content: center;
+    height: 4rem;
+
+    &.collapsed {
+        display: none !important ;
     }
 }

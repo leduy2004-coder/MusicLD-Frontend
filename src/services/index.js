@@ -7,6 +7,7 @@ import getAvatar from './getAvatar';
 import uploadAvatar from './uploadAvatar';
 import oauth2 from './oauth2Service';
 import removeAvatar from './removeAvatar';
+import { updateRequestFollowUser,getAllFollower,getAllFollowing,getAllReceive,getAllRequest } from './follow';
 const config = {
     login,
     logout,
@@ -16,7 +17,12 @@ const config = {
     getAvatar,
     uploadAvatar,
     oauth2,
-    removeAvatar
+    removeAvatar,
+    updateRequestFollowUser,
+    getAllFollower,
+    getAllFollowing,
+    getAllRequest,
+    getAllReceive,
 };
 
 export default config;
