@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Tabs, Row, Empty,Typography } from 'antd';
+import { Tabs, Row, Empty, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faUserFriends,
@@ -62,7 +62,11 @@ function ItemFollow({ data = {} }) {
                     {followers.length > 0 ? (
                         <Row gutter={[8, 8]}>
                             {followers.map((follower) => (
-                                <ViewFollower key={follower.id} data={follower} statusFollow={'ACCEPTED'} />
+                                <ViewFollower
+                                    key={follower.id}
+                                    data={follower}
+                                    statusFollow={userAuth.id === data.id ? 'ACCEPTED' : 'NONE'}
+                                />
                             ))}
                         </Row>
                     ) : (
@@ -71,7 +75,7 @@ function ItemFollow({ data = {} }) {
                                 height: 220,
                             }}
                             description={
-                                <Typography.Text style={{ color: 'red' , fontSize: 20}}>
+                                <Typography.Text style={{ color: 'red', fontSize: 20 }}>
                                     Không có người theo dõi
                                 </Typography.Text>
                             }
@@ -92,17 +96,20 @@ function ItemFollow({ data = {} }) {
                     {following.length > 0 ? (
                         <Row gutter={[8, 8]}>
                             {following.map((followed) => (
-                                <ViewFollower key={followed.id} data={followed} statusFollow={'FRIEND'} />
+                                <ViewFollower
+                                    key={followed.id}
+                                    data={followed}
+                                    statusFollow={userAuth.id === data.id ? 'FRIEND' : 'NONE'}
+                                />
                             ))}
                         </Row>
                     ) : (
                         <Empty
                             imageStyle={{
                                 height: 220,
-                          
                             }}
                             description={
-                                <Typography.Text style={{ color: 'red' , fontSize: 20}}>
+                                <Typography.Text style={{ color: 'red', fontSize: 20 }}>
                                     Không có người nào bạn đang theo dõi
                                 </Typography.Text>
                             }
@@ -135,15 +142,15 @@ function ItemFollow({ data = {} }) {
                                   </Row>
                               ) : (
                                   <Empty
-                            imageStyle={{
-                                height: 220,
-                            }}
-                            description={
-                                <Typography.Text style={{ color: 'red' , fontSize: 20}}>
-                                    Không có lời mời nào
-                                </Typography.Text>
-                            }
-                        />
+                                      imageStyle={{
+                                          height: 220,
+                                      }}
+                                      description={
+                                          <Typography.Text style={{ color: 'red', fontSize: 20 }}>
+                                              Không có lời mời nào
+                                          </Typography.Text>
+                                      }
+                                  />
                               )}
                           </div>
                       ),
@@ -170,15 +177,15 @@ function ItemFollow({ data = {} }) {
                                   </Row>
                               ) : (
                                   <Empty
-                            imageStyle={{
-                                height: 220,
-                            }}
-                            description={
-                                <Typography.Text style={{ color: 'red' , fontSize: 20}}>
-                                    Không có yêu cầu nào đã gửi
-                                </Typography.Text>
-                            }
-                        />
+                                      imageStyle={{
+                                          height: 220,
+                                      }}
+                                      description={
+                                          <Typography.Text style={{ color: 'red', fontSize: 20 }}>
+                                              Không có yêu cầu nào đã gửi
+                                          </Typography.Text>
+                                      }
+                                  />
                               )}
                           </div>
                       ),

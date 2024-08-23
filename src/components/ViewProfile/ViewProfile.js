@@ -34,12 +34,18 @@ function ViewProfile() {
     } = theme.useToken();
 
     useEffect(() => {
-        const fetchProfile = async () => {
-            const data = await config.getUser(id, tokenStr);
-            setProfileUser(data.result);
-        };
-        fetchProfile();
-    }, [id]);
+        if (tokenStr) {
+            const fetchProfile = async () => {
+                try {
+                    const data = await config.getUser(id, tokenStr);
+                    setProfileUser(data.result);
+                } catch (error) {
+                    console.error('Failed to fetch profile:', error);
+                }
+            };
+            fetchProfile();
+        }
+    }, [id, tokenStr]);
 
     useEffect(() => {
         setSelectedKey('nav1');
@@ -69,7 +75,7 @@ function ViewProfile() {
         }
     };
 
-
+    console.log(profileUser.statusFollower)
     const menuItems = [
         { key: 'nav1', icon: <UserOutlined />, label: 'Thông tin cá nhân' },
         { key: 'nav2', icon: <VideoCameraOutlined />, label: 'Nhạc của tôi' },
