@@ -18,3 +18,13 @@
 .content {
     flex: 1;
 }
+
+.play-music {
+    width: 100%;
+    height: 90px;
+    flex: none;
+    position: fixed;
+    background-color: var(--background-music-play);
+    z-index: 99;
+    bottom: 0;
+}

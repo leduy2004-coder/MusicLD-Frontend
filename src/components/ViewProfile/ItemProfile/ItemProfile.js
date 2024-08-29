@@ -44,38 +44,11 @@ function ItemProfile({ data = {} }) {
         },
     ];
 
-    // const handleFollowUser = () => {
-    //     const userId = data?.id;
-    //     const fetchApi = async () => {
-    //         const data = await config.followUser(userId, tokenStr);
-
-    //         setIsFollowed(data.data.is_followed);
-    //     };
-
-    //     fetchApi();
-    // };
-
-    // const handleUnFollowUser = () => {
-    //     const userId = data.id;
-    //     const fetchApi = async () => {
-    //         const data = await config.unFollowUser(userId, tokenStr);
-
-    //         setIsFollowed(data.data.is_followed);
-    //     };
-
-    //     fetchApi();
-    // };
-
     return (
         <>
             <Divider orientation="center" className={cx('divider')}>
                 {userAuth?.id === data?.id ? (
-                    <Menu
-                        className={cx('menu')}
-                        items={userMenu}
-                        offset={[-70, 0]}
-                        placement="left"
-                    >
+                    <Menu className={cx('menu')} items={userMenu} offset={[-70, 0]} placement="left">
                         <Image className={cx('avatar')} src={data?.avatar?.url} />
                     </Menu>
                 ) : (

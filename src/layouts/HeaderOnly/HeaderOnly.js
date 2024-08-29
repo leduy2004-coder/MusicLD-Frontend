@@ -11,6 +11,7 @@ import FormUpdate from '../../components/Auth/UpdateForm';
 import AuthForm from '../../components/Auth';
 import Notify from '~/components/Notify'
 import Login from '../../components/Auth/Login';
+import PlayMusic from '~/components/PlayMusic';
 
 const cx = classNames.bind(styles)
 
@@ -40,7 +41,9 @@ function HeaderOnly({children}) {
                     {openFormLogin && <Login/>}
                 </AuthForm>
             )}
-            
+            <div className={cx('play-music')}>
+                <PlayMusic />
+            </div>
             <Notify />
         </div>
     );

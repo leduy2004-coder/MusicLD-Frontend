@@ -1,0 +1,136 @@
+.play_control {
+    width: 98%;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    color: #fff;
+}
+.detail_song {
+    width: 30%;
+    flex: auto;
+    display: flex;
+    align-items: center;
+}
+.ava_thumb {
+    width: 64px;
+    height: 64px;
+}
+.ava_thumb img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.song_infor {
+    margin: 0 30px;
+}
+.song_infor p {
+    margin-bottom: 5px;
+}
+.song_infor span {
+    color: #ccc;
+}
+.like_action {
+    margin: 0 10px;
+}
+.like_action span {
+    margin: 0 10px;
+}
+
+.main_control {
+    width: 40%;
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.control {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    justify-content: center;
+}
+.btn_next {
+    cursor: pointer;
+}
+.bur_next {
+    opacity: 0.6;
+}
+.isTrue {
+    cursor: pointer;
+    color: #985cb9;
+}
+.isFalse {
+    cursor: pointer;
+}
+
+.progress_bar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+.track {
+    width: 70%;
+    height: 3px;
+    background-color: #595560;
+    position: relative;
+    border-radius: 5px;
+}
+.run_time {
+    /* width: 70%; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background-color: #ffffff;
+    border-radius: 5px;
+}
+
+.run_time-dot {
+    display: none;
+    height: 6px;
+    width: 60px;
+    background-color: red;
+}
+.track:hover,
+.run_time:hover {
+    height: 6px;
+}
+.track:hover .run_time-dot {
+    display: block;
+    width: 100%;
+}
+.volume {
+    width: 30%;
+    flex: auto;
+    gap: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.volume_zone {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.volume_action {
+    width: 70px;
+}
+
+.el_hover {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.el_hover:hover {
+    border-color: #8b45ca;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}

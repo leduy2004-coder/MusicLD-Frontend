@@ -13,6 +13,7 @@ import LogOut from '../../components/Auth/LogOut';
 import Login from '../../components/Auth/Login';
 import AuthForm from '../../components/Auth';
 import Notify from '~/components/Notify';
+import PlayMusic from '~/components/PlayMusic';
 
 const cx = classNames.bind(styles);
 
@@ -46,6 +47,9 @@ function DefaultLayout({ children }) {
                 <Player setIsShow={setIsShow} />
             </div> */}
             <Notify />
+            <div className={cx('play-music')}>
+                <PlayMusic />
+            </div>
         </div>
     );
 }

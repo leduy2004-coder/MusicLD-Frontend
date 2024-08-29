@@ -1,6 +1,12 @@
 
+import UploadForm from "~/components/Upload/UploadForm";
 function Upload() {
-    return <h2>Upload Page</h2>
-}
+    return (
+        <div style={{padding : 20, display:"flex", justifyContent:"center"
+         }}>
+            <UploadForm/>
+        </div>
+    );
+};
 
 export default Upload;

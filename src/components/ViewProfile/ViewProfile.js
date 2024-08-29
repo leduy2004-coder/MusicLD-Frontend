@@ -17,6 +17,7 @@ import ItemProfile from './ItemProfile/ItemProfile';
 import ItemFollow from './ItemFollow/ItemFollow';
 import config from '~/services';
 import ButtonFollow from '../Button/ButtonFollow';
+import ItemMusic from './ItemMusic/ItemMusic';
 
 const { Header, Sider, Content } = Layout;
 const cx = classNames.bind(styles);
@@ -57,7 +58,7 @@ function ViewProfile() {
         const userId = profileUser.id;
         const updateFollowStatus = async () => {
             const data = await config.updateRequestFollowUser(userId, tokenStr, status);
-            setProfileUser((prev) => ({ ...prev, statusFollower: data.result}));
+            setProfileUser((prev) => ({ ...prev, statusFollower: data.result }));
         };
         updateFollowStatus();
     };
@@ -70,19 +71,21 @@ function ViewProfile() {
                 return <ItemFollow data={profileUser} />;
             case 'nav3':
                 return <ItemFollow data={profileUser} />;
+            case 'nav4':
+                return <ItemMusic data={profileUser} />;
             default:
                 return <div>Select a menu item</div>;
         }
     };
 
-    console.log(profileUser.statusFollower)
+    console.log(profileUser.statusFollower);
     const menuItems = [
         { key: 'nav1', icon: <UserOutlined />, label: 'Thông tin cá nhân' },
         { key: 'nav2', icon: <VideoCameraOutlined />, label: 'Nhạc của tôi' },
         { key: 'nav3', icon: <UsergroupAddOutlined />, label: 'Người theo dõi' },
     ];
 
-    const menuMyItem = [...menuItems, { key: 'nav4', icon: <UploadOutlined />, label: 'Upload nhạc' }];
+    const menuMyItem = [...menuItems, { key: 'nav4', icon: <UploadOutlined />, label: 'Quản lí nhạc' }];
 
     return (
         <Layout>
