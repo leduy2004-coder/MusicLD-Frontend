@@ -1,7 +1,7 @@
 import config from '~/config';
 
 //Layouts
-import layouts, { HeaderOnly } from '~/layouts';
+import  { HeaderOnly } from '~/layouts';
 
 //Pages
 import Home from '~/pages/Home';
@@ -20,7 +20,6 @@ const publicRoutes = [
     { path: config.routes.search, component: Search, layout: null },
     { path: config.routes.live, component: Live },
     { path: config.routes.oauth2, component: OAuth2Success },
-   
 ];
 const privateRoutes = [];
 

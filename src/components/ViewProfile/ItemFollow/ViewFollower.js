@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom'; // Import Link từ react-router-dom
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
-import styles from './ItemFollow.module.scss';
 import { UserAuth } from '../../Store';
+import styles from './ItemFollow.module.scss';
 import config from '../../../services';
 import Image from '~/components/Image';
 import ButtonFollow from '~/components/Button/ButtonFollow';
@@ -17,7 +17,6 @@ const cx = classNames.bind(styles);
 
 function ViewFollower({ data = {}, statusFollow }) {
     const { tokenStr } = UserAuth();
-
     const [followStatus, setFollowStatus] = useState(statusFollow);
 
     const handleFollowAction = (status) => {
@@ -25,7 +24,7 @@ function ViewFollower({ data = {}, statusFollow }) {
         const updateFollowStatus = async () => {
             try {
                 console.log(status);
-                const response = await config.updateRequestFollowUser(userId, tokenStr, status);
+                const response = await config.updateRequestFollowUser(userId,tokenStr, status);
                 if (status === 'PENDING') setFollowStatus(status);
                 else setFollowStatus('HIDE');
             } catch (error) {
@@ -42,7 +41,7 @@ function ViewFollower({ data = {}, statusFollow }) {
                 hidden: followStatus === 'HIDE',
             })}
         >
-            <Link to={`/profile/${data.id}`}> 
+            <Link to={`/profile/${data.id}`}>
                 <Card hoverable>
                     <div className={cx('card-body')}>
                         <div className={cx('avatar')}>

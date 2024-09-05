@@ -32,10 +32,10 @@ function ItemFollow({ data = {} }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const followersData = await config.getAllFollower(data.id, tokenStr);
-                const followingData = await config.getAllFollowing(data.id, tokenStr);
-                const receivedRequestsData = await config.getAllReceive(data.id, tokenStr);
-                const sentRequestsData = await config.getAllRequest(data.id, tokenStr);
+                const followersData = await config.getAllFollower(data.id,tokenStr);
+                const followingData = await config.getAllFollowing(data.id,tokenStr);
+                const receivedRequestsData = await config.getAllReceive(data.id,tokenStr);
+                const sentRequestsData = await config.getAllRequest(data.id,tokenStr);
 
                 setFollowers(followersData);
                 setFollowing(followingData);

@@ -5,10 +5,8 @@ const removeAvatar = async (publicId,token) => {
         const res = await callPath.post(
             `avatar/delete`,
             null,
+            token,
             {
-                headers: {
-                    Authorization: token,
-                },
                 params: {
                     publicId
                 },

@@ -6,7 +6,6 @@ import DefaultLayout from '~/layouts';
 function App() {
     // localStorage.clear()
 
-    console.log(localStorage.getItem('token'))
     return (
         <Router>
             <div className="App">

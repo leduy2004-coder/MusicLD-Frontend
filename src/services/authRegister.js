@@ -1,12 +1,13 @@
 import * as callPath from '../utils/httpRequest';
 
-const register = async (username, password, nickName, dateOfBirth, code) => {
+const register = async (username, password, nickName, dateOfBirth,gender, code) => {
     try {
         const res = await callPath.post('users/register', {
             username,
             password,
             nickName,
             dateOfBirth,
+            gender,
             authType: 'LOCAL', 
             roles: [{ code: code }], 
         });

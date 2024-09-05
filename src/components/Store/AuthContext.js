@@ -30,7 +30,7 @@ export function AuthProvider({ children }) {
     const [avatar, setAvatar] = useState('');
 
     useEffect(() => {
-        const storedToken = localStorage.getItem('token');
+        const storedToken = localStorage.getItem('access_token');
         const storedUserId = localStorage.getItem('user-id');
         const avatarUser = localStorage.getItem('avatar');
         

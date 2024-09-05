@@ -18,7 +18,6 @@ function UploadForm() {
     const [fileList, setFileList] = useState([]); // Trạng thái để lưu danh sách file tải lên
     const { setInfoNotify } = UserNotify();
     const { tokenStr } = UserAuth();
-
     const handleFinish = async (values) => {
         const formData = new FormData();
         formData.append('songName', values.songName);

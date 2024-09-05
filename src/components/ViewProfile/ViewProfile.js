@@ -38,7 +38,7 @@ function ViewProfile() {
         if (tokenStr) {
             const fetchProfile = async () => {
                 try {
-                    const data = await config.getUser(id, tokenStr);
+                    const data = await config.getUser(id,tokenStr);
                     setProfileUser(data.result);
                 } catch (error) {
                     console.error('Failed to fetch profile:', error);
@@ -57,7 +57,7 @@ function ViewProfile() {
     const handleFollowAction = (status) => {
         const userId = profileUser.id;
         const updateFollowStatus = async () => {
-            const data = await config.updateRequestFollowUser(userId, tokenStr, status);
+            const data = await config.updateRequestFollowUser(userId,tokenStr, status);
             setProfileUser((prev) => ({ ...prev, statusFollower: data.result }));
         };
         updateFollowStatus();
@@ -78,7 +78,6 @@ function ViewProfile() {
         }
     };
 
-    console.log(profileUser.statusFollower);
     const menuItems = [
         { key: 'nav1', icon: <UserOutlined />, label: 'Thông tin cá nhân' },
         { key: 'nav2', icon: <VideoCameraOutlined />, label: 'Nhạc của tôi' },

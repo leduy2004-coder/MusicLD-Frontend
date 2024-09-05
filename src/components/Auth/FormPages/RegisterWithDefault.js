@@ -2,14 +2,17 @@ import { useEffect, useState, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
-import styles from './FormPages.module.scss';
+import { DatePicker, Select } from 'antd'; // Import Select từ Ant Design
+import moment from 'moment';
 
+import styles from './FormPages.module.scss';
 import { HidePassIcon, ShowPassIcon } from '~/components/Icons';
 import { UserNotify } from '../../Store';
 import Button from '../../Button';
 import config from '~/services';
 
 const cx = classNames.bind(styles);
+const { Option } = Select; // Khai báo Option từ Select
 
 function RegisterWithDefault() {
     const [disabledSubmitted, setDisabledSubmited] = useState(false);
@@ -18,14 +21,15 @@ function RegisterWithDefault() {
         password: '',
         nickName: '',
         date: '',
+        gender: '', // Thêm trường giới tính vào state
     });
     const [showPass, setShowPass] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const { setInfoNotify } = UserNotify();
 
-    const handleChange = useCallback((e) => {
-        const { name, value } = e.target;
+    const handleChange = useCallback((name, value) => {
+        // Hàm này sẽ nhận tên trường và giá trị mới
         if (value.startsWith(' ')) return;
 
         setFormValues((prevValues) => ({
@@ -41,15 +45,15 @@ function RegisterWithDefault() {
     const handleRegister = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        const { account, password,nickName,date } = formValues;
-        const data = await config.register(account, password,nickName,date,'USER');
+        const { account, password, nickName, date, gender } = formValues; // Bao gồm cả gender
+        const data = await config.register(account, password, nickName, date, gender, 'USER');
 
         if (data.errCode) {
             setInfoNotify({
                 content: 'Đăng kí thất bại. Vui lòng thử lại !!',
                 delay: 1500,
                 isNotify: true,
-                type: 'error'
+                type: 'error',
             });
 
             setTimeout(() => {
@@ -60,11 +64,12 @@ function RegisterWithDefault() {
                 content: 'Đăng kí thành công',
                 delay: 1500,
                 isNotify: true,
-                type: 'success'
+                type: 'success',
             });
 
             localStorage.setItem('user-id', JSON.stringify(data.result.userResponse));
-            localStorage.setItem('token', JSON.stringify(`Bearer ${data.result.access_token}`));
+            localStorage.setItem('access_token', JSON.stringify(`Bearer ${data.result.access_token}`));
+            localStorage.setItem('refresh_token', JSON.stringify(`Bearer ${data.result.refresh_token}`));
             localStorage.setItem('avatar', JSON.stringify(data.result.userResponse.avatar));
 
             setTimeout(() => {
@@ -73,11 +78,6 @@ function RegisterWithDefault() {
             }, [300]);
         }
     };
-
-    useEffect(() => {
-        const { account, password, nickName, date } = formValues;
-        setDisabledSubmited(!account || !password || !nickName || !date);
-    }, [formValues]);
 
     return (
         <form action="" method="POST" className={cx('login-inner')}>
@@ -91,7 +91,7 @@ function RegisterWithDefault() {
                         <input
                             name="account"
                             value={formValues.account}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
                             type="text"
                             placeholder="Số điện thoại / Email"
                         />
@@ -102,7 +102,7 @@ function RegisterWithDefault() {
                         <input
                             name="password"
                             value={formValues.password}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
                             type={showPass ? 'text' : 'password'}
                             placeholder="Mật khẩu"
                             autoComplete="on"
@@ -120,7 +120,7 @@ function RegisterWithDefault() {
                         <input
                             name="nickName"
                             value={formValues.nickName}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
                             type="text"
                             placeholder="Tên người dùng"
                         />
@@ -128,13 +128,27 @@ function RegisterWithDefault() {
                 </div>
                 <div className={cx('container-form')}>
                     <div className={cx('form-input')}>
-                        <input
-                            name="date"
-                            value={formValues.date}
-                            onChange={handleChange}
-                            type="date"
+                        <DatePicker
+                            value={formValues.date ? moment(formValues.date, 'DD/MM/YYYY') : null}
+                            onChange={(date, dateString) => handleChange('date', dateString)}
+                            format="DD/MM/YYYY" 
                             placeholder="Ngày tháng năm sinh"
+                            className={cx('date-picker')}
                         />
+                    </div>
+                </div>
+                <div className={cx('container-form')}>
+                    <div className={cx('form-input')}>
+                        <Select
+                            placeholder="Giới tính"
+                            value={formValues.gender}
+                            onChange={(value) => handleChange('gender', value)} 
+                            className={cx('select-gender')}
+                        >
+                            <Option value="true">Nam</Option>
+                            <Option value="false">Nữ</Option>
+                
+                        </Select>
                     </div>
                 </div>
             </div>

@@ -5,8 +5,8 @@ import { faEdit, faRemove } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
-import styles from './ItemMusic.module.scss';
 import { UserAuth } from '../../Store';
+import styles from './ItemMusic.module.scss';
 import config from '../../../services';
 import Image from '~/components/Image';
 import Btn from '~/components/Button';
@@ -15,7 +15,6 @@ const cx = classNames.bind(styles);
 
 function ViewMusic({ data = {}, statusFollow }) {
     const { tokenStr } = UserAuth();
-
     const [followStatus, setFollowStatus] = useState(statusFollow);
 
     const handleFollowAction = (status) => {
@@ -43,7 +42,8 @@ function ViewMusic({ data = {}, statusFollow }) {
                     </div>
 
                     <h3 className={cx('meta-title')}>
-                        Bao lời con chưa nói con mẹ mày chớ nói mày làm gì taao đám gãy mặt mày luôn con mẹ mày cút khỏi cuộc đồi tao nghe chưa
+                        Bao lời con chưa nói con mẹ mày chớ nói mày làm gì taao đám gãy mặt mày luôn con mẹ mày cút khỏi
+                        cuộc đồi tao nghe chưa
                     </h3>
 
                     <div className={cx('button-area')}>

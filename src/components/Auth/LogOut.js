@@ -23,7 +23,6 @@ function LogOut() {
     const handleLogout = async () => {
         console.log(tokenStr)
         const data = await config.logout(tokenStr);
-        console.log("logout")
         if (data.errorCode) {
             setInfoNotify({
                 content: 'Đăng xuất thất bại. Vui lòng thử lại!',

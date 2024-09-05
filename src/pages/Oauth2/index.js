@@ -34,11 +34,12 @@ function OAuth2Success() {
                         type: 'success',
                     });
                     localStorage.setItem('user-id', JSON.stringify(data.result.userResponse));
-                    localStorage.setItem('token', JSON.stringify(`Bearer ${data.result.access_token}`));
+                    localStorage.setItem('access_token', JSON.stringify(`Bearer ${data.result.access_token}`));
+                    localStorage.setItem('refresh_token', JSON.stringify(`Bearer ${data.result.refresh_token}`));
                     localStorage.setItem('avatar', JSON.stringify(data.result.userResponse.avatar));
                 }
             } catch (error) {
-                console.error('Login failed', error);
+       
                 setInfoNotify({
                     content: 'Đăng nhập thất bại. Hãy thử lại!',
                     delay: 1300,

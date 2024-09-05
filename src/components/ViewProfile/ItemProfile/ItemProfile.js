@@ -21,12 +21,6 @@ const style = {
 function ItemProfile({ data = {} }) {
     const { userAuth, tokenStr, setOpenFormEdit, avatar } = UserAuth();
 
-    // const [isFollowed, setIsFollowed] = useState(data?.is_followed);
-
-    // useEffect(() => {
-    //     setIsFollowed(data?.is_followed);
-    // }, [data]);
-
     const handleOpenFormUpdate = () => {
         setOpenFormEdit(true);
     };

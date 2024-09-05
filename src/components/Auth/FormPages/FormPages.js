@@ -70,13 +70,14 @@ function FormPages() {
         setConvertForm(false);
         setIsFormLogin(!isFormLogin);
     };
-
+    let href = window.location.href;
     const handleNextForm = (value) => {
         if (value.children) {
             setForm(value.children);
             setConvertForm(true);
         } else {
-            localStorage.setItem('prev-href', window.location.href);
+            if (window.location.pathname  === '/login') href = '/';
+            localStorage.setItem('prev-href', href);
             window.location.href = value.to;
         }
     };
