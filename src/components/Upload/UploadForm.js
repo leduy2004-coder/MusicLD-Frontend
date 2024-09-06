@@ -28,12 +28,20 @@ function UploadForm() {
         try {
             const data = await config.uploadMusic(formData, tokenStr);
             if (data.errorCode) {
-                setInfoNotify({
-                    content: 'Đăng nhạc thất bại. Hãy thử lại !!',
-                    delay: 1500,
-                    isNotify: true,
-                    type: 'error',
-                });
+                if (data.errorCode.data.code === 1014) {
+                    setInfoNotify({
+                        content: 'Đuôi file ảnh phải là jpg, png, gif, bmp !!',
+                        delay: 1700,
+                        isNotify: true,
+                        type: 'error',
+                    });
+                } else
+                    setInfoNotify({
+                        content: 'Đăng nhạc thất bại. Hãy thử lại !!',
+                        delay: 1700,
+                        isNotify: true,
+                        type: 'error',
+                    });
             } else {
                 setInfoNotify({
                     content: 'Đăng nhạc thành công',

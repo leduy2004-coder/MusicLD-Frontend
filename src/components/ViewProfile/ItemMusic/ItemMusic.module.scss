@@ -3,6 +3,16 @@
         cursor: auto;
         width: 80%;
     }
+    :where(.css-dev-only-do-not-override-98ntnt).ant-btn-primary {
+        background: var(--primary);
+    }
+    :where(.css-dev-only-do-not-override-98ntnt).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+        background: #ea8484;
+    }
+    :where(.css-dev-only-do-not-override-98ntnt).ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
+        color: var(--primary);
+        border-color: var(--primary);
+    }
 }
 
 .card-body {
@@ -11,7 +21,7 @@
     justify-content: space-around;
     gap: 1rem;
     padding: 1rem 2rem;
-    background-color: #686068;
+    background-color: var(--background-music-play);
     border-radius: 5px;
 }
 
@@ -21,7 +31,7 @@
 .number {
     width: 1rem;
     font-size: 1.7rem;
-    color: rgb(220, 200, 200);
+    color: rgb(240, 230, 230);
 }
 .avatar {
     width: 7rem;
@@ -73,7 +83,7 @@
 }
 .meta-title {
     width: 50%;
-    color: rgb(220, 200, 200);
+    color: rgb(240, 230, 230);
     font-weight: 500;
     display: -webkit-box;
     -webkit-line-clamp: 2; /* Giới hạn số dòng */

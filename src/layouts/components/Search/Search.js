@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef } from 'react';
 import { faCircleXmark, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,7 +21,7 @@ function Search() {
     const debouncedValue = useDebounce(searchValue, 500);
 
     const inputRef = useRef();
-   
+
     useEffect(() => {
         if (!debouncedValue.trim()) {
             setSearchResult([]);
@@ -63,14 +62,13 @@ function Search() {
         <div>
             <HeadlessTippy
                 interactive
-                visible={showResult && searchResult.length > 0}
+                visible={showResult && Array.isArray(searchResult) && searchResult.length > 0}
                 render={(attrs) => (
                     <div className={cx('search-result')} tabIndex="-1" {...attrs}>
                         <PopperWrapper>
                             <h4 className={cx('search-title')}>Tài khoản</h4>
-                            {searchResult.map((result) => (
-                                <AccountItem key={result.id} data={result} />
-                            ))}
+                            {Array.isArray(searchResult) &&
+                                searchResult.map((result) => <AccountItem key={result.id} data={result} />)}
                         </PopperWrapper>
                     </div>
                 )}

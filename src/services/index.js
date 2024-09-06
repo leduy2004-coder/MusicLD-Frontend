@@ -7,8 +7,8 @@ import getAvatar from './getAvatar';
 import uploadAvatar from './uploadAvatar';
 import oauth2 from './oauth2Service';
 import removeAvatar from './removeAvatar';
-import { updateRequestFollowUser,getAllFollower,getAllFollowing,getAllReceive,getAllRequest } from './follow';
-import { getDetailSong,getSong,uploadMusic } from './musicService';
+import { updateRequestFollowUser,getAllFollower,getAllFollowing,getAllReceive,getAllRequest } from './followService';
+import { getDetailSong,getSong,uploadMusic,getPlaylist,removeMusic } from './musicService';
 const config = {
     login,
     logout,
@@ -26,7 +26,9 @@ const config = {
     getAllReceive,
     getDetailSong,
     getSong,
-    uploadMusic
+    uploadMusic,
+    getPlaylist,
+    removeMusic
 };
 
 export default config;

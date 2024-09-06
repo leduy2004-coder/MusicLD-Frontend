@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Divider, Row } from 'antd';
+import { Tabs, Row, Empty, Typography } from 'antd';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload, faTrash, faCalendarDay, faVenusMars, faSignature } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
@@ -14,47 +15,50 @@ import Btn from '~/components/Button';
 import ViewMusic from './ViewMusic';
 
 const cx = classNames.bind(styles);
-const style = {
-    fontSize: 20,
-    padding: '16px 8px',
-    textAlign: 'center',
-};
+
 function ItemMusic({ data = {} }) {
     const { userAuth, tokenStr, setOpenFormEdit, avatar } = UserAuth();
+    const [musics, setMusics] = useState([]);
+    const [number, setNumber] = useState(0);
 
-    // const [isFollowed, setIsFollowed] = useState(data?.is_followed);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const musicsData = await config.getPlaylist(data.id, tokenStr);
+                setMusics(musicsData.result);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
 
-    // useEffect(() => {
-    //     setIsFollowed(data?.is_followed);
-    // }, [data]);
+        fetchData();
+    }, [data, tokenStr]);
 
-    const handleOpenFormUpdate = () => {
-        setOpenFormEdit(true);
-    };
-
-    const userMenu = [
-        {
-            icon: <FontAwesomeIcon icon={faUpload} />,
-            title: 'Thay ảnh',
-            avatar: true,
-        },
-        {
-            icon: <FontAwesomeIcon icon={faTrash} />,
-            title: 'Xóa ảnh',
-            removeAvatar: true,
-        },
-    ];
+    // Update the `number` state based on the length of `musics`
+    useEffect(() => {
+        if (Array.isArray(musics)) {
+            setNumber(musics.length);
+        }
+    }, [musics]);
 
     return (
         <div className={cx('body')}>
-            <Row gutter={[16, 28]}>
-                <ViewMusic/>
-                <ViewMusic/>
-                <ViewMusic/>
-                <ViewMusic/>
-                <ViewMusic/>
-            </Row>
-
+            {Array.isArray(musics) && musics.length > 0 ? (
+                <Row gutter={[16, 28]}>
+                    {musics.map((music, index) => (
+                        <ViewMusic key={music.id} data={music} number={index + 1} />
+                    ))}
+                </Row>
+            ) : (
+                <Empty
+                    imageStyle={{
+                        height: 220,
+                    }}
+                    description={
+                        <Typography.Text style={{ color: 'red', fontSize: 20 }}>Chưa đăng nhạc</Typography.Text>
+                    }
+                />
+            )}
         </div>
     );
 }
