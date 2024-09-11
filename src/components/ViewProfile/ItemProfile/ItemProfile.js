@@ -31,11 +31,16 @@ function ItemProfile({ data = {} }) {
             title: 'Thay ảnh',
             avatar: true,
         },
-        {
-            icon: <FontAwesomeIcon icon={faTrash} />,
-            title: 'Xóa ảnh',
-            removeAvatar: true,
-        },
+        
+        ...(data?.avatar?.url
+            ? [
+                  {
+                      icon: <FontAwesomeIcon icon={faTrash} />,
+                      title: 'Xóa ảnh',
+                      removeAvatar: true,
+                  },
+              ]
+            : []),
     ];
 
     return (

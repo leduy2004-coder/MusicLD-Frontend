@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Form, Input, Upload, Button, Typography, message } from 'antd';
+import { Form, Input, Upload, Button, Typography } from 'antd';
 import classNames from 'classnames/bind';
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './UploadForm.module.scss';
 import { UserNotify } from '../Store';
@@ -18,6 +20,8 @@ function UploadForm() {
     const [fileList, setFileList] = useState([]); // Trạng thái để lưu danh sách file tải lên
     const { setInfoNotify } = UserNotify();
     const { tokenStr } = UserAuth();
+    const [isLoading, setIsLoading] = useState(false);
+
     const handleFinish = async (values) => {
         const formData = new FormData();
         formData.append('songName', values.songName);
@@ -26,6 +30,7 @@ function UploadForm() {
         formData.append('lyrics', values.lyrics);
 
         try {
+            setIsLoading(true);
             const data = await config.uploadMusic(formData, tokenStr);
             if (data.errorCode) {
                 if (data.errorCode.data.code === 1014) {
@@ -64,11 +69,13 @@ function UploadForm() {
                 type: 'error',
             });
         }
+        setIsLoading(false);
     };
 
     const handleAvatarChange = ({ fileList: newFileList }) => {
         // Chỉ giữ lại tệp đầu tiên trong danh sách
         setAvatarList(newFileList.slice(-1));
+
     };
 
     const handleFileChange = ({ fileList: newFileList }) => {
@@ -145,8 +152,13 @@ function UploadForm() {
                 </Form.Item>
 
                 <Form.Item className={cx('Btn-area')}>
-                    <Button type="primary" htmlType="submit" className={cx('button')}>
-                        Đăng
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        className={cx('button')}
+                        disabled={isLoading} 
+                    >
+                        {isLoading ? <FontAwesomeIcon className={cx('loading')} icon={faSpinner} /> : <span>Đăng</span>}
                     </Button>
                 </Form.Item>
             </Form>

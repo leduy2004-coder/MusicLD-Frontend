@@ -1,14 +1,14 @@
-import login from './authLogin';
-import logout from './authLogout';
-import register from './authRegister';
-import getUser from './getUser';
-import { search } from './searchService';
-import getAvatar from './getAvatar';
-import uploadAvatar from './uploadAvatar';
-import oauth2 from './oauth2Service';
-import removeAvatar from './removeAvatar';
-import { updateRequestFollowUser,getAllFollower,getAllFollowing,getAllReceive,getAllRequest } from './followService';
-import { getDetailSong,getSong,uploadMusic,getPlaylist,removeMusic } from './musicService';
+import { login, logout, register, oauth2 } from './authService';
+import { getAvatar, removeAvatar, uploadAvatar } from './avatarService.js';
+import {
+    updateRequestFollowUser,
+    getAllFollower,
+    getAllFollowing,
+    getAllReceive,
+    getAllRequest,
+} from './followService';
+import { getDetailSong, getSong, uploadMusic, getPlaylist, removeMusic, updateMusic } from './musicService';
+import { search, getUser,updateUser } from './userService.js';
 const config = {
     login,
     logout,
@@ -28,7 +28,9 @@ const config = {
     getSong,
     uploadMusic,
     getPlaylist,
-    removeMusic
+    updateUser,
+    removeMusic,
+    updateMusic,
 };
 
 export default config;

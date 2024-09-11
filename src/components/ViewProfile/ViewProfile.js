@@ -26,10 +26,9 @@ function ViewProfile() {
     const { id } = useParams();
     const { userAuth, tokenStr, setOpenFormLogin } = UserAuth();
     const { profileUser, setProfileUser } = UserMusic();
-    // const { setInfoNotify } = UserNotify();
 
     const [collapsed, setCollapsed] = useState(false);
-    const [selectedKey, setSelectedKey] = useState('nav1');
+    const [selectedKey, setSelectedKey] = useState(localStorage.getItem('selectedKey') || 'nav1'); // Lấy giá trị từ localStorage nếu có
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -38,7 +37,7 @@ function ViewProfile() {
         if (tokenStr) {
             const fetchProfile = async () => {
                 try {
-                    const data = await config.getUser(id,tokenStr);
+                    const data = await config.getUser(id, tokenStr);
                     setProfileUser(data.result);
                 } catch (error) {
                     console.error('Failed to fetch profile:', error);
@@ -49,15 +48,18 @@ function ViewProfile() {
     }, [id, tokenStr]);
 
     useEffect(() => {
-        setSelectedKey('nav1');
+        localStorage.setItem('selectedKey', 'nav1'); // Đặt giá trị mặc định khi profileUser thay đổi
     }, [profileUser]);
 
-    const handleMenuClick = (e) => setSelectedKey(e.key);
+    const handleMenuClick = (e) => {
+        setSelectedKey(e.key); // Cập nhật `selectedKey`
+        localStorage.setItem('selectedKey', e.key); // Lưu vào localStorage
+    };
 
     const handleFollowAction = (status) => {
         const userId = profileUser.id;
         const updateFollowStatus = async () => {
-            const data = await config.updateRequestFollowUser(userId,tokenStr, status);
+            const data = await config.updateRequestFollowUser(userId, tokenStr, status);
             setProfileUser((prev) => ({ ...prev, statusFollower: data.result }));
         };
         updateFollowStatus();

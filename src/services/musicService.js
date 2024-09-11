@@ -59,3 +59,21 @@ export const removeMusic = async (publicIdMusic, publicIdAvatar, id, token) => {
         return { errorCode: error.response };
     }
 };
+
+export const updateMusic = async (formData, token) => {
+    try {
+        const res = await callPath.patch(
+            `music/update-music`,
+            formData,
+            token,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            },
+        );
+        return res.data;
+    } catch (err) {
+        return { errCode: err.response.status };
+    }
+};

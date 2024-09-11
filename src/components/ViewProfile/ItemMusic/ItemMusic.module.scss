@@ -91,3 +91,43 @@
     overflow: hidden;
     text-overflow: ellipsis; /* Thêm dấu chấm ba (...) nếu có văn bản bị cắt */
 }
+
+//Edit Form
+:global {
+    .ant-modal {
+        width: 50vw !important;
+        min-height: 10rem !important;
+    }
+    :where(.css-dev-only-do-not-override-98ntnt).ant-form-item .ant-form-item-control-input-content {
+        text-align: end;
+        padding: 0 1rem;
+    }
+}
+
+.upload {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    margin-bottom: 1rem;
+}
+
+.upload-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+
+}
+
+.upload-img {
+    width: 15rem; 
+    height: 15rem; 
+    object-fit: cover;
+    border-radius: 0.5rem; 
+    border: 1px solid #d9d9d9;
+}
+
+.loading {
+    animation: var(--animation-loading);
+}

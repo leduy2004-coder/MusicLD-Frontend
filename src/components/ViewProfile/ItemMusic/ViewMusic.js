@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Col, Popconfirm, message } from 'antd'; // Import Popconfirm and message from Ant Design
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faRemove } from '@fortawesome/free-solid-svg-icons';
@@ -11,16 +11,18 @@ import { UserAuth } from '../../Store';
 import styles from './ItemMusic.module.scss';
 import Image from '~/components/Image';
 import Btn from '~/components/Button';
+import EditFormMusic from './EditFormMusic';
 
 const cx = classNames.bind(styles);
 
-function ViewMusic({ data = {}, number = 0 }) {
+function ViewMusic({ data = {}, number = 0, setMusics = {} }) {
     const { tokenStr, userAuth, setOpenFormLogin } = UserAuth();
     const { setInfoNotify } = UserNotify();
-    console.log(data)
+    const [isEditVisible, setIsEditVisible] = useState(false);
+
     const handleDelete = async (e) => {
         if (userAuth && tokenStr) {
-            const result = await config.removeMusic(data.publicId, data?.avatarResponse?.publicId, data.id,tokenStr);
+            const result = await config.removeMusic(data.publicId, data?.avatarResponse?.publicId, data.id, tokenStr);
 
             if (result.errCode) {
                 setInfoNotify({
@@ -37,9 +39,8 @@ function ViewMusic({ data = {}, number = 0 }) {
                     type: 'success',
                 });
 
-                setTimeout(() => {
-                    window.location.reload();
-                }, [300]);
+                // Thay vì reload lại trang, cập nhật lại danh sách nhạc
+                setMusics((prevMusics) => prevMusics.filter((music) => music.id !== data.id));
             }
         } else {
             setOpenFormLogin(true);
@@ -58,7 +59,13 @@ function ViewMusic({ data = {}, number = 0 }) {
                     <h3 className={cx('meta-title')}>{data.title}</h3>
 
                     <div className={cx('button-area')}>
-                        <Btn leftIcon={<FontAwesomeIcon icon={faEdit} />} medium primary className={cx('button-edit')}>
+                        <Btn
+                            leftIcon={<FontAwesomeIcon icon={faEdit} />}
+                            medium
+                            primary
+                            className={cx('button-edit')}
+                            onClick={() => setIsEditVisible(true)}
+                        >
                             Chỉnh sửa
                         </Btn>
 
@@ -81,6 +88,13 @@ function ViewMusic({ data = {}, number = 0 }) {
                     </div>
                 </div>
             </Card>
+            <EditFormMusic
+                visible={isEditVisible}
+                onCancel={() => setIsEditVisible(false)}
+                musicData={data}
+                tokenStr={tokenStr}
+                setMusics={setMusics}
+            />
         </Col>
     );
 }

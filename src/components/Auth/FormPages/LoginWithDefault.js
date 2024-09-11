@@ -51,7 +51,7 @@ function LoginWithDefault() {
                 content: 'Đăng nhập thất bại. Hãy thử lại !!',
                 delay: 1500,
                 isNotify: true,
-                type: 'error'
+                type: 'error',
             });
 
             setTimeout(() => {
@@ -62,15 +62,14 @@ function LoginWithDefault() {
                 content: 'Đăng nhập thành công',
                 delay: 1500,
                 isNotify: true,
-                type: 'success'
+                type: 'success',
             });
-    
+
             localStorage.setItem('user-id', JSON.stringify(data.result.userResponse));
             localStorage.setItem('access_token', JSON.stringify(`Bearer ${data.result.access_token}`));
             localStorage.setItem('refresh_token', JSON.stringify(`Bearer ${data.result.refresh_token}`));
             localStorage.setItem('avatar', JSON.stringify(data.result.userResponse.avatar));
 
-            
             setTimeout(() => {
                 setIsLoading(false);
                 window.location.reload();
@@ -123,8 +122,8 @@ function LoginWithDefault() {
             </div>
             <Button
                 className={cx('btn-submit')}
-                onClick={handleLogin}
-                disabled={disabledSubmitted ? true : false}
+                onClick={!isLoading ? handleLogin : undefined} 
+                disabled={isLoading || disabledSubmitted} 
                 type="submit"
                 primary
                 large

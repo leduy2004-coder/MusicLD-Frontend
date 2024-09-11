@@ -46,7 +46,7 @@ function ItemMusic({ data = {} }) {
             {Array.isArray(musics) && musics.length > 0 ? (
                 <Row gutter={[16, 28]}>
                     {musics.map((music, index) => (
-                        <ViewMusic key={music.id} data={music} number={index + 1} />
+                        <ViewMusic key={music.id} data={music} number={index + 1} setMusics ={setMusics}/>
                     ))}
                 </Row>
             ) : (

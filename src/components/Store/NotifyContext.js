@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 const NotifyContext = React.createContext();
@@ -12,8 +12,23 @@ export function NotifyProvider({ children }) {
         content: '',
         delay: 3000,
         isNotify: false,
-        type : 'success'
+        type: 'success',
     });
+
+    // Khi infoNotify.isNotify là true, sau một khoảng thời gian delay, cập nhật isNotify về false
+    useEffect(() => {
+        if (infoNotify.isNotify) {
+            const timer = setTimeout(() => {
+                setInfoNotify((prev) => ({
+                    ...prev,
+                    isNotify: false,
+                }));
+            }, infoNotify.delay*1.5);
+
+            // Cleanup timer khi component bị unmount hoặc trước khi chạy effect mới
+            return () => clearTimeout(timer);
+        }
+    }, [infoNotify]);
 
     const values = { infoNotify, setInfoNotify };
 

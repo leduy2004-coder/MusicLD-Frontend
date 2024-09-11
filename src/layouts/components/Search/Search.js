@@ -30,7 +30,6 @@ function Search() {
 
         const fetchApi = async () => {
             setLoading(true);
-
             const result = await config.search(debouncedValue);
             setSearchResult(result.result);
             setLoading(false);
