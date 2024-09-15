@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Card, Col, Popconfirm, message } from 'antd'; // Import Popconfirm and message from Ant Design
+import { Card, Col, Popconfirm, message } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faRemove } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faEdit, faRemove } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
-import { UserNotify } from '../../Store';
+import { UserMusic, UserNotify } from '../../Store';
 import config from '~/services';
 import { UserAuth } from '../../Store';
 import styles from './ItemMusic.module.scss';
@@ -15,42 +15,57 @@ import EditFormMusic from './EditFormMusic';
 
 const cx = classNames.bind(styles);
 
-function ViewMusic({ data = {}, number = 0, setMusics = {} }) {
+function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false }) {
     const { tokenStr, userAuth, setOpenFormLogin } = UserAuth();
     const { setInfoNotify } = UserNotify();
     const [isEditVisible, setIsEditVisible] = useState(false);
+    const { setSongs } = UserMusic();
 
-    const handleDelete = async (e) => {
+    const handleDelete = async () => {
         if (userAuth && tokenStr) {
-            const result = await config.removeMusic(data.publicId, data?.avatarResponse?.publicId, data.id, tokenStr);
+            try {
+                const result = await config.removeMusic(
+                    data.publicId,
+                    data?.avatarResponse?.publicId,
+                    data.id,
+                    tokenStr,
+                );
 
-            if (result.errCode) {
-                setInfoNotify({
-                    content: 'Xóa thất bại. Hãy thử lại !!',
-                    delay: 1500,
-                    isNotify: true,
-                    type: 'error',
-                });
-            } else {
-                setInfoNotify({
-                    content: 'Xóa thành công',
-                    delay: 1500,
-                    isNotify: true,
-                    type: 'success',
-                });
+                if (result.errCode) {
+                    setInfoNotify({
+                        content: 'Xóa thất bại. Hãy thử lại !!',
+                        delay: 1500,
+                        isNotify: true,
+                        type: 'error',
+                    });
+                } else {
+                    setInfoNotify({
+                        content: 'Xóa thành công',
+                        delay: 1500,
+                        isNotify: true,
+                        type: 'success',
+                    });
 
-                // Thay vì reload lại trang, cập nhật lại danh sách nhạc
-                setMusics((prevMusics) => prevMusics.filter((music) => music.id !== data.id));
+                    // Update the music list without refreshing the page
+                    setMusics((prevMusics) => prevMusics.filter((music) => music.id !== data.id));
+                }
+            } catch (error) {
+                message.error('Có lỗi xảy ra. Vui lòng thử lại!');
             }
         } else {
             setOpenFormLogin(true);
         }
     };
-
+    const handlePlayMusic = () => {
+        
+    };
+    const handleAddMusic = (newSong) => {
+        setSongs((prevSongs) => [...prevSongs, newSong]);
+    }
     return (
-        <Col span={24} className={cx('card')}>
-            <Card hoverable>
-                <div className={cx('card-body')}>
+        <Col span={20}>
+            <Card hoverable onClick={playMusic ? handlePlayMusic : undefined} >
+                <div className={cx(playMusic ? 'card-play' : 'card-body')}>
                     <div className={cx('number')}>{number}</div>
                     <div className={cx('avatar')}>
                         <Image alt="example" src={data?.avatarResponse?.url} />
@@ -59,32 +74,46 @@ function ViewMusic({ data = {}, number = 0, setMusics = {} }) {
                     <h3 className={cx('meta-title')}>{data.title}</h3>
 
                     <div className={cx('button-area')}>
-                        <Btn
-                            leftIcon={<FontAwesomeIcon icon={faEdit} />}
-                            medium
-                            primary
-                            className={cx('button-edit')}
-                            onClick={() => setIsEditVisible(true)}
-                        >
-                            Chỉnh sửa
-                        </Btn>
-
-                        {/* Bọc nút "Xóa" bằng Popconfirm */}
-                        <Popconfirm
-                            title="Bạn có chắc chắn muốn xóa bài hát này không?"
-                            onConfirm={handleDelete}
-                            okText="Có"
-                            cancelText="Không"
-                        >
+                        {playMusic ? (
                             <Btn
-                                leftIcon={<FontAwesomeIcon icon={faRemove} />}
-                                outline
+                                leftIcon={<FontAwesomeIcon icon={faAdd} />}
                                 medium
-                                className={cx('button-delete')}
+                                primary
+                                className={cx('button-edit')}
+                                onClick={() => handleAddMusic(data)}
                             >
-                                Xóa
+                                Thêm vào list nhạc
                             </Btn>
-                        </Popconfirm>
+                        ) : (
+                            <>
+                                <Btn
+                                    leftIcon={<FontAwesomeIcon icon={faEdit} />}
+                                    medium
+                                    primary
+                                    className={cx('button-edit')}
+                                    onClick={() => setIsEditVisible(true)}
+                                >
+                                    Chỉnh sửa
+                                </Btn>
+
+                                {/* Wrap "Delete" button in Popconfirm */}
+                                <Popconfirm
+                                    title="Bạn có chắc chắn muốn xóa bài hát này không?"
+                                    onConfirm={handleDelete}
+                                    okText="Có"
+                                    cancelText="Không"
+                                >
+                                    <Btn
+                                        leftIcon={<FontAwesomeIcon icon={faRemove} />}
+                                        outline
+                                        medium
+                                        className={cx('button-delete')}
+                                    >
+                                        Xóa
+                                    </Btn>
+                                </Popconfirm>
+                            </>
+                        )}
                     </div>
                 </div>
             </Card>
@@ -100,7 +129,18 @@ function ViewMusic({ data = {}, number = 0, setMusics = {} }) {
 }
 
 ViewMusic.propTypes = {
-    data: PropTypes.object,
+    data: PropTypes.shape({
+        id: PropTypes.number,
+        title: PropTypes.string,
+        avatarResponse: PropTypes.shape({
+            url: PropTypes.string,
+            publicId: PropTypes.string,
+        }),
+        publicId: PropTypes.string,
+    }).isRequired,
+    number: PropTypes.number,
+    setMusics: PropTypes.func.isRequired,
+    playMusic: PropTypes.bool,
 };
 
 export default ViewMusic;

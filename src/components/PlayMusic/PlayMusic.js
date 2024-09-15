@@ -6,6 +6,7 @@ import icons from '~/utils/icon';
 import { Slider } from 'antd';
 import styles from './PlayMusic.module.scss';
 import Image from '../Image';
+import { UserMusic } from '../Store';
 
 const cx = classNames.bind(styles);
 const {
@@ -25,12 +26,12 @@ const {
 let intervalID;
 
 const PlayMusic = ({ setIsShow }) => {
+    const { songs, setSongs } = UserMusic();
     const [curIdSong, setCurIdSong] = useState(null);
     const [isPlay, setIsPlay] = useState(false);
-    const [songs, setSongs] = useState([]);
     const [songInfo, setSongInfo] = useState(null);
     const [crsecond, setCrSecond] = useState(0);
-    const [audio, setAudio] = useState(new Audio());
+    const [audio, setAudio] = useState(null); // Initialize to null
     const [volumes, setVolumes] = useState(0.5);
     const [isShuff, setIsShuff] = useState(false);
     const [repeatMode, setRepeatMode] = useState(0);
@@ -39,21 +40,24 @@ const PlayMusic = ({ setIsShow }) => {
 
     const onChangeValue = (value) => {
         setVolumes(value / 100);
-        audio.volume = value / 100;
+        if (audio) audio.volume = value / 100;
     };
 
     useEffect(() => {
         const fetchDetailSong = async () => {
             if (curIdSong) {
-                const [res1, res2] = await Promise.all([config.getDetailSong(curIdSong), config.getSong(curIdSong)]);
-                if (res1.data.err === 0 && res2.data.err === 0) {
-                    setSongInfo(res1.data.data);
-                    setAudio(new Audio(res2.data.data['128']));
-                } else {
-                    setAudio(new Audio());
+                const res = await config.getDetailSong(curIdSong);
+                if (res.errCode) {
+                    setAudio(null);
                     setIsPlay(false);
                     setCrSecond(0);
                     runTimeref.current.style.cssText = `right: ${100}%`;
+                } else {
+                    setSongInfo(res);
+
+                    const newAudio = new Audio(res.url);
+                    newAudio.volume = volumes;
+                    setAudio(newAudio);
                 }
             }
         };
@@ -61,17 +65,19 @@ const PlayMusic = ({ setIsShow }) => {
     }, [curIdSong]);
 
     useEffect(() => {
-        intervalID && clearInterval(intervalID);
         if (audio && isPlay && runTimeref.current) {
             audio.play();
-            audio.volume = volumes;
             intervalID = setInterval(() => {
                 let percent = Math.round((audio.currentTime * 10000) / songInfo?.duration) / 100;
                 runTimeref.current.style.cssText = `right: ${100 - percent}%`;
                 setCrSecond(Math.round(audio.currentTime));
-            }, 10);
+            }, 1000);
+
+            return () => {
+                clearInterval(intervalID);
+            };
         }
-    }, [audio, isPlay]);
+    }, [audio]);
 
     useEffect(() => {
         const handleEnded = () => {
@@ -81,41 +87,48 @@ const PlayMusic = ({ setIsShow }) => {
                 repeatMode === 1 ? handleRepeatOne() : handleNextSong();
             } else if (isShuff && repeatMode) {
                 handleShuff();
-                audio.play();
-                setIsPlay(true);
             } else {
                 handleNextSong();
             }
         };
-        audio.addEventListener('ended', handleEnded);
+
+        if (audio) {
+            audio.addEventListener('ended', handleEnded);
+        }
         return () => {
-            audio.removeEventListener('ended', handleEnded);
+            if (audio) {
+                audio.removeEventListener('ended', handleEnded);
+            }
         };
     }, [audio, isShuff, repeatMode]);
 
     const handlePlayMusic = () => {
-        if (isPlay) {
-            audio.pause();
-            setIsPlay(false);
-        } else {
-            audio.play();
-            setIsPlay(true);
+        if (songs.length > 0) {
+            if (isPlay) {
+                audio.pause();
+                setIsPlay(false);
+            } else {
+                audio.play();
+                setIsPlay(true);
+            }
         }
     };
 
     const handleClickProgesBar = (e) => {
-        const tracRect = trackref.current.getBoundingClientRect();
-        const percent = Math.round(((e.clientX - tracRect.left) * 10000) / tracRect.width) / 100;
-        runTimeref.current.style.cssText = `right: ${100 - percent}%`;
-        audio.currentTime = (percent * songInfo.duration) / 100;
-        setCrSecond(Math.round((percent * songInfo.duration) / 100));
+        if (songs.length > 0) {
+            const tracRect = trackref.current.getBoundingClientRect();
+            const percent = Math.round(((e.clientX - tracRect.left) * 10000) / tracRect.width) / 100;
+            runTimeref.current.style.cssText = `right: ${100 - percent}%`;
+            audio.currentTime = (percent * songInfo.duration) / 100;
+            setCrSecond(Math.round((percent * songInfo.duration) / 100));
+        }
     };
 
     const handleNextSong = () => {
-        if (songs) {
+        if (songs.length > 1) {
             let currentSongIndex;
             songs.forEach((item, index) => {
-                if (item.encodeId === curIdSong) currentSongIndex = index;
+                if (item.id === curIdSong) currentSongIndex = index;
             });
 
             if (isShuff) {
@@ -124,53 +137,59 @@ const PlayMusic = ({ setIsShow }) => {
                 let idSongSelected = currentSongIndex;
                 if (currentSongIndex === songs.length - 1) {
                     idSongSelected = 0;
-                    setCurIdSong(songs[idSongSelected].encodeId);
-                    setIsPlay(true);
+                    setCurIdSong(songs[idSongSelected].id);
                 } else {
-                    setCurIdSong(songs[currentSongIndex + 1].encodeId);
-                    setIsPlay(true);
+                    setCurIdSong(songs[currentSongIndex + 1].id);
                 }
+                setIsPlay(true);
             }
+            audio.pause();
         }
     };
 
     const handlePrevSong = () => {
-        if (songs) {
+        if (songs.length > 1) {
             let currentSongIndex;
             songs.forEach((item, index) => {
-                if (item.encodeId === curIdSong) currentSongIndex = index;
+                if (item.id === curIdSong) currentSongIndex = index;
             });
             let idSongPlay = currentSongIndex;
             if (currentSongIndex === 0) {
                 idSongPlay = songs.length - 1;
-                setCurIdSong(songs[idSongPlay].encodeId);
-                setIsPlay(true);
+                setCurIdSong(songs[idSongPlay].id);
             } else {
-                setCurIdSong(songs[idSongPlay - 1].encodeId);
-                setIsPlay(true);
+                setCurIdSong(songs[idSongPlay - 1].id);
             }
+            setIsPlay(true);
+            audio.pause();
         }
     };
 
     const handleShuff = () => {
-        const randomIndex = Math.floor(Math.random() * songs?.length);
-        setCurIdSong(songs[randomIndex].encodeId);
-        setIsPlay(true);
+        if (songs.length > 1) {
+            const randomIndex = Math.floor(Math.random() * songs?.length);
+            setCurIdSong(songs[randomIndex].id);
+            setIsPlay(true);
+        }
     };
 
     const handleRepeatOne = () => {
         audio.play();
     };
-
+    useEffect(() => {
+        if (songs.length > 0) {
+            setCurIdSong(songs[0].id);
+        }
+    }, [songs]);
     return (
         <div className={cx('play_control')}>
             <div className={cx('detail_song')}>
                 <div className={cx('ava_thumb')}>
-                    <Image />
+                    <Image src={songInfo?.avatarResponse.url} />
                 </div>
                 <div className={cx('song_infor')}>
                     <p>{songInfo?.title}</p>
-                    <span>{songInfo?.artistsNames}</span>
+                    <span>{songInfo?.nickName}</span>
                 </div>
                 <div className={cx('like_action')}>
                     <span>
@@ -204,7 +223,7 @@ const PlayMusic = ({ setIsShow }) => {
                         <BiSkipNext size={27} />
                     </span>
                     <span
-                        title="Bật phát lại tất cả"
+                        title={repeatMode === 0 ? 'Không lặp lại' : repeatMode === 1 ? 'Lặp lại 1 bài' : 'Lặp lại toàn bộ'}
                         className={cx(!repeatMode ? 'isFalse' : 'isTrue')}
                         onClick={() => setRepeatMode((prev) => (prev === 2 ? 0 : prev + 1))}
                     >

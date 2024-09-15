@@ -9,41 +9,69 @@ const httpRequest = axios.create({
 });
 
 // Add a response interceptor to handle errors
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+    failedQueue.forEach((prom) => {
+        if (error) {
+            prom.reject(error);
+        } else {
+            prom.resolve(token);
+        }
+    });
+
+    failedQueue = [];
+};
+
+// Interceptor logic here...
 httpRequest.interceptors.response.use(
     (response) => response,
     async (error) => {
+        const originalRequest = error.config;
+
         if (error.response && error.response.status === 401) {
-            const originalRequest = error.config;
-            try {
-                let refreshToken = localStorage.getItem('refresh_token');
+            if (!isRefreshing) {
+                isRefreshing = true;
 
-                // Kiểm tra nếu refreshToken tồn tại và không phải là null
-                if (refreshToken) {
-                    refreshToken = JSON.parse(refreshToken); // Đảm bảo đúng định dạng từ localStorage
-
-                    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}v1/auth/refresh-token`, null, {
+                try {
+                    const refreshToken = JSON.parse(localStorage.getItem('refresh_token'));
+                    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/v1/auth/refresh-token`, null, {
                         headers: {
                             Authorization: refreshToken,
                         },
                     });
 
                     if (response.status === 200) {
-                        const accessToken = response.data.result.access_token;
-                        const newRefreshToken = response.data.result.refresh_token;
+                        const { access_token, refresh_token } = response.data.result;
+                        localStorage.setItem('access_token', JSON.stringify(`Bearer ${access_token}`));
+                        localStorage.setItem('refresh_token', JSON.stringify(`Bearer ${refresh_token}`));
 
-                        localStorage.setItem('access_token', JSON.stringify(`Bearer ${accessToken}`));
-                        localStorage.setItem('refresh_token', JSON.stringify(`Bearer ${newRefreshToken}`));
-                        originalRequest.headers.Authorization = JSON.parse(localStorage.getItem('access_token'));
-
+                        originalRequest.headers.Authorization = `Bearer ${access_token}`;
+                        processQueue(null, access_token);
                         return httpRequest(originalRequest);
                     }
+                } catch (error) {
+                    processQueue(error, null);
+                    localStorage.clear();
+                    window.location.href = '/login';
+                } finally {
+                    isRefreshing = false;
                 }
-            } catch (refreshError) {
-                console.error('Error refreshing token', refreshError);
-                localStorage.clear();
-                window.location.href = '/login';
             }
+
+            return new Promise((resolve, reject) => {
+                failedQueue.push({ resolve, reject });
+            })
+                .then((token) => {
+                    originalRequest.headers.Authorization = `Bearer ${token}`;
+                    return httpRequest(originalRequest);
+                })
+                .catch((err) => {
+                    return Promise.reject(err);
+                });
         }
+
         return Promise.reject(error);
     },
 );

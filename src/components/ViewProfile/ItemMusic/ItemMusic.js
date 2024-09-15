@@ -1,40 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { Tabs, Row, Empty, Typography } from 'antd';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload, faTrash, faCalendarDay, faVenusMars, faSignature } from '@fortawesome/free-solid-svg-icons';
+import { Row, Empty, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
 import styles from './ItemMusic.module.scss';
 import { UserAuth } from '../../Store';
 import config from '../../../services';
-import Image from '~/components/Image';
-import Menu from '~/components/Popper/Menu';
-import Btn from '~/components/Button';
 import ViewMusic from './ViewMusic';
 
 const cx = classNames.bind(styles);
 
-function ItemMusic({ data = {} }) {
-    const { userAuth, tokenStr, setOpenFormEdit, avatar } = UserAuth();
+function ItemMusic({ data, playMusic = false }) {
+    const { userAuth, tokenStr } = UserAuth();
     const [musics, setMusics] = useState([]);
     const [number, setNumber] = useState(0);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const musicsData = await config.getPlaylist(data.id, tokenStr);
-                setMusics(musicsData.result);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
+        // Xử lý data thành mảng nếu là object
+        const processedData = Array.isArray(data) ? data : [data];
 
-        fetchData();
-    }, [data, tokenStr]);
+        if (playMusic) {
+            setMusics(processedData);
+        } else {
+            const fetchData = async () => {
+                try {
+                    const musicsData = await config.getPlaylist(data.id, tokenStr);
+                    setMusics(musicsData.result);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            };
 
-    // Update the `number` state based on the length of `musics`
+            fetchData();
+        }
+    }, [data, tokenStr, playMusic]);
+
     useEffect(() => {
         if (Array.isArray(musics)) {
             setNumber(musics.length);
@@ -42,11 +42,17 @@ function ItemMusic({ data = {} }) {
     }, [musics]);
 
     return (
-        <div className={cx('body')}>
+        <div className={cx({ body: !playMusic })}>
             {Array.isArray(musics) && musics.length > 0 ? (
                 <Row gutter={[16, 28]}>
                     {musics.map((music, index) => (
-                        <ViewMusic key={music.id} data={music} number={index + 1} setMusics ={setMusics}/>
+                        <ViewMusic
+                            key={music.id}
+                            data={music}
+                            number={index + 1}
+                            setMusics={setMusics}
+                            playMusic={playMusic}
+                        />
                     ))}
                 </Row>
             ) : (
@@ -62,9 +68,5 @@ function ItemMusic({ data = {} }) {
         </div>
     );
 }
-
-ItemMusic.propTypes = {
-    data: PropTypes.object,
-};
 
 export default ItemMusic;

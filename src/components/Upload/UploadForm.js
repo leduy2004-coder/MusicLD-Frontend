@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Upload, Button, Typography } from 'antd';
+import { Form, Input, Upload, Button, Typography, Radio } from 'antd'; // Import Radio từ antd
 import classNames from 'classnames/bind';
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -28,7 +28,7 @@ function UploadForm() {
         formData.append('avatar', avatarList[0]?.originFileObj); // `originFileObj` chứa đối tượng tệp
         formData.append('file', fileList[0]?.originFileObj);
         formData.append('lyrics', values.lyrics);
-
+        formData.append('access', values.access);
         try {
             setIsLoading(true);
             const data = await config.uploadMusic(formData, tokenStr);
@@ -75,7 +75,6 @@ function UploadForm() {
     const handleAvatarChange = ({ fileList: newFileList }) => {
         // Chỉ giữ lại tệp đầu tiên trong danh sách
         setAvatarList(newFileList.slice(-1));
-
     };
 
     const handleFileChange = ({ fileList: newFileList }) => {
@@ -142,6 +141,16 @@ function UploadForm() {
                         </Upload>
                     </Form.Item>
                 </div>
+                <Form.Item
+                    name="access"
+                    label="Trạng thái"
+                    rules={[{ required: true, message: 'Vui lòng chọn trạng thái!' }]}
+                >
+                    <Radio.Group>
+                        <Radio value="public">Công khai</Radio>
+                        <Radio value="private">Chỉ người theo dõi mới nghe được</Radio>
+                    </Radio.Group>
+                </Form.Item>
 
                 <Form.Item
                     name="lyrics"
@@ -152,12 +161,7 @@ function UploadForm() {
                 </Form.Item>
 
                 <Form.Item className={cx('Btn-area')}>
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                        className={cx('button')}
-                        disabled={isLoading} 
-                    >
+                    <Button type="primary" htmlType="submit" className={cx('button')} disabled={isLoading}>
                         {isLoading ? <FontAwesomeIcon className={cx('loading')} icon={faSpinner} /> : <span>Đăng</span>}
                     </Button>
                 </Form.Item>

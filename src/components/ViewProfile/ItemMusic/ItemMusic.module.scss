@@ -1,8 +1,4 @@
 :global {
-    .ant-card {
-        cursor: auto;
-        width: 80%;
-    }
     :where(.css-dev-only-do-not-override-98ntnt).ant-btn-primary {
         background: var(--primary);
     }
@@ -23,6 +19,7 @@
     padding: 1rem 2rem;
     background-color: var(--background-music-play);
     border-radius: 5px;
+    cursor: auto;
 }
 
 .hidden {
@@ -97,6 +94,7 @@
     .ant-modal {
         width: 50vw !important;
         min-height: 10rem !important;
+        top: 2rem;
     }
     :where(.css-dev-only-do-not-override-98ntnt).ant-form-item .ant-form-item-control-input-content {
         text-align: end;
@@ -130,4 +128,31 @@
 
 .loading {
     animation: var(--animation-loading);
+}
+.button-area {
+    display: flex;
+    justify-content: end;
+}
+//play
+.button-play {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+.card-play {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    background-color: var(--background-music-play);
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+
+    &:hover {
+        cursor: pointer;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        transform: translateX(3px);
+    }
 }

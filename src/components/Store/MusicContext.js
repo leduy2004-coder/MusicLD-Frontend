@@ -9,7 +9,7 @@ export function UserMusic() {
 
 export function MusicProvider({ children }) {
     const [idVideo, setIdVideo] = useState();
-    const [listVideos, setListVideos] = useState([]);
+    const [songs, setSongs] = useState([]);
     const [listVideoHome, setListVideoHome] = useState([]);
     const [profileUser, setProfileUser] = useState({});
     const [positionVideo, setPositionVideo] = useState(null);
@@ -20,8 +20,8 @@ export function MusicProvider({ children }) {
     const [followUser, setFollowUser] = useState(false);
 
     const value = {
-        listVideos,
-        setListVideos,
+        songs,
+        setSongs,
         listVideoHome,
         setListVideoHome,
         positionVideo,

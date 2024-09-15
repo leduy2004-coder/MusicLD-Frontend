@@ -6,8 +6,9 @@ import {
     getAllFollowing,
     getAllReceive,
     getAllRequest,
+    checkFollow
 } from './followService';
-import { getDetailSong, getSong, uploadMusic, getPlaylist, removeMusic, updateMusic } from './musicService';
+import { getDetailSong, uploadMusic, getPlaylist,getPlaylistByAccess, removeMusic, updateMusic } from './musicService';
 import { search, getUser,updateUser } from './userService.js';
 const config = {
     login,
@@ -25,12 +26,13 @@ const config = {
     getAllRequest,
     getAllReceive,
     getDetailSong,
-    getSong,
     uploadMusic,
     getPlaylist,
     updateUser,
     removeMusic,
     updateMusic,
+    getPlaylistByAccess,
+    checkFollow,
 };
 
 export default config;

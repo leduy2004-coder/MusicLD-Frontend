@@ -1,32 +1,16 @@
-import axios from 'axios';
+
 import * as callPath from '../utils/httpRequest';
 
-export const getSong = (sid) =>
-    new Promise(async (resolve, reject) => {
-        try {
-            const respon = await axios({
-                url: '/song',
-                method: 'get',
-                params: { id: sid },
-            });
-            resolve(respon);
-        } catch (error) {
-            reject(error);
-        }
-    });
-export const getDetailSong = (sid) =>
-    new Promise(async (resolve, reject) => {
-        try {
-            const respon = await axios({
-                url: '/infosong',
-                method: 'get',
-                params: { id: sid },
-            });
-            resolve(respon);
-        } catch (error) {
-            reject(error);
-        }
-    });
+export const getDetailSong = async (id, token) => {
+    try {
+        const res = await callPath.get('music/get-music', token, {
+            params: { id },
+        });
+        return res.result;
+    } catch (error) {
+        return { errorCode: error.response.status };
+    }
+};
 export const getPlaylist = async (id, token) => {
     try {
         const res = await callPath.get('music/get-playlist', token, {
@@ -37,7 +21,16 @@ export const getPlaylist = async (id, token) => {
         return { errorCode: error.response.status };
     }
 };
-
+export const getPlaylistByAccess = async (id, token, access) => {
+    try {
+        const res = await callPath.get('music/get-playlist-access', token, {
+            params: { id, access },
+        });
+        return res;
+    } catch (error) {
+        return { errorCode: error.response.status };
+    }
+};
 export const uploadMusic = async (formData, token) => {
     try {
         const res = await callPath.post('music/upload', formData, token, {
@@ -62,16 +55,11 @@ export const removeMusic = async (publicIdMusic, publicIdAvatar, id, token) => {
 
 export const updateMusic = async (formData, token) => {
     try {
-        const res = await callPath.patch(
-            `music/update-music`,
-            formData,
-            token,
-            {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+        const res = await callPath.patch(`music/update-music`, formData, token, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
             },
-        );
+        });
         return res.data;
     } catch (err) {
         return { errCode: err.response.status };

@@ -18,6 +18,7 @@ import ItemFollow from './ItemFollow/ItemFollow';
 import config from '~/services';
 import ButtonFollow from '../Button/ButtonFollow';
 import ItemMusic from './ItemMusic/ItemMusic';
+import MenuMusic from './ItemMusic/MenuMusic';
 
 const { Header, Sider, Content } = Layout;
 const cx = classNames.bind(styles);
@@ -70,7 +71,7 @@ function ViewProfile() {
             case 'nav1':
                 return <ItemProfile data={profileUser} />;
             case 'nav2':
-                return <ItemFollow data={profileUser} />;
+                return <MenuMusic data={profileUser}/>;
             case 'nav3':
                 return <ItemFollow data={profileUser} />;
             case 'nav4':
@@ -105,7 +106,7 @@ function ViewProfile() {
                 />
                 <div className={cx('follow', { collapsed, expanded: !collapsed })}>
                     <ButtonFollow
-                        followStatus={profileUser.statusFollower || null}
+                        followStatus={profileUser.statusFollower === 'ACCEPTED' ? 'FRIEND' : profileUser.statusFollower}
                         profileUser={profileUser}
                         handleFollowAction={handleFollowAction}
                     />

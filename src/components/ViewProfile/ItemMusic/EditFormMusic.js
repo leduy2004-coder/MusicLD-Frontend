@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import React, { useState, useEffect } from 'react';
-import { Modal, Form, Input, Button, Upload } from 'antd';
+import { Modal, Form, Input, Button, Upload, Select } from 'antd'; // Imported Select from antd
 import { PlusOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,6 +12,7 @@ import styles from './ItemMusic.module.scss';
 import Image from '~/components/Image';
 
 const { TextArea } = Input;
+const { Option } = Select; // Define Option for Select
 
 const cx = classNames.bind(styles);
 
@@ -27,6 +28,7 @@ function EditFormMusic({ visible, onCancel, musicData, tokenStr, setMusics }) {
             form.setFieldsValue({
                 title: musicData.title,
                 lyrics: musicData.lyrics,
+                access: musicData.access === 'PUBLIC' ? 'public' : 'private'
             });
         }
     }, [visible, musicData, form]);
@@ -43,6 +45,7 @@ function EditFormMusic({ visible, onCancel, musicData, tokenStr, setMusics }) {
             formData.append('id', musicData.id);
             formData.append('title', values.title);
             formData.append('lyrics', values.lyrics);
+            formData.append('access', values.access);
 
             if (avatarList.length > 0) {
                 formData.append('fileAvatar', avatarList[0]?.originFileObj);
@@ -99,14 +102,17 @@ function EditFormMusic({ visible, onCancel, musicData, tokenStr, setMusics }) {
     const handleValuesChange = (changedValues, allValues) => {
         const songNameChanged = allValues.title !== musicData.title;
         const lyricsChanged = allValues.lyrics !== musicData.lyrics;
+        const accessChanged = allValues.access !== musicData.access; // Track changes in access
 
         const avatarChanged = avatarList.length > 0;
 
-        setHasChanges(songNameChanged || lyricsChanged || avatarChanged);
+        setHasChanges(songNameChanged || lyricsChanged || avatarChanged || accessChanged);
     };
+
     const handleRemove = (file) => {
         setAvatarList((prevList) => prevList.filter((item) => item.uid !== file.uid));
     };
+
     return (
         <Modal
             title="Chỉnh sửa thông tin bài hát"
@@ -127,6 +133,7 @@ function EditFormMusic({ visible, onCancel, musicData, tokenStr, setMusics }) {
                 >
                     <Input placeholder="Nhập tên bài hát" />
                 </Form.Item>
+
                 <div className={cx('upload')}>
                     <Form.Item
                         name="avatar"
@@ -156,18 +163,27 @@ function EditFormMusic({ visible, onCancel, musicData, tokenStr, setMusics }) {
                         <Image src={musicData?.avatarResponse?.url || ''} alt="Avatar" className={cx('upload-img')} />
                     </div>
                 </div>
+
+                <Form.Item
+                    name="access"
+                    label="Trạng thái bài hát"
+                    rules={[{ required: true, message: 'Vui lòng chọn trạng thái bài hát!' }]}
+                >
+                    <Select placeholder="Chọn trạng thái">
+                        <Option value="public">Công khai</Option>
+                        <Option value="private">Chỉ người theo dõi</Option>
+                    </Select>
+                </Form.Item>
+
                 <Form.Item
                     name="lyrics"
                     label="Lời bài hát"
                     rules={[{ required: true, message: 'Vui lòng nhập lời!' }]}
                 >
-                    <TextArea
-                        placeholder="Nhập lời bài hát"
-                        autoSize={{ minRows: 4, maxRows: 8 }} 
-                    />
+                    <TextArea placeholder="Nhập lời bài hát" autoSize={{ minRows: 4, maxRows: 8 }} />
                 </Form.Item>
 
-                <Form.Item>
+                <Form.Item className={cx('button-area')}>
                     <Button type="primary" htmlType="submit" disabled={!hasChanges || isLoading}>
                         {isLoading ? <FontAwesomeIcon className={cx('loading')} icon={faSpinner} /> : <span>Lưu</span>}
                     </Button>

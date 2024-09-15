@@ -1,14 +1,9 @@
 import React from 'react';
-
-import config from '~/services';
 import Btn from '../Button';
 import { UserAuth } from '~/components/Store';
 
-
-
 function ButtonFollow({ followStatus, profileUser, className, handleFollowAction }) {
     const { userAuth, tokenStr, setOpenFormLogin } = UserAuth();
-
 
     const actions = {
         CANCELED: () => handleFollowAction('PENDING'),
@@ -39,7 +34,15 @@ function ButtonFollow({ followStatus, profileUser, className, handleFollowAction
     if (userAuth.id === profileUser?.id) return null;
 
     return (
-        <Btn onClick={actions[followStatus]} outline large className={className}>
+        <Btn
+            onClick={(e) => {
+                e.stopPropagation(); // Stop event from propagating to parent elements
+                actions[followStatus](); // Call the passed onClick function if any
+            }}
+            outline
+            large
+            className={className}
+        >
             {buttonText[followStatus]}
         </Btn>
     );

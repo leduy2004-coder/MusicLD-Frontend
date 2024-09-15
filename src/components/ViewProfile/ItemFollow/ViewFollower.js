@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Col } from 'antd';
-import { Link } from 'react-router-dom'; // Import Link từ react-router-dom
-
+import { useNavigate } from 'react-router-dom'; // Use useNavigate from react-router-dom
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
@@ -18,20 +17,28 @@ const cx = classNames.bind(styles);
 function ViewFollower({ data = {}, statusFollow }) {
     const { tokenStr } = UserAuth();
     const [followStatus, setFollowStatus] = useState(statusFollow);
+    const navigate = useNavigate();
+    const [count, setCount] = useState(0);
 
     const handleFollowAction = (status) => {
+
         const userId = data.id;
         const updateFollowStatus = async () => {
             try {
-                console.log(status);
-                const response = await config.updateRequestFollowUser(userId,tokenStr, status);
+                const response = await config.updateRequestFollowUser(userId, tokenStr, status);
                 if (status === 'PENDING') setFollowStatus(status);
                 else setFollowStatus('HIDE');
             } catch (error) {
                 console.error('Failed to update follow status:', error);
             }
         };
-        updateFollowStatus(followStatus);
+        updateFollowStatus(status);
+    };
+
+    const handleCardClick = () => {
+        if (followStatus !== 'HIDE') {
+            navigate(`/profile/${data.id}`);
+        }
     };
 
     return (
@@ -41,46 +48,45 @@ function ViewFollower({ data = {}, statusFollow }) {
                 hidden: followStatus === 'HIDE',
             })}
         >
-            <Link to={`/profile/${data.id}`}>
-                <Card hoverable>
-                    <div className={cx('card-body')}>
-                        <div className={cx('avatar')}>
-                            <Image alt="example" src={data?.avatar?.url} />
-                        </div>
-                        <Meta title={data?.nickName} description="www.instagram.com" className={cx('content')} />
+            <Card hoverable onClick={handleCardClick}>
+                <div className={cx('card-body')}>
+                    <div className={cx('avatar')}>
+                        <Image alt="example" src={data?.avatar?.url} />
+                    </div>
+                    <Meta title={data?.nickName} description="www.instagram.com" className={cx('content')} />
 
-                        {followStatus === 'RECEIVED' ? (
-                            <div className={cx('button-area')}>
-                                <ButtonFollow
-                                    followStatus={'RECEIVED'}
-                                    profileUser={data}
-                                    className={cx('Btn-follow')}
-                                    handleFollowAction={handleFollowAction}
-                                />
-                                <ButtonFollow
-                                    followStatus={'ACCEPTED'}
-                                    profileUser={data}
-                                    className={cx('Btn-follow')}
-                                    handleFollowAction={handleFollowAction}
-                                />
-                            </div>
-                        ) : (
+                    {followStatus === 'RECEIVED' ? (
+                        <div className={cx('button-area')}>
                             <ButtonFollow
-                                followStatus={followStatus}
+                                followStatus={'RECEIVED'}
                                 profileUser={data}
                                 className={cx('Btn-follow')}
                                 handleFollowAction={handleFollowAction}
                             />
-                        )}
-                    </div>
-                </Card>
-            </Link>
+                            <ButtonFollow
+                                followStatus={'ACCEPTED'}
+                                profileUser={data}
+                                className={cx('Btn-follow')}
+                                handleFollowAction={handleFollowAction}
+                            />
+                        </div>
+                    ) : (
+                        <ButtonFollow
+                            followStatus={followStatus}
+                            profileUser={data}
+                            className={cx('Btn-follow')}
+                            handleFollowAction={handleFollowAction}
+                        />
+                    )}
+                </div>
+            </Card>
         </Col>
     );
 }
 
 ViewFollower.propTypes = {
     data: PropTypes.object,
+    statusFollow: PropTypes.string,
 };
 
 export default ViewFollower;

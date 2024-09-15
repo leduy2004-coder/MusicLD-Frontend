@@ -2,14 +2,23 @@
     .ant-form-item-required {
         font-size: 2rem !important;
     }
-
+    :where(.css-dev-only-do-not-override-98ntnt).ant-form-item .ant-form-item-control-input-content {
+        text-align: start;
+    }
+    :where(.css-dev-only-do-not-override-98ntnt).ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
+        border-color: var(--primary);
+        background-color: var(--primary);
+    }
+    :where(.css-dev-only-do-not-override-98ntnt).ant-upload-wrapper .ant-upload-list .ant-upload-list-item .ant-upload-list-item-name {
+        width: 30rem;
+    }
 }
 
 .form {
-    padding: 5rem 11rem;
+    padding: 5rem 10rem;
     background-color: #fff7f7;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), /* Bóng đổ lớn mờ */ 0 6px 6px rgba(0, 0, 0, 0.1);
-    min-height: 65rem;
+    min-height: 55rem;
     width: 70%;
 }
 .button {
@@ -45,7 +54,8 @@
     width: 80%;
 }
 .Btn-area {
-    text-align: end;
+    display: flex;
+    justify-content: end;
 }
 
 .loading {
