@@ -64,13 +64,35 @@ export function MusicProvider({ children }) {
                 });
                 return prevSongs; // Không làm gì nếu index không hợp lệ
             }
+
             const updatedSongs = prevSongs.filter((_, i) => i !== index);
+
+            // Cập nhật localStorage
             localStorage.setItem('songs', JSON.stringify(updatedSongs));
+
+            // Nếu bài hát hiện tại đang phát là bài bị xóa
+            if (currentSongId === prevSongs[index].id) {
+                if (updatedSongs.length > 0) {
+                    // Chuyển sang bài tiếp theo (hoặc bài đầu tiên)
+                    const nextSongIndex = index < updatedSongs.length ? index : 0;
+                    setCurrentSongId(updatedSongs[nextSongIndex].id);
+                    setAutoPlay(true); // Tự động phát bài mới
+                } else {
+                    setCurrentSongId(null);
+                    setAutoPlay(false);
+                }
+            }
+
+            setInfoNotify({
+                content: 'Xóa thành công !!',
+                delay: 1500,
+                isNotify: true,
+                type: 'success',
+            });
+
             return updatedSongs;
         });
     };
-
-    console.log(isShow)
 
     const value = {
         songs,
@@ -101,7 +123,7 @@ export function MusicProvider({ children }) {
         runTimeref,
         trackref,
 
-        isShow, 
+        isShow,
         setIsShow,
     };
 

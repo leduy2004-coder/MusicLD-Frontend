@@ -1,12 +1,17 @@
 import classNames from 'classnames/bind';
 import styles from './WaitListMusic.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faVolumeHigh } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faVolumeHigh, faClose } from '@fortawesome/free-solid-svg-icons';
 import Image from '../Image';
 
 const cx = classNames.bind(styles);
 
-function WaitItemMusic({ data, play = false }) {
+function WaitItemMusic({ data, play = false, handleClose }) {
+    const handleClickClose = (e) => {
+        e.stopPropagation();
+        handleClose();
+    };
+
     return (
         <div className={cx('music')}>
             <div className={cx('avatar')}>
@@ -18,6 +23,7 @@ function WaitItemMusic({ data, play = false }) {
             ) : (
                 <FontAwesomeIcon className={cx('icon-play')} icon={faPlay} />
             )}
+            <FontAwesomeIcon className={cx('icon-close')} icon={faClose} onClick={handleClickClose} />
         </div>
     );
 }

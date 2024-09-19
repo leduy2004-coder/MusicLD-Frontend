@@ -21,7 +21,7 @@ import { RiMovieLine, RiDeleteBin7Line } from 'react-icons/ri';
 import { LiaMicrophoneAltSolid } from 'react-icons/lia';
 import { TfiAlarmClock } from 'react-icons/tfi';
 import { IoIosMore } from 'react-icons/io';
-
+import { FaInfoCircle } from 'react-icons/fa';
 const icons = {
     BsFillDiscFill,
     AiOutlineLineChart,
@@ -55,5 +55,6 @@ const icons = {
     BsPlayCircleFill,
     FaPlay,
     AiOutlineUser,
+    FaInfoCircle 
 };
 export default icons;

@@ -40,10 +40,16 @@
     color: #ccc;
 }
 .like_action {
+    display: flex;
     margin: 0 10px;
 }
 .like_action span {
     margin: 0 10px;
+
+    &:hover {
+        cursor: pointer;
+        color: var(--primary);
+    }
 }
 
 .main_control {
@@ -90,6 +96,7 @@
 
     &:hover {
         cursor: pointer;
+        
     }
 }
 .run_time {
@@ -146,6 +153,7 @@
     border-color: var(--primary);
     border-radius: 50%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    cursor: pointer;
 }
 .btn_playlist {
     width: 60px;
@@ -187,3 +195,5 @@
         box-shadow: 0 0 0 2.5px #ff1616;
     }
 }
+
+

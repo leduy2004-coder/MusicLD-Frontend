@@ -2,11 +2,13 @@ import React, { useEffect, useState, useRef } from 'react';
 import config from '~/services';
 import moment from 'moment';
 import classNames from 'classnames/bind';
+import { useNavigate } from 'react-router-dom';
 import icons from '~/utils/icon';
 import { Slider } from 'antd';
 import styles from './PlayMusic.module.scss';
 import Image from '../Image';
 import { UserMusic } from '../Store';
+import Menu from '../Popper/Menu';
 
 const cx = classNames.bind(styles);
 const {
@@ -22,6 +24,7 @@ const {
     BsFillVolumeUpFill,
     BsRepeat1,
     BiSolidPlaylist,
+    FaInfoCircle,
 } = icons;
 
 let intervalID;
@@ -50,7 +53,7 @@ const PlayMusic = () => {
         trackref,
         setIsShow,
     } = UserMusic();
-    
+
     const onChangeValue = (value) => {
         setVolumes(value / 100);
         if (audio) audio.volume = value / 100;
@@ -77,6 +80,16 @@ const PlayMusic = () => {
                         audio.pause();
                     }
                 }
+            } else {
+                setSongInfo(null);
+                if (audio) {
+                    console.log('2')
+                    audio.pause();
+                    setAudio(null);
+                    setIsPlay(false);
+                    setCrSecond(0);
+                    runTimeref.current.style.cssText = `right: ${100}%`;
+                }
             }
         };
         fetchDetailSong();
@@ -84,7 +97,6 @@ const PlayMusic = () => {
 
     useEffect(() => {
         if (audio && isPlay && runTimeref.current) {
-            console.log(audio);
             audio.play();
             intervalID = setInterval(() => {
                 let percent = Math.round((audio.currentTime * 10000) / songInfo?.duration) / 100;
@@ -213,6 +225,14 @@ const PlayMusic = () => {
             setCurrentSongId(songs[0].id);
         }
     }, [songs]);
+
+    const navigate = useNavigate();
+    const handleOpenInfo = () => {
+        if (songInfo && songInfo.idUser) {
+            navigate(`/profile/${songInfo.idUser}`);
+            localStorage.setItem('selectedKey', 'nav2');
+        }
+    };
     return (
         <div className={cx('play-music')}>
             <div className={cx('play_control')}>
@@ -228,8 +248,9 @@ const PlayMusic = () => {
                         <span>
                             <AiOutlineHeart size={21} />
                         </span>
-                        <span>
-                            <BiDotsHorizontalRounded size={21} />
+
+                        <span onClick={handleOpenInfo}>
+                            <FaInfoCircle size={21} />
                         </span>
                     </div>
                 </div>

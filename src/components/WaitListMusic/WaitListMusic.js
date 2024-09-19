@@ -11,10 +11,15 @@ import WaitItemMusic from './WaitItemMusic';
 const cx = classNames.bind(styles);
 
 function WaitListMusic() {
-    const { songs, currentSongId, setCurrentSongId, setAutoPlay } = UserMusic();
+    const { songs, currentSongId, setCurrentSongId, setAutoPlay, removeSong } = UserMusic();
+    
     const handlePlayMusic = (id) => {
         setCurrentSongId(id);
         setAutoPlay(true);
+    };
+
+    const handleClose = (index) => {
+        removeSong(index);  
     };
 
     return (
@@ -25,9 +30,13 @@ function WaitListMusic() {
             </div>
             <div className={cx('list-music')}>
                 {Array.isArray(songs) && songs.length > 0 ? (
-                    songs.map((song) => (
+                    songs.map((song, index) => (  // Lấy index của bài hát
                         <div key={song.id} onClick={() => handlePlayMusic(song.id)}>
-                            <WaitItemMusic data={song} play={song.id === currentSongId} />
+                            <WaitItemMusic
+                                data={song}
+                                play={song.id === currentSongId}
+                                handleClose={() => handleClose(index)}  
+                            />
                         </div>
                     ))
                 ) : (

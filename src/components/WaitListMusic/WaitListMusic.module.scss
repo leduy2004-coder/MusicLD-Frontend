@@ -70,3 +70,8 @@
     overflow: hidden;
     text-overflow: ellipsis; /* Thêm dấu chấm ba (...) nếu có văn bản bị cắt */
 }
+
+.icon-close:hover {
+    cursor: pointer;
+    color: var(--primary);
+}
