@@ -16,7 +16,7 @@ import config from '~/config';
 
 const cx = classNames.bind(styles);
 
-function Sidebar() {
+function  Sidebar() {
     const [show, setShow] = useState(false);
     const [hover, setHover] = useState(false);
 

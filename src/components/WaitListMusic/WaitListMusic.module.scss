@@ -1,0 +1,72 @@
+.body {
+    background-color: #ffffff26;
+}
+.wrapper {
+    width: 270px;
+    padding: 10px 5px 26px 5px;
+    position: relative;
+    height: calc(100vh - var(--default-layout-header-height) - var(--default-layout-play-height));
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: var(--background-aside-play);
+    z-index: 80;
+}
+
+.title {
+    width: 100%;
+    height: 10%;
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    font-size: 2.1rem;
+    border-right: 1px #000;
+}
+.list-music {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.music {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1rem;
+    padding: 1rem 1rem;
+    background-color: var(--background-music-play);
+    border-radius: 5px;
+    cursor: auto;
+
+    &:hover {
+        cursor: pointer;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        transform: translateX(3px);
+    }
+}
+.avatar {
+    width: 5rem;
+    height: 5rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.meta-title {
+    width: 70%;
+    color: rgb(240, 230, 230);
+    font-weight: 100;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Giới hạn số dòng */
+    -webkit-box-orient: vertical;
+    line-height: 2rem;
+    font-size: 1.5rem;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Thêm dấu chấm ba (...) nếu có văn bản bị cắt */
+}

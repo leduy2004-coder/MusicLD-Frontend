@@ -1,3 +1,12 @@
+.play-music {
+    width: 100%;
+    height: var(--default-layout-play-height);
+    flex: none;
+    position: fixed;
+    background-color: var(--background-music-play);
+    z-index: 99;
+    bottom: 0;
+}
 .play_control {
     width: 98%;
     height: 100%;
@@ -78,6 +87,10 @@
     background-color: #595560;
     position: relative;
     border-radius: 5px;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 .run_time {
     /* width: 70%; */
@@ -130,7 +143,47 @@
 }
 
 .el_hover:hover {
-    border-color: #8b45ca;
+    border-color: var(--primary);
     border-radius: 50%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.btn_playlist {
+    width: 60px;
+    height: 35px;
+    margin-left: 40px;
+    border-left: 1px solid #595560;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.playlist_action {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary);
+    border-radius: 5px;
+}
+
+.playlist_action:hover {
+    background-color: var(--primary);
+    cursor: pointer;
+}
+
+:global {
+    :where(.css-dev-only-do-not-override-98ntnt).ant-slider .ant-slider-track {
+        background-color: var(--primary);
+    }
+    :where(.css-dev-only-do-not-override-98ntnt).ant-slider:hover .ant-slider-track {
+        background-color: #ff9669;
+    }
+    :where(.css-dev-only-do-not-override-98ntnt).ant-slider .ant-slider-handle:hover::after,
+    :where(.css-dev-only-do-not-override-98ntnt).ant-slider .ant-slider-handle:active::after,
+    :where(.css-dev-only-do-not-override-98ntnt).ant-slider .ant-slider-handle:focus::after {
+        box-shadow: 0 0 0 2.5px #ff1616;
+    }
+    :where(.css-dev-only-do-not-override-98ntnt).ant-slider .ant-slider-handle::after {
+        box-shadow: 0 0 0 2.5px #ff1616;
+    }
 }

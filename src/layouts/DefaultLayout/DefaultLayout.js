@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import Header from '../components/Header';
@@ -13,11 +13,14 @@ import LogOut from '../../components/Auth/LogOut';
 import Login from '../../components/Auth/Login';
 import AuthForm from '../../components/Auth';
 import Notify from '~/components/Notify';
-import PlayMusic from '~/components/PlayMusic';
+import WaitListMusic from '~/components/WaitListMusic';
+import { UserMusic } from '~/components/Store';
 
 const cx = classNames.bind(styles);
 
 function DefaultLayout({ children }) {
+    const { isShow } = UserMusic();
+
     const { openFormLogin, openFormLogout, openFormEdit, openFullVideo, openFormDelete, openFormDiscard } = UserAuth();
 
     useEffect(() => {
@@ -31,8 +34,17 @@ function DefaultLayout({ children }) {
         <div className={cx('wrapper')}>
             <Header />
             <div className={cx('container')}>
-                <div className={cx('content')}>{children}</div>
                 <Sidebar />
+                <div className={cx('content')}>{children}</div>
+                {isShow ? (
+                    <div className={cx('side-right')}>
+                        <WaitListMusic />
+                    </div>
+                ) : (
+                    <div className={cx('side-right-hidden')}>
+                        <WaitListMusic />
+                    </div>
+                )}
             </div>
             {(openFormLogin || openFormLogout || openFormEdit || openFormDelete || openFormDiscard) && (
                 <AuthForm>
@@ -43,13 +55,8 @@ function DefaultLayout({ children }) {
                     {openFormDiscard && <DiscardForm />} */}
                 </AuthForm>
             )}
-            {/* <div className="playmusic">
-                <Player setIsShow={setIsShow} />
-            </div> */}
+
             <Notify />
-            <div className={cx('play-music')}>
-                <PlayMusic />
-            </div>
         </div>
     );
 }

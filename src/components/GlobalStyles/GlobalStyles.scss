@@ -10,9 +10,11 @@
     --focus: rgba(22, 24, 35, 0.2);
     --background-avatar: rgba(70, 65, 65, 0.5);
     --background-music-play: #533e43;
+    --background-aside-play: hsla(0, 14%, 57%, 0.868);
     --font-family: 'ProximaNova', sans-serif;
     //Default Layout
     --default-layout-header-height: 60px;
+    --default-layout-play-height: 90px;
     --default-layout-width: 95%;
     --default-layout-horizontal-spacer: 24px;
 
@@ -32,6 +34,7 @@
     --black: #fff;
     --text-color: #fff;
     --white: #161823;
+    --background-aside-play: #0a0b12e4;
     --background: #161823;
     --background-header: #231b2e;
     --background-avatar: rgba(255, 255, 255, .2);

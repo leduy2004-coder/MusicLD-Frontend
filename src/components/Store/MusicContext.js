@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
-
+import { UserNotify } from './NotifyContext';
 const VideoContext = React.createContext();
 
 export function UserMusic() {
@@ -8,38 +8,101 @@ export function UserMusic() {
 }
 
 export function MusicProvider({ children }) {
-    const [idVideo, setIdVideo] = useState();
-    const [songs, setSongs] = useState([]);
-    const [listVideoHome, setListVideoHome] = useState([]);
+    const [songs, setSongsState] = useState(() => {
+        const storedSongs = localStorage.getItem('songs');
+        return storedSongs ? JSON.parse(storedSongs) : [];
+    });
+    const { setInfoNotify } = UserNotify();
     const [profileUser, setProfileUser] = useState({});
-    const [positionVideo, setPositionVideo] = useState(null);
-    const [valueVolume, setValueVolume] = useState(0);
-    const [mutedVideo, setMutedVideo] = useState(true);
-    const [likeVideo, setLikeVideo] = useState(false);
-    const [likesCount, setLikesCount] = useState(false);
+    const [currentSongId, setCurrentSongId] = useState(null);
+    const [autoPlay, setAutoPlay] = useState(false);
     const [followUser, setFollowUser] = useState(false);
+    const [isPlay, setIsPlay] = useState(false);
+    const [songInfo, setSongInfo] = useState(null);
+    const [crSecond, setCrSecond] = useState(0);
+    const [audio, setAudio] = useState(null); // Initialize to null
+    const [volumes, setVolumes] = useState(0.5);
+    const [isShuff, setIsShuff] = useState(false);
+    const [repeatMode, setRepeatMode] = useState(0);
+    const runTimeref = useRef();
+    const trackref = useRef();
+    const [isShow, setIsShow] = useState(false);
+
+    // Hàm thêm bài hát mới
+    const addSong = (newSong) => {
+        setSongsState((prevSongs) => {
+            if (prevSongs.includes(newSong)) {
+                setInfoNotify({
+                    content: 'Bài hát đã tồn tại trong danh sách !!',
+                    delay: 1500,
+                    isNotify: true,
+                    type: 'error',
+                });
+                return prevSongs; // Không thêm nếu bài hát đã tồn tại
+            }
+            const updatedSongs = [...prevSongs, newSong];
+            localStorage.setItem('songs', JSON.stringify(updatedSongs));
+            setInfoNotify({
+                content: 'Thêm thành công !!',
+                delay: 1500,
+                isNotify: true,
+                type: 'success',
+            });
+            return updatedSongs;
+        });
+    };
+
+    // Hàm xóa bài hát theo index
+    const removeSong = (index) => {
+        setSongsState((prevSongs) => {
+            if (index < 0 || index >= prevSongs.length) {
+                setInfoNotify({
+                    content: 'Bài hát không tồn tại trong danh sách !!',
+                    delay: 1500,
+                    isNotify: true,
+                    type: 'error',
+                });
+                return prevSongs; // Không làm gì nếu index không hợp lệ
+            }
+            const updatedSongs = prevSongs.filter((_, i) => i !== index);
+            localStorage.setItem('songs', JSON.stringify(updatedSongs));
+            return updatedSongs;
+        });
+    };
+
+    console.log(isShow)
 
     const value = {
         songs,
-        setSongs,
-        listVideoHome,
-        setListVideoHome,
-        positionVideo,
-        setPositionVideo,
-        idVideo,
-        setIdVideo,
-        mutedVideo,
-        setMutedVideo,
-        valueVolume,
-        setValueVolume,
-        likeVideo,
-        setLikeVideo,
-        likesCount,
-        setLikesCount,
+        addSong,
+        removeSong, // Cung cấp hàm removeSong
+        currentSongId,
+        setCurrentSongId,
+        autoPlay,
+        setAutoPlay,
         followUser,
         setFollowUser,
         profileUser,
         setProfileUser,
+        isPlay,
+        setIsPlay,
+        songInfo,
+        setSongInfo,
+        crSecond,
+        setCrSecond,
+        audio,
+        setAudio,
+        volumes,
+        setVolumes,
+        isShuff,
+        setIsShuff,
+        repeatMode,
+        setRepeatMode,
+        runTimeref,
+        trackref,
+
+        isShow, 
+        setIsShow,
     };
 
     return <VideoContext.Provider value={value}>{children}</VideoContext.Provider>;

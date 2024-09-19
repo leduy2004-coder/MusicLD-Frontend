@@ -21,23 +21,36 @@ const {
     BiWindows,
     BsFillVolumeUpFill,
     BsRepeat1,
+    BiSolidPlaylist,
 } = icons;
 
 let intervalID;
 
-const PlayMusic = ({ setIsShow }) => {
-    const { songs, setSongs } = UserMusic();
-    const [curIdSong, setCurIdSong] = useState(null);
-    const [isPlay, setIsPlay] = useState(false);
-    const [songInfo, setSongInfo] = useState(null);
-    const [crsecond, setCrSecond] = useState(0);
-    const [audio, setAudio] = useState(null); // Initialize to null
-    const [volumes, setVolumes] = useState(0.5);
-    const [isShuff, setIsShuff] = useState(false);
-    const [repeatMode, setRepeatMode] = useState(0);
-    const runTimeref = useRef();
-    const trackref = useRef();
-
+const PlayMusic = () => {
+    const {
+        songs,
+        currentSongId,
+        setCurrentSongId,
+        autoPlay,
+        isPlay,
+        setIsPlay,
+        songInfo,
+        setSongInfo,
+        crSecond,
+        setCrSecond,
+        audio,
+        setAudio,
+        volumes,
+        setVolumes,
+        isShuff,
+        setIsShuff,
+        repeatMode,
+        setRepeatMode,
+        runTimeref,
+        trackref,
+        setIsShow,
+    } = UserMusic();
+    
     const onChangeValue = (value) => {
         setVolumes(value / 100);
         if (audio) audio.volume = value / 100;
@@ -45,8 +58,8 @@ const PlayMusic = ({ setIsShow }) => {
 
     useEffect(() => {
         const fetchDetailSong = async () => {
-            if (curIdSong) {
-                const res = await config.getDetailSong(curIdSong);
+            if (currentSongId) {
+                const res = await config.getDetailSong(currentSongId);
                 if (res.errCode) {
                     setAudio(null);
                     setIsPlay(false);
@@ -58,14 +71,20 @@ const PlayMusic = ({ setIsShow }) => {
                     const newAudio = new Audio(res.url);
                     newAudio.volume = volumes;
                     setAudio(newAudio);
+
+                    if (autoPlay) {
+                        setIsPlay(true);
+                        audio.pause();
+                    }
                 }
             }
         };
         fetchDetailSong();
-    }, [curIdSong]);
+    }, [currentSongId]);
 
     useEffect(() => {
         if (audio && isPlay && runTimeref.current) {
+            console.log(audio);
             audio.play();
             intervalID = setInterval(() => {
                 let percent = Math.round((audio.currentTime * 10000) / songInfo?.duration) / 100;
@@ -77,7 +96,7 @@ const PlayMusic = ({ setIsShow }) => {
                 clearInterval(intervalID);
             };
         }
-    }, [audio]);
+    }, [audio, isPlay]);
 
     useEffect(() => {
         const handleEnded = () => {
@@ -128,22 +147,28 @@ const PlayMusic = ({ setIsShow }) => {
         if (songs.length > 1) {
             let currentSongIndex;
             songs.forEach((item, index) => {
-                if (item.id === curIdSong) currentSongIndex = index;
+                if (item.id === currentSongId) currentSongIndex = index;
             });
 
             if (isShuff) {
                 handleShuff();
+            } else if (repeatMode === 2 && currentSongIndex === songs.length - 1) {
+                setCurrentSongId(songs[0].id);
             } else {
-                let idSongSelected = currentSongIndex;
                 if (currentSongIndex === songs.length - 1) {
-                    idSongSelected = 0;
-                    setCurIdSong(songs[idSongSelected].id);
+                    return;
                 } else {
-                    setCurIdSong(songs[currentSongIndex + 1].id);
+                    setCurrentSongId(songs[currentSongIndex + 1].id);
                 }
-                setIsPlay(true);
             }
-            audio.pause();
+
+            audio.pause(); // Tạm dừng bài nhạc hiện tại trước khi chuyển
+
+            if (!isPlay) {
+                setTimeout(() => {
+                    setIsPlay(true);
+                }, 300);
+            }
         }
     };
 
@@ -151,25 +176,32 @@ const PlayMusic = ({ setIsShow }) => {
         if (songs.length > 1) {
             let currentSongIndex;
             songs.forEach((item, index) => {
-                if (item.id === curIdSong) currentSongIndex = index;
+                if (item.id === currentSongId) currentSongIndex = index;
             });
-            let idSongPlay = currentSongIndex;
             if (currentSongIndex === 0) {
-                idSongPlay = songs.length - 1;
-                setCurIdSong(songs[idSongPlay].id);
+                return;
             } else {
-                setCurIdSong(songs[idSongPlay - 1].id);
+                setCurrentSongId(songs[currentSongIndex - 1].id);
             }
-            setIsPlay(true);
             audio.pause();
+            if (!isPlay) {
+                setTimeout(() => {
+                    setIsPlay(true);
+                }, 300);
+            }
         }
     };
 
     const handleShuff = () => {
         if (songs.length > 1) {
             const randomIndex = Math.floor(Math.random() * songs?.length);
-            setCurIdSong(songs[randomIndex].id);
-            setIsPlay(true);
+            console.log(randomIndex);
+            if (randomIndex === currentSongId - 1) handleRepeatOne();
+            else {
+                setCurrentSongId(songs[randomIndex].id);
+                setIsPlay(true);
+                audio.pause();
+            }
         }
     };
 
@@ -178,83 +210,98 @@ const PlayMusic = ({ setIsShow }) => {
     };
     useEffect(() => {
         if (songs.length > 0) {
-            setCurIdSong(songs[0].id);
+            setCurrentSongId(songs[0].id);
         }
     }, [songs]);
     return (
-        <div className={cx('play_control')}>
-            <div className={cx('detail_song')}>
-                <div className={cx('ava_thumb')}>
-                    <Image src={songInfo?.avatarResponse.url} />
+        <div className={cx('play-music')}>
+            <div className={cx('play_control')}>
+                <div className={cx('detail_song')}>
+                    <div className={cx('ava_thumb')}>
+                        <Image src={songInfo?.avatarResponse.url} />
+                    </div>
+                    <div className={cx('song_infor')}>
+                        <p>{songInfo?.title}</p>
+                        <span>{songInfo?.nickName}</span>
+                    </div>
+                    <div className={cx('like_action')}>
+                        <span>
+                            <AiOutlineHeart size={21} />
+                        </span>
+                        <span>
+                            <BiDotsHorizontalRounded size={21} />
+                        </span>
+                    </div>
                 </div>
-                <div className={cx('song_infor')}>
-                    <p>{songInfo?.title}</p>
-                    <span>{songInfo?.nickName}</span>
+                <div className={cx('main_control')}>
+                    <div className={cx('control')}>
+                        <span
+                            title="Bật phát ngẫu nhiên"
+                            onClick={() => setIsShuff((prev) => !prev)}
+                            className={cx(!isShuff ? 'isFalse' : 'isTrue')}
+                        >
+                            <PiShuffleLight size={21} />
+                        </span>
+                        <span>
+                            <BiSkipPrevious
+                                size={27}
+                                onClick={handlePrevSong}
+                                className={cx(!songs ? 'bur_next' : 'btn_next')}
+                            />
+                        </span>
+                        <span onClick={handlePlayMusic}>
+                            {isPlay ? <FiPauseCircle size={40} /> : <BsPlayCircle size={40} />}
+                        </span>
+                        <span onClick={handleNextSong} className={cx(!songs ? 'bur_next' : 'btn_next')}>
+                            <BiSkipNext size={27} />
+                        </span>
+                        <span
+                            title={
+                                repeatMode === 0
+                                    ? 'Không lặp lại'
+                                    : repeatMode === 1
+                                    ? 'Lặp lại 1 bài'
+                                    : 'Lặp lại toàn bộ'
+                            }
+                            className={cx(!repeatMode ? 'isFalse' : 'isTrue')}
+                            onClick={() => setRepeatMode((prev) => (prev === 2 ? 0 : prev + 1))}
+                        >
+                            {repeatMode === 1 ? <BsRepeat1 size={21} /> : <CiRepeat size={21} />}
+                        </span>
+                    </div>
+                    <div className={cx('progress_bar')}>
+                        <span className={cx('time_progress')}>{moment.utc(crSecond * 1000).format('mm:ss')}</span>
+                        <div ref={trackref} className={cx('track')} onClick={handleClickProgesBar}>
+                            <div ref={runTimeref} className={cx('run_time')}>
+                                <div className={cx('run_time-dot')}></div>
+                            </div>
+                        </div>
+                        <span className={cx('time_progress')}>
+                            {moment.utc(songInfo?.duration * 1000).format('mm:ss')}
+                        </span>
+                    </div>
                 </div>
-                <div className={cx('like_action')}>
-                    <span>
-                        <AiOutlineHeart size={21} />
-                    </span>
-                    <span>
-                        <BiDotsHorizontalRounded size={21} />
-                    </span>
-                </div>
-            </div>
-            <div className={cx('main_control')}>
-                <div className={cx('control')}>
-                    <span
-                        title="Bật phát ngẫu nhiên"
-                        onClick={() => setIsShuff((prev) => !prev)}
-                        className={cx(!isShuff ? 'isFalse' : 'isTrue')}
-                    >
-                        <PiShuffleLight size={21} />
-                    </span>
-                    <span>
-                        <BiSkipPrevious
-                            size={27}
-                            onClick={handlePrevSong}
-                            className={cx(!songs ? 'bur_next' : 'btn_next')}
-                        />
-                    </span>
-                    <span onClick={handlePlayMusic}>
-                        {isPlay ? <FiPauseCircle size={40} /> : <BsPlayCircle size={40} />}
-                    </span>
-                    <span onClick={handleNextSong} className={cx(!songs ? 'bur_next' : 'btn_next')}>
-                        <BiSkipNext size={27} />
-                    </span>
-                    <span
-                        title={repeatMode === 0 ? 'Không lặp lại' : repeatMode === 1 ? 'Lặp lại 1 bài' : 'Lặp lại toàn bộ'}
-                        className={cx(!repeatMode ? 'isFalse' : 'isTrue')}
-                        onClick={() => setRepeatMode((prev) => (prev === 2 ? 0 : prev + 1))}
-                    >
-                        {repeatMode === 1 ? <BsRepeat1 size={21} /> : <CiRepeat size={21} />}
-                    </span>
-                </div>
-                <div className={cx('progress_bar')}>
-                    <span className={cx('time_progress')}>{moment.utc(crsecond * 1000).format('mm:ss')}</span>
-                    <div ref={trackref} className={cx('track')} onClick={handleClickProgesBar}>
-                        <div ref={runTimeref} className={cx('run_time')}>
-                            <div className={cx('run_time-dot')}></div>
+                <div className={cx('volume')}>
+                    <div className={cx('el_hover')}>
+                        <BiWindows size={27} style={{ fontWeight: 200 }} />
+                    </div>
+                    <div className={cx('volume_zone')}>
+                        <BsFillVolumeUpFill size={27} />
+                        <div>
+                            <Slider
+                                defaultValue={volumes * 100}
+                                onChange={onChangeValue}
+                                className={cx('volume_action')}
+                                tooltip={{
+                                    formatter: null,
+                                }}
+                            />
                         </div>
                     </div>
-                    <span className={cx('time_progress')}>{moment.utc(songInfo?.duration * 1000).format('mm:ss')}</span>
-                </div>
-            </div>
-            <div className={cx('volume')}>
-                <div className={cx('el_hover')}>
-                    <BiWindows size={27} style={{ fontWeight: 200 }} />
-                </div>
-                <div className={cx('volume_zone')}>
-                    <BsFillVolumeUpFill size={27} />
-                    <div>
-                        <Slider
-                            defaultValue={50}
-                            onChange={onChangeValue}
-                            className={cx('volume_action')}
-                            tooltip={{
-                                formatter: null,
-                            }}
-                        />
+                    <div className={cx('btn_playlist')}>
+                        <div className={cx('playlist_action')} onClick={() => setIsShow((prev) => !prev)}>
+                            <BiSolidPlaylist size={23} />
+                        </div>
                     </div>
                 </div>
             </div>

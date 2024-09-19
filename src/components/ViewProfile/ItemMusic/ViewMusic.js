@@ -9,7 +9,7 @@ import { UserMusic, UserNotify } from '../../Store';
 import config from '~/services';
 import { UserAuth } from '../../Store';
 import styles from './ItemMusic.module.scss';
-import Image from '~/components/Image';
+import Image from '~/components/Image'; 
 import Btn from '~/components/Button';
 import EditFormMusic from './EditFormMusic';
 
@@ -19,7 +19,7 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false }) {
     const { tokenStr, userAuth, setOpenFormLogin } = UserAuth();
     const { setInfoNotify } = UserNotify();
     const [isEditVisible, setIsEditVisible] = useState(false);
-    const { setSongs } = UserMusic();
+    const { addSong } = UserMusic();
 
     const handleDelete = async () => {
         if (userAuth && tokenStr) {
@@ -60,10 +60,11 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false }) {
         
     };
     const handleAddMusic = (newSong) => {
-        setSongs((prevSongs) => [...prevSongs, newSong]);
+        addSong(newSong);
+
     }
     return (
-        <Col span={20}>
+        <Col span={18}>
             <Card hoverable onClick={playMusic ? handlePlayMusic : undefined} >
                 <div className={cx(playMusic ? 'card-play' : 'card-body')}>
                     <div className={cx('number')}>{number}</div>

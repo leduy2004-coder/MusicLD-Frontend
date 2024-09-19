@@ -9,15 +9,15 @@ import GlobalStyles from '~/components/GlobalStyles';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     // <React.StrictMode>
-    <AuthProvider>
-        <MusicProvider>
-            <NotifyProvider>
+    <NotifyProvider>
+        <AuthProvider>
+            <MusicProvider>
                 <GlobalStyles>
                     <App />
                 </GlobalStyles>
-            </NotifyProvider>
-        </MusicProvider>
-    </AuthProvider>,
+            </MusicProvider>
+        </AuthProvider>
+    </NotifyProvider>,
     // </React.StrictMode>,
 );
 

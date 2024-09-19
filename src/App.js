@@ -2,9 +2,11 @@ import { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { publicRoutes } from '~/routes/routes';
 import DefaultLayout from '~/layouts';
+import PlayMusic from './components/PlayMusic';
 
 function App() {
     // localStorage.clear()
+
 
     return (
         <Router>
@@ -32,6 +34,8 @@ function App() {
                         );
                     })}
                 </Routes>
+
+                <PlayMusic />
             </div>
         </Router>
     );
