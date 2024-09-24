@@ -1,33 +1,55 @@
+import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 
 import Image from '~/components/Image';
-import Button from '~/components/Button';
+import { UserAuth } from '~/components/Store';
+import ButtonFollow from '~/components/Button/ButtonFollow';
 import styles from './AccountPreview.module.scss';
+import config from '~/services';
 
 const cx = classNames.bind(styles);
 
-function AccountPreview() {
+function AccountPreview({ data = {} ,followStatus,onFollowStatusChange }) {
+    const { tokenStr } = UserAuth();
+    const [statusFollow, setStatusFollow] = useState(followStatus);
+    const [userData, setUserData] = useState(data);
+
+    const handleFollowAction = async (status) => {
+        const userId = userData.id;
+        try {
+            const response = await config.updateRequestFollowUser(userId, tokenStr, status);
+            if (response) {
+                setStatusFollow(status);
+                onFollowStatusChange('HIDE')
+                setUserData((prevData) => ({
+                    ...prevData,
+                    statusFollower: status,
+                }));
+            }
+        } catch (error) {
+            console.error('Failed to update follow status:', error);
+        }
+    };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('header')}>
-                <Image
-                    className={cx('avatar')}
-                    src="https://p16-sign-va.tiktokcdn.com/tos-useast2a-avt-0068-aiso/65d3c6b1d1e205c75536ccf1f26d552d~c5_100x100.jpeg?x-expires=1660665600&x-signature=hToDdYbvevi4S9Fn5tdnI%2Bk0%2BkM%3D"
-                    alt=""
+                <Image alt="example" src={userData?.avatar?.url} className={cx('avatar')} />
+
+                <ButtonFollow
+                    followStatus={statusFollow}
+                    profileUser={data}
+                    className={classNames(cx('follow-btn', 'access'))}
+                    handleFollowAction={handleFollowAction}
                 />
-                <Button className={cx('follow-btn')} primary>
-                    Chấp nhận
-                </Button>
             </div>
             <div className={cx('body')}>
                 <p className={cx('nickname')}>
-                    <strong>quocnguyenphu</strong>
-      
+                    <strong>{userData?.nickName}</strong>
                 </p>
-                <p className={cx('name')}>Quốc Nguyễn Phú</p>
                 <p className={cx('analytics')}>
-                    <strong className={cx('value')}>8.2M </strong>
-                    <span className={cx('label')}>Followers</span>
+                    <strong className={cx('value')}>{data.countFollower}</strong>
+                    <span className={cx('label')}>Người theo dõi</span>
                 </p>
             </div>
         </div>

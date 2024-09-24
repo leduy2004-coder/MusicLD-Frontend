@@ -5,8 +5,6 @@ import Menu, { MenuItem } from './Menu';
 import {
     HomeIcon,
     HomeActiveIcon,
-    UserGroupIcon,
-    UserGroupActiveIcon,
     LiveIcon,
     LiveActiveIcon,
     SideBarIcon,
@@ -40,15 +38,9 @@ function  Sidebar() {
                     <Menu>
                         <MenuItem
                             title="Trang chủ"
-                            to={config.routes.home}
+                            to={'/'}
                             icon={<HomeIcon />}
                             activeIcon={<HomeActiveIcon />}
-                        />
-                        <MenuItem
-                            title="Người theo dõi"
-                            to={config.routes.following}
-                            icon={<UserGroupIcon />}
-                            activeIcon={<UserGroupActiveIcon />}
                         />
                         <MenuItem
                             title="Nhạc đã đăng"

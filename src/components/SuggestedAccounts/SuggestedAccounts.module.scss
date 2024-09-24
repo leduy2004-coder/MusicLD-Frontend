@@ -4,14 +4,17 @@
 
 .label {
     padding: 8px;
-    font-size: 1.4rem;
+    font-size: 1.7rem;
     font-weight: 600;
 }
-
+.notify {
+    font-size: 1.4rem;
+}
 .account-item {
     display: flex;
     padding: 8px;
     cursor: pointer;
+    align-items: center;
 }
 
 .avatar {
@@ -29,7 +32,6 @@
 .nickname {
     margin-top: 0;
     font-size: 1.6rem;
-
     line-height: 1;
 }
 
@@ -50,4 +52,19 @@
     font-weight: 700;
     color: #fe2c55;
     cursor: pointer;
+}
+.loading {
+    color: var(--black);
+    animation: spinner 0.8s linear infinite;
+}
+@keyframes spinner {
+    from {
+        transform: translateY(-50%) rotate(0);
+    }
+    to {
+        transform: translateY(-50%) rotate(360deg);
+    }
+}
+.hidden {
+    display: none;
 }

@@ -238,7 +238,7 @@ const PlayMusic = () => {
             <div className={cx('play_control')}>
                 <div className={cx('detail_song')}>
                     <div className={cx('ava_thumb')}>
-                        <Image src={songInfo?.avatarResponse.url} />
+                        <Image src={songInfo?.avatarResponse?.url} />
                     </div>
                     <div className={cx('song_infor')}>
                         <p>{songInfo?.title}</p>

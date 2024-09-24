@@ -4,7 +4,6 @@ import { UserAuth } from '~/components/Store';
 
 function ButtonFollow({ followStatus, profileUser, className, handleFollowAction }) {
     const { userAuth, tokenStr, setOpenFormLogin } = UserAuth();
-
     const actions = {
         CANCELED: () => handleFollowAction('PENDING'),
         ACCEPTED: () => handleFollowAction('CANCELED'),

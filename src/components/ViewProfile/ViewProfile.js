@@ -71,7 +71,7 @@ function ViewProfile() {
             case 'nav1':
                 return <ItemProfile data={profileUser} />;
             case 'nav2':
-                return <MenuMusic data={profileUser}/>;
+                return <MenuMusic data={profileUser} />;
             case 'nav3':
                 return <ItemFollow data={profileUser} />;
             case 'nav4':
@@ -106,7 +106,15 @@ function ViewProfile() {
                 />
                 <div className={cx('follow', { collapsed, expanded: !collapsed })}>
                     <ButtonFollow
-                        followStatus={profileUser.statusFollower === 'ACCEPTED' ? 'FRIEND' : profileUser.statusFollower}
+                        followStatus={(() => {
+                            if (profileUser.statusFollower === 'ACCEPTED') {
+                                return 'FRIEND';
+                            } else if (!profileUser.statusFollower) {
+                                return 'CANCELED';
+                            } else {
+                                return profileUser.statusFollower;
+                            }
+                        })()}
                         profileUser={profileUser}
                         handleFollowAction={handleFollowAction}
                     />

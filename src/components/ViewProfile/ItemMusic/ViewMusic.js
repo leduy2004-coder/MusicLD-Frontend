@@ -9,7 +9,7 @@ import { UserMusic, UserNotify } from '../../Store';
 import config from '~/services';
 import { UserAuth } from '../../Store';
 import styles from './ItemMusic.module.scss';
-import Image from '~/components/Image'; 
+import Image from '~/components/Image';
 import Btn from '~/components/Button';
 import EditFormMusic from './EditFormMusic';
 
@@ -19,7 +19,7 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false }) {
     const { tokenStr, userAuth, setOpenFormLogin } = UserAuth();
     const { setInfoNotify } = UserNotify();
     const [isEditVisible, setIsEditVisible] = useState(false);
-    const { addSong } = UserMusic();
+    const { addSong, removeSong, songs, currentSongId } = UserMusic();
 
     const handleDelete = async () => {
         if (userAuth && tokenStr) {
@@ -38,6 +38,7 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false }) {
                         isNotify: true,
                         type: 'error',
                     });
+                    
                 } else {
                     setInfoNotify({
                         content: 'Xóa thành công',
@@ -45,7 +46,11 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false }) {
                         isNotify: true,
                         type: 'success',
                     });
-
+                    songs.forEach((song, index) => {
+                        if (song.id === data.id){
+                            removeSong(index);
+                        } 
+                    });
                     // Update the music list without refreshing the page
                     setMusics((prevMusics) => prevMusics.filter((music) => music.id !== data.id));
                 }
@@ -56,16 +61,13 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false }) {
             setOpenFormLogin(true);
         }
     };
-    const handlePlayMusic = () => {
-        
-    };
+    const handlePlayMusic = () => {};
     const handleAddMusic = (newSong) => {
         addSong(newSong);
-
-    }
+    };
     return (
         <Col span={18}>
-            <Card hoverable onClick={playMusic ? handlePlayMusic : undefined} >
+            <Card hoverable onClick={playMusic ? handlePlayMusic : undefined}>
                 <div className={cx(playMusic ? 'card-play' : 'card-body')}>
                     <div className={cx('number')}>{number}</div>
                     <div className={cx('avatar')}>

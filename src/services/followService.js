@@ -2,6 +2,7 @@ import * as callPath from '../utils/httpRequest';
 
 export const updateRequestFollowUser = async (id, token, status) => {
     try {
+
         const res = await callPath.patch(`follow/${id}/${status}`, null,token);
         return res.data;
     } catch (error) {

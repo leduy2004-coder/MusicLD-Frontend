@@ -1,5 +1,13 @@
+import RequestFollow from "~/components/RequestFollow";
+
 function Following() {
-    return <h2>Following Page</h2>
+    return (
+        <div style={{padding : 20
+        }}>
+           <RequestFollow/>
+       </div>
+    );
+    
 }
 
 export default Following;
