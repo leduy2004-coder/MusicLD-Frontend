@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import {useState, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';

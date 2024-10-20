@@ -36,7 +36,7 @@ httpRequest.interceptors.response.use(
 
                 try {
                     const refreshToken = JSON.parse(localStorage.getItem('refresh_token'));
-                    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/v1/auth/refresh-token`, null, {
+                    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}v1/auth/refresh-token`, null, {
                         headers: {
                             Authorization: refreshToken,
                         },
@@ -55,6 +55,7 @@ httpRequest.interceptors.response.use(
                     processQueue(error, null);
                     localStorage.clear();
                     window.location.href = '/login';
+                    // console.log('errooooo')
                 } finally {
                     isRefreshing = false;
                 }

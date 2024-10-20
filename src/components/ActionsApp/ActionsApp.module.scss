@@ -2,8 +2,8 @@
     position: fixed;
     bottom: 0;
     right: 24px;
-    margin-bottom: 8px;
-    transform: translateY(40px);
+    margin-bottom: calc(var(--default-layout-play-height));
+    transform: translateY(calc(var(--default-layout-play-height) + 50px)) ;
     transition: all 400ms cubic-bezier(0.65, 0, 0.35, 1) 0s;
     z-index: 10;
 }

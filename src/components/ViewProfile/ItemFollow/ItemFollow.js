@@ -32,22 +32,25 @@ function ItemFollow({ data = {} }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const followersData = await config.getAllFollower(data.id,tokenStr);
-                const followingData = await config.getAllFollowing(data.id,tokenStr);
-                const receivedRequestsData = await config.getAllReceive(data.id,tokenStr);
-                const sentRequestsData = await config.getAllRequest(data.id,tokenStr);
-
-                setFollowers(followersData);
-                setFollowing(followingData);
-                setReceivedRequests(receivedRequestsData);
-                setSentRequests(sentRequestsData);
+                if (data?.id) {
+                    const followersData = await config.getAllFollower(data.id, tokenStr);
+                    const followingData = await config.getAllFollowing(data.id, tokenStr);
+                    const receivedRequestsData = await config.getAllReceive(data.id, tokenStr);
+                    const sentRequestsData = await config.getAllRequest(data.id, tokenStr);
+    
+                    setFollowers(followersData);
+                    setFollowing(followingData);
+                    setReceivedRequests(receivedRequestsData);
+                    setSentRequests(sentRequestsData);
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
-
+    
         fetchData();
     }, [data, tokenStr]);
+    
 
     const tabsItems = [
         {

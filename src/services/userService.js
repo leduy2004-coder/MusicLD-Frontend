@@ -13,7 +13,7 @@ export const getUser = async (id, token) => {
 
 export const search = async (q, type = 'less') => {
     try {
-        const res = await callPath.get('users/search', null,{
+        const res = await callPath.get('users/search', null, {
             params: {
                 q,
                 type,
@@ -25,18 +25,17 @@ export const search = async (q, type = 'less') => {
     }
 };
 
-
 export const updateUser = async (token, nickName, gender, dateOfBirth, id) => {
     try {
         const res = await callPath.patch(
-            `users/update-user`, 
+            `users/update-user`,
             {
                 id,
                 nickName,
                 dateOfBirth,
                 gender,
             },
-            token
+            token,
         );
         return res.data;
     } catch (err) {
@@ -44,3 +43,11 @@ export const updateUser = async (token, nickName, gender, dateOfBirth, id) => {
     }
 };
 
+export const getTopUser = async (tokenStr) => {
+    try {
+        const res = await callPath.get('users/get-top-user', tokenStr, {});
+        return res;
+    } catch (err) {
+        return { errCode: err };
+    }
+};

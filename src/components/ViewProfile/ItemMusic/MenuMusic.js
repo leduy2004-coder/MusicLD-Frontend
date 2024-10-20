@@ -27,14 +27,16 @@ function MenuMusic({ data = {} }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const privateMusicData = await config.getPlaylistByAccess(data.id, tokenStr, 'PRIVATE');
-                const publicMusicData = await config.getPlaylistByAccess(data.id, tokenStr, 'PUBLIC');
+                if (data?.id) {
+                    const privateMusicData = await config.getPlaylistByAccess(data.id, tokenStr, 'PRIVATE');
+                    const publicMusicData = await config.getPlaylistByAccess(data.id, tokenStr, 'PUBLIC');
 
-                setPrivateMusic(privateMusicData.result);
-                setPublicMusic(publicMusicData.result);
+                    setPrivateMusic(privateMusicData.result);
+                    setPublicMusic(publicMusicData.result);
 
-                const followStatus = await config.checkFollow(data.id, tokenStr);
-                setIsFollowing(followStatus.result);
+                    const followStatus = await config.checkFollow(data.id, tokenStr);
+                    setIsFollowing(followStatus.result);
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -75,18 +77,19 @@ function MenuMusic({ data = {} }) {
                     <FontAwesomeIcon icon={faPersonMilitaryToPerson} /> Riêng tư
                 </span>
             ),
-            children: isFollowing || userAuth.id === data.id? (
-                renderTabContent(privateMusic)
-            ) : (
-                <Empty
-                    imageStyle={{ height: 220 }}
-                    description={
-                        <Typography.Text style={{ color: 'red', fontSize: 20 }}>
-                            Vui lòng follow để truy cập
-                        </Typography.Text>
-                    }
-                />
-            ),
+            children:
+                isFollowing || userAuth.id === data.id ? (
+                    renderTabContent(privateMusic)
+                ) : (
+                    <Empty
+                        imageStyle={{ height: 220 }}
+                        description={
+                            <Typography.Text style={{ color: 'red', fontSize: 20 }}>
+                                Vui lòng follow để truy cập
+                            </Typography.Text>
+                        }
+                    />
+                ),
         },
     ];
 
@@ -102,7 +105,6 @@ function MenuMusic({ data = {} }) {
 }
 
 ItemMusic.propTypes = {
-    data: PropTypes.arrayOf(PropTypes.object).isRequired, 
     playMusic: PropTypes.bool,
 };
 export default MenuMusic;

@@ -24,8 +24,10 @@ function ItemMusic({ data, playMusic = false }) {
         } else {
             const fetchData = async () => {
                 try {
-                    const musicsData = await config.getPlaylist(data.id, tokenStr);
-                    setMusics(musicsData.result);
+                    if(data?.id){
+                        const musicsData = await config.getPlaylist(data.id, tokenStr);
+                        setMusics(musicsData.result);
+                    }
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }

@@ -24,6 +24,7 @@ function SuggestedAccounts({ label }) {
         const fetchData = async () => {
             setLoading(true); // Bắt đầu loading
             try {
+                if (!userAuth) return;
                 const receivedRequestsData = await config.getAllReceive(userAuth.id, tokenStr);
                 
                 setReceivedRequests(receivedRequestsData);

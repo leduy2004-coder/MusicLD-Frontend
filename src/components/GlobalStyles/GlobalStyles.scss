@@ -10,6 +10,7 @@
     --focus: rgba(22, 24, 35, 0.2);
     --background-avatar: rgba(70, 65, 65, 0.5);
     --background-music-play: #533e43;
+    --background-slider: #533e43;
     --background-aside-play: hsl(0deg 0% 88.19% / 86.8%);
     --font-family: 'ProximaNova', sans-serif;
     //Default Layout
@@ -19,6 +20,11 @@
     --default-layout-horizontal-spacer: 24px;
 
     --animation-loading: spin 1s linear infinite;
+
+    //Home
+    --home-title-color: #161823; 
+    --home-card-in: #f2efef;
+    --home-card-out: #c5c0c0;
 }
 @keyframes spin {
     from {
@@ -40,6 +46,11 @@
     --background-avatar: rgba(255, 255, 255, 0.2);
     --focus: #c0b2b2;
     --background-music-play: #130c1c;
+
+    //Home
+    --home-title-color: #fe2c55; 
+    --home-card-in: #4b3146;
+    --home-card-out: #58224e;
 }
 * {
     margin: 0;

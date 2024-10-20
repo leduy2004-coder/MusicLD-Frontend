@@ -9,7 +9,7 @@ import {
     checkFollow
 } from './followService';
 import { getDetailSong, uploadMusic, getPlaylist,getPlaylistByAccess, removeMusic, updateMusic } from './musicService';
-import { search, getUser,updateUser } from './userService.js';
+import { search, getUser,updateUser, getTopUser } from './userService.js';
 const config = {
     login,
     logout,
@@ -25,7 +25,7 @@ const config = {
     getAllFollowing,
     getAllRequest,
     getAllReceive,
-    getDetailSong,
+    getDetailSong,  
     uploadMusic,
     getPlaylist,
     updateUser,
@@ -33,6 +33,7 @@ const config = {
     updateMusic,
     getPlaylistByAccess,
     checkFollow,
+    getTopUser,
 };
 
 export default config;
