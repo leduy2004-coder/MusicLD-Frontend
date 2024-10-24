@@ -4,9 +4,9 @@ const routes = {
     profile: '/profile/:id',
     upload: '/upload',
     search: '/search',
-    live: '/live',
     oauth2: '/login/oauth2/code/:provider',
     login: '/login',
+    music: '/music',
 };
 
 export default routes;

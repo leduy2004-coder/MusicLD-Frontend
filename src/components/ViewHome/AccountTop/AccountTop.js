@@ -40,8 +40,8 @@ function MusicTop() {
                 <div className={cx('wrapper')}>
                     <div className={cx('title')}>Bảng xếp hạng tài khoản</div>
                     <Row gutter={[12, 12]}>
-                        {topUser.map((request,index) => (
-                            <MusicTopItem key={request.id} data={request} order={index + 1}/>
+                        {topUser.map((request, index) => (
+                            <MusicTopItem key={request.id} data={request} order={index + 1} />
                         ))}
                     </Row>
                 </div>
