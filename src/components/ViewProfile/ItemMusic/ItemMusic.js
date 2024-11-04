@@ -10,7 +10,7 @@ import ViewMusic from './ViewMusic';
 
 const cx = classNames.bind(styles);
 
-function ItemMusic({ data, playMusic = false }) {
+function ItemMusic({ data, playMusic = false, detailMusic = false }) {
     const { userAuth, tokenStr } = UserAuth();
     const [musics, setMusics] = useState([]);
     const [number, setNumber] = useState(0);
@@ -21,10 +21,12 @@ function ItemMusic({ data, playMusic = false }) {
 
         if (playMusic) {
             setMusics(processedData);
+        } else if (detailMusic) {
+            setMusics(data);
         } else {
             const fetchData = async () => {
                 try {
-                    if(data?.id){
+                    if (data?.id) {
                         const musicsData = await config.getPlaylist(data.id, tokenStr);
                         setMusics(musicsData.result);
                     }
@@ -44,7 +46,12 @@ function ItemMusic({ data, playMusic = false }) {
     }, [musics]);
 
     return (
-        <div className={cx({ body: !playMusic })}>
+        <div
+            className={cx({
+                body: !playMusic && !detailMusic,
+                'body-music': detailMusic,
+            })}
+        >
             {Array.isArray(musics) && musics.length > 0 ? (
                 <Row gutter={[16, 28]}>
                     {musics.map((music, index) => (
@@ -54,6 +61,7 @@ function ItemMusic({ data, playMusic = false }) {
                             number={index + 1}
                             setMusics={setMusics}
                             playMusic={playMusic}
+                            detailMusic={detailMusic}
                         />
                     ))}
                 </Row>

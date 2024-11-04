@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Card, Col, Popconfirm, message } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAdd, faEdit, faRemove } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faEdit, faRemove,faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
+import { useNavigate } from 'react-router-dom'; 
 
 import { UserMusic, UserNotify } from '../../Store';
 import config from '~/services';
@@ -15,11 +16,12 @@ import EditFormMusic from './EditFormMusic';
 
 const cx = classNames.bind(styles);
 
-function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false }) {
+function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false, detailMusic = false }) {
     const { tokenStr, userAuth, setOpenFormLogin } = UserAuth();
     const { setInfoNotify } = UserNotify();
     const [isEditVisible, setIsEditVisible] = useState(false);
     const { addSong, removeSong, songs, currentSongId } = UserMusic();
+    const navigate = useNavigate();
 
     const handleDelete = async () => {
         if (userAuth && tokenStr) {
@@ -38,7 +40,6 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false }) {
                         isNotify: true,
                         type: 'error',
                     });
-                    
                 } else {
                     setInfoNotify({
                         content: 'Xóa thành công',
@@ -47,9 +48,9 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false }) {
                         type: 'success',
                     });
                     songs.forEach((song, index) => {
-                        if (song.id === data.id){
+                        if (song.id === data.id) {
                             removeSong(index);
-                        } 
+                        }
                     });
                     // Update the music list without refreshing the page
                     setMusics((prevMusics) => prevMusics.filter((music) => music.id !== data.id));
@@ -65,7 +66,24 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false }) {
     const handleAddMusic = (newSong) => {
         addSong(newSong);
     };
-    return (
+    const handleDetailMusic = () => {
+        navigate(`/music/${data.id}`);
+    };
+    return detailMusic ? (
+        <Col span={18}>
+            <Card hoverable onClick={handleDetailMusic}>
+                <div className={cx('body-card-detail')}>
+                    <div className={cx('number')}>{number}</div>
+                    <div className={cx('avatar')}>
+                        <Image alt="example" src={data?.avatarResponse?.url} />
+                    </div>
+
+                    <h3 className={cx('meta-title')}>{data.title}</h3>
+                    <FontAwesomeIcon icon={faPlay} />
+                </div>
+            </Card>
+        </Col>
+    ) : (
         <Col span={18}>
             <Card hoverable onClick={playMusic ? handlePlayMusic : undefined}>
                 <div className={cx(playMusic ? 'card-play' : 'card-body')}>

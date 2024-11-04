@@ -6,7 +6,7 @@ const routes = {
     search: '/search',
     oauth2: '/login/oauth2/code/:provider',
     login: '/login',
-    music: '/music',
+    music: '/music/:id',
 };
 
 export default routes;

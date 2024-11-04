@@ -44,7 +44,7 @@ function  Sidebar() {
                         />
                         <MenuItem
                             title="Nhạc đã đăng"
-                            to={config.routes.music}
+                            to={'/music/0'}
                             icon={<LiveIcon />}
                             activeIcon={<LiveActiveIcon />}
                         />

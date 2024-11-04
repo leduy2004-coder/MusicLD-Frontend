@@ -10,7 +10,15 @@
         border-color: var(--primary);
     }
 }
-
+.body-card-detail {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1rem;
+    background-color: var(--background-music-play);
+    border-radius: 5px;
+    cursor: auto;
+}
 .card-body {
     display: flex;
     align-items: center;
@@ -53,7 +61,51 @@
     scrollbar-color: var(--primary) transparent;
     padding: 1rem 5rem;
 }
+.body-music {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    :global {
+        :where(.css-dev-only-do-not-override-98ntnt).ant-col-18 {
+            flex: none;
+            max-width: 100%;
+        }
+        :where(.css-dev-only-do-not-override-98ntnt).ant-card-bordered {
+            border: none;
+        }
+        :where(.css-dev-only-do-not-override-98ntnt).ant-row {
+            display: flex;
+            justify-content: center;
+            row-gap: 10px !important;
+            flex-flow: row wrap;
+            min-width: 0;
+        }
+        :where(.css-dev-only-do-not-override-98ntnt).ant-card .ant-card-body {
+            border-radius: 0 0 8px 8px;
+            min-width: 22rem;
+        }
+    }
+    .body-card-detail {
+        background-color: var(--music-music-item);
+        padding: 0.5rem; 
 
+        &:hover {
+            cursor: pointer;
+
+        }
+    }
+
+    .avatar {
+        width: 6rem;
+        height: 6rem;
+    
+    }
+    .meta-title, .number {
+        color: var(--black);
+        font-size: 1.4rem;
+    }
+
+}
 .body::-webkit-scrollbar {
     width: 8px; /* Độ rộng của thanh cuộn */
 }

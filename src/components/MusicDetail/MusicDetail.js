@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faHeart as faHeartSolid, faMusic, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartRegular, faComments } from '@fortawesome/free-regular-svg-icons';
+import { useParams } from 'react-router-dom';
 
 import ItemMusic from '../ViewProfile/ItemMusic/ItemMusic';
 import { UserAuth } from '../Store';
@@ -11,17 +12,24 @@ import config from '~/services';
 import styles from './MusicDetail.module.scss';
 import Image from '../Image';
 import Button from '../Button';
+import Comments from './Comment/Comments';
+import { UserMusic, UserNotify } from '~/components/Store'
 
 const cx = classNames.bind(styles);
 
 function MusicDetail({ data = {} }) {
+    const { id } = useParams();
+    
     const { userAuth, tokenStr } = UserAuth();
     const [activeKey, setActiveKey] = useState('1');
     const [publicMusic, setPublicMusic] = useState([]);
+    const [currentMusic, setCurrentMusic] = useState();
 
     const [isPlaying, setIsPlaying] = useState(false); // Trạng thái phát nhạc
     const [isLiked, setIsLiked] = useState(false); // Trạng thái thích
     const [isAdding, setIsAdding] = useState(false); // Trạng thái đang thêm nhạc
+
+    const { addSong, removeSong, songs, currentSongId } = UserMusic();
 
     const handleTogglePlay = () => {
         setIsPlaying(!isPlaying); // Đổi trạng thái phát nhạc
@@ -32,26 +40,50 @@ function MusicDetail({ data = {} }) {
     };
 
     const handleAddMusic = () => {
-        setIsAdding(!isAdding); // Đổi trạng thái thêm nhạc
+        if (isAdding) {
+            removeSong(currentMusic.id); 
+        } else {
+            addSong(currentMusic); 
+        }
+        setIsAdding(!isAdding); 
     };
     const handleTabChange = (key) => {
         setActiveKey(key);
     };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                if (data?.id) {
-                    const publicMusicData = await config.getPlaylistByAccess(data.id, tokenStr, 'PUBLIC');
+                if (!userAuth || !tokenStr) return; 
+                console.log(id)
+                if (id !== '0' && id) {
+                    
+                    const musicData = await config.getDetailSong(id, tokenStr);   
+                    console.log(musicData)     
+                    setCurrentMusic(musicData);
 
-                    setPublicMusic(publicMusicData.result);
+                    const listMusic = await config.getPlaylistByAccess(musicData.idUser, tokenStr, 'PUBLIC');
+                    setPublicMusic(listMusic.result);
+                } else {
+                    console.log(userAuth.id);
+                    const listMusic = await config.getPlaylistByAccess(userAuth.id, tokenStr, 'PUBLIC');
+                    setPublicMusic(listMusic.result);
                 }
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
 
         fetchData();
-    }, [data, tokenStr]);
+    }, [id, userAuth, tokenStr]);
+
+    useEffect(() => {
+        if (id === '0' && publicMusic?.length > 0) {
+
+            setCurrentMusic(publicMusic[0]);
+        }
+    }, [publicMusic]);
     const tabsItems = [
         {
             key: '1',
@@ -60,7 +92,7 @@ function MusicDetail({ data = {} }) {
                     <FontAwesomeIcon icon={faMusic} /> Lời nhạc
                 </span>
             ),
-            children: <div className={cx('lyric')}>loiaf ad adjk ka oa oa aoa dsafad</div>,
+            children: <div className={cx('lyric')}>{currentMusic?.lyrics}</div>,
         },
         {
             key: '2',
@@ -69,30 +101,23 @@ function MusicDetail({ data = {} }) {
                     <FontAwesomeIcon icon={faComments} /> Bình luận
                 </span>
             ),
-            children: data.id ? (
-                <div></div>
-            ) : (
-                <Empty
-                    imageStyle={{ height: 220 }}
-                    description={
-                        <Typography.Text style={{ color: 'red', fontSize: 20 }}>
-                            Vui lòng follow để truy cập
-                        </Typography.Text>
-                    }
-                />
+            children: (
+                <div>
+                    <Comments currentMusicId={currentMusic?.id} />
+                </div>
             ),
         },
     ];
 
-    return (
+    return (publicMusic?.length > 0 &&  id === '0') || id !== '0'? (
         <div className={cx('container')}>
             <div className={cx('header')}>
                 <div>
-                    <Image className={cx('avatar-music')} />
+                    <Image className={cx('avatar-music')} src={currentMusic?.avatarResponse.url} />
                 </div>
                 <div className={cx('info')}>
-                    <h2 className={cx('info-name')}>Bao lời con chưa nói</h2>
-                    <span style={{ opacity: '0.5' }}>Sáng tác: Lê Duy</span>
+                    <h2 className={cx('info-name')}>{currentMusic?.title}</h2>
+                    <span style={{ opacity: '0.5' }}>Sáng tác: {currentMusic?.nickName}</span>
                     <span style={{ opacity: '0.5' }}>10 người yêu thích</span>
                     <div className={cx('area-button')}>
                         <Button
@@ -122,6 +147,7 @@ function MusicDetail({ data = {} }) {
                     </div>
                 </div>
             </div>
+
             <div className={cx('content')}>
                 <div className={cx('tab')}>
                     <Tabs
@@ -135,14 +161,21 @@ function MusicDetail({ data = {} }) {
                 <div className={cx('account')}>
                     <div className={cx('position')}>
                         <div className={cx('account-user')}>
-                            <Image className={cx('account-img')} />
-                            <div className={cx('account-name')}>Lê Duy</div>
+                            <Image className={cx('account-img')} src={currentMusic?.avatarResponse.url} />
+                            <div className={cx('account-name')}>{currentMusic?.nickName}</div>
                         </div>
-                        <ItemMusic data={publicMusic} playMusic={true} />
+                        <ItemMusic data={publicMusic} detailMusic={true}/>
                     </div>
                 </div>
             </div>
         </div>
+    ) : (
+        <Empty
+            imageStyle={{
+                height: 220,
+            }}
+            description={<Typography.Text style={{ color: 'red', fontSize: 20 }}>Chưa đăng nhạc</Typography.Text>}
+        />
     );
 }
 

@@ -10,6 +10,7 @@ import {
 } from './followService';
 import { getDetailSong, uploadMusic, getPlaylist,getPlaylistByAccess, removeMusic, updateMusic } from './musicService';
 import { search, getUser,updateUser, getTopUser } from './userService.js';
+import {getComment, addComment, updateComment, removeComment} from './commentService';
 const config = {
     login,
     logout,
@@ -34,6 +35,10 @@ const config = {
     getPlaylistByAccess,
     checkFollow,
     getTopUser,
+    getComment,
+    updateComment,
+    removeComment,
+    addComment,
 };
 
 export default config;
