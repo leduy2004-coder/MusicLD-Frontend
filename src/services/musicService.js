@@ -7,8 +7,8 @@ export const getDetailSong = async (id, token) => {
             params: { id },
         });
         return res.result;
-    } catch (error) {
-        return { errorCode: error.response.status };
+    } catch (errorCode) {
+        return { errorCode: errorCode.response.status };
     }
 };
 export const getPlaylist = async (id, token) => {

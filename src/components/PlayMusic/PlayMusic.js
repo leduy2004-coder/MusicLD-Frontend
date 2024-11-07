@@ -52,6 +52,9 @@ const PlayMusic = () => {
         runTimeref,
         trackref,
         setIsShow,
+        priorityMusic,
+        setPriorityMusic,
+        setAutoPlay,
     } = UserMusic();
 
     const onChangeValue = (value) => {
@@ -63,7 +66,7 @@ const PlayMusic = () => {
         const fetchDetailSong = async () => {
             if (currentSongId) {
                 const res = await config.getDetailSong(currentSongId);
-                if (res.errCode) {
+                if (res.errorCode) {
                     setAudio(null);
                     setIsPlay(false);
                     setCrSecond(0);
@@ -83,7 +86,6 @@ const PlayMusic = () => {
             } else {
                 setSongInfo(null);
                 if (audio) {
-                    console.log('2')
                     audio.pause();
                     setAudio(null);
                     setIsPlay(false);
@@ -221,9 +223,27 @@ const PlayMusic = () => {
         audio.play();
     };
     useEffect(() => {
-        if (songs.length > 0) {
+        if (priorityMusic && songs.length === 1) {
+            console.log("A")
+            setCurrentSongId(songs[songs.length - 1].id);
+
+            if (audio) audio.pause();
+
+            setIsPlay(true);
+        } else if (priorityMusic) {
+            console.log("B")
+            setCurrentSongId(songs[songs.length - 1].id);
+
+            if (audio) audio.pause();
+            setTimeout(() => {
+                setIsPlay(true);
+            }, 50);
+        } else if (songs.length > 0) {
+            console.log("C")
+
             setCurrentSongId(songs[0].id);
         }
+        setPriorityMusic(false);
     }, [songs]);
 
     const navigate = useNavigate();

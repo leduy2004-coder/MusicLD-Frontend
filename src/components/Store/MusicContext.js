@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { UserNotify } from './NotifyContext';
 const VideoContext = React.createContext();
@@ -27,32 +27,37 @@ export function MusicProvider({ children }) {
     const runTimeref = useRef();
     const trackref = useRef();
     const [isShow, setIsShow] = useState(false);
+    const [priorityMusic, setPriorityMusic] = useState(false);
 
     // Hàm thêm bài hát mới
     const addSong = (newSong) => {
         setSongsState((prevSongs) => {
-            if (prevSongs.includes(newSong)) {
+            const songExists = songs.some((song) => song.id === newSong.id);
+            if (songExists) {
                 setInfoNotify({
                     content: 'Bài hát đã tồn tại trong danh sách !!',
                     delay: 1500,
                     isNotify: true,
                     type: 'error',
                 });
-                return prevSongs; // Không thêm nếu bài hát đã tồn tại
+                return prevSongs;
             }
             const updatedSongs = [...prevSongs, newSong];
             localStorage.setItem('songs', JSON.stringify(updatedSongs));
-            setInfoNotify({
-                content: 'Thêm thành công !!',
-                delay: 1500,
-                isNotify: true,
-                type: 'success',
-            });
+
+            setTimeout(() => {
+                setInfoNotify({
+                    content: 'Thêm thành công !!',
+                    delay: 1500,
+                    isNotify: true,
+                    type: 'success',
+                });
+            }, 0);
+
             return updatedSongs;
         });
     };
 
-    // Hàm xóa bài hát theo index
     const removeSong = (index) => {
         setSongsState((prevSongs) => {
             if (index < 0 || index >= prevSongs.length) {
@@ -62,34 +67,29 @@ export function MusicProvider({ children }) {
                     isNotify: true,
                     type: 'error',
                 });
-                return prevSongs; // Không làm gì nếu index không hợp lệ
+                return prevSongs;
             }
-
             const updatedSongs = prevSongs.filter((_, i) => i !== index);
-
-            // Cập nhật localStorage
             localStorage.setItem('songs', JSON.stringify(updatedSongs));
 
-            // Nếu bài hát hiện tại đang phát là bài bị xóa
             if (currentSongId === prevSongs[index].id) {
                 if (updatedSongs.length > 0) {
-                    // Chuyển sang bài tiếp theo (hoặc bài đầu tiên)
                     const nextSongIndex = index < updatedSongs.length ? index : 0;
                     setCurrentSongId(updatedSongs[nextSongIndex].id);
-                    setAutoPlay(true); // Tự động phát bài mới
+                    setAutoPlay(true);
                 } else {
                     setCurrentSongId(null);
                     setAutoPlay(false);
                 }
+                setTimeout(() => {
+                    setInfoNotify({
+                        content: 'Xóa thành công !!',
+                        delay: 1500,
+                        isNotify: true,
+                        type: 'success',
+                    });
+                }, 0);
             }
-
-            setInfoNotify({
-                content: 'Xóa thành công !!',
-                delay: 1500,
-                isNotify: true,
-                type: 'success',
-            });
-
             return updatedSongs;
         });
     };
@@ -125,6 +125,8 @@ export function MusicProvider({ children }) {
 
         isShow,
         setIsShow,
+        priorityMusic,
+        setPriorityMusic
     };
 
     return <VideoContext.Provider value={value}>{children}</VideoContext.Provider>;

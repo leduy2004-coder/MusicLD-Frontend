@@ -8,31 +8,84 @@ import { useParams } from 'react-router-dom';
 
 import ItemMusic from '../ViewProfile/ItemMusic/ItemMusic';
 import { UserAuth } from '../Store';
+import icons from '~/utils/icon';
 import config from '~/services';
 import styles from './MusicDetail.module.scss';
 import Image from '../Image';
 import Button from '../Button';
 import Comments from './Comment/Comments';
-import { UserMusic, UserNotify } from '~/components/Store'
-
+import { UserMusic, UserNotify } from '~/components/Store';
+import AudioLoading from '../AudioLoading/AudioLoading';
 const cx = classNames.bind(styles);
+const { BsPlayCircle } = icons;
 
 function MusicDetail({ data = {} }) {
     const { id } = useParams();
-    
+
     const { userAuth, tokenStr } = UserAuth();
     const [activeKey, setActiveKey] = useState('1');
     const [publicMusic, setPublicMusic] = useState([]);
     const [currentMusic, setCurrentMusic] = useState();
-
+    const [status, setStatus] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false); // Trạng thái phát nhạc
     const [isLiked, setIsLiked] = useState(false); // Trạng thái thích
     const [isAdding, setIsAdding] = useState(false); // Trạng thái đang thêm nhạc
 
-    const { addSong, removeSong, songs, currentSongId } = UserMusic();
+    const {
+        addSong,
+        removeSong,
+        songs,
+        setCurrentSongId,
+        currentSongId,
+        setAutoPlay,
+        audio,
+        setIsPlay,
+        isPlay,
+        setPriorityMusic,
+    } = UserMusic();
+
+    useEffect(() => {
+        console.log(!status)
+        if (currentSongId === currentMusic?.id && !status) {
+            
+            setIsPlaying(!isPlaying);
+        }
+        setStatus(false);
+    }, [isPlay]);
 
     const handleTogglePlay = () => {
-        setIsPlaying(!isPlaying); // Đổi trạng thái phát nhạc
+        if (currentMusic) {
+            const songExists = songs.some((song) => song.id === currentMusic.id);
+            if (!songExists && !isPlaying) {
+                console.log('a')
+                setPriorityMusic(true);
+                addSong(currentMusic);
+                setStatus(true);
+                setIsPlaying(true);
+                return;
+            }
+        }
+
+        if (!isPlaying && currentSongId !== currentMusic.id) {
+            console.log('b')
+            setCurrentSongId(currentMusic.id);
+            setAutoPlay(true);
+            
+            setStatus(false);
+
+        } else if (!isPlaying && currentSongId === currentMusic.id) {
+            console.log('c')
+            audio.play();
+            setStatus(true);
+            setIsPlay(true);
+        } else {
+            console.log('d')
+            audio.pause();
+            setStatus(true);
+            setIsPlay(false);
+        }
+
+        setIsPlaying(!isPlaying);
     };
 
     const handleToggleLike = () => {
@@ -40,12 +93,13 @@ function MusicDetail({ data = {} }) {
     };
 
     const handleAddMusic = () => {
-        if (isAdding) {
-            removeSong(currentMusic.id); 
+        const songIndex = songs.findIndex((song) => song.id === currentMusic.id);
+        if (isAdding && songIndex !== -1) {
+            removeSong(songIndex);
         } else {
-            addSong(currentMusic); 
+            addSong(currentMusic);
         }
-        setIsAdding(!isAdding); 
+        setIsAdding(!isAdding);
     };
     const handleTabChange = (key) => {
         setActiveKey(key);
@@ -54,12 +108,10 @@ function MusicDetail({ data = {} }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                if (!userAuth || !tokenStr) return; 
-                console.log(id)
+                if (!userAuth || !tokenStr) return;
                 if (id !== '0' && id) {
-                    
-                    const musicData = await config.getDetailSong(id, tokenStr);   
-                    console.log(musicData)     
+                    const musicData = await config.getDetailSong(id, tokenStr);
+                    console.log(musicData);
                     setCurrentMusic(musicData);
 
                     const listMusic = await config.getPlaylistByAccess(musicData.idUser, tokenStr, 'PUBLIC');
@@ -69,7 +121,6 @@ function MusicDetail({ data = {} }) {
                     const listMusic = await config.getPlaylistByAccess(userAuth.id, tokenStr, 'PUBLIC');
                     setPublicMusic(listMusic.result);
                 }
-
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -80,10 +131,34 @@ function MusicDetail({ data = {} }) {
 
     useEffect(() => {
         if (id === '0' && publicMusic?.length > 0) {
-
             setCurrentMusic(publicMusic[0]);
         }
     }, [publicMusic]);
+
+    useEffect(() => {
+        if (currentMusic) {
+      
+            const songExists = songs.some((song) => song.id === currentMusic.id);
+
+            if (!songExists) {
+                console.log('1')
+                setIsPlaying(false);
+                setIsAdding(songExists);
+            } else if (isPlay && currentMusic.id === currentSongId) {
+                console.log('2')
+                setIsPlay(true);
+                setIsPlaying(true);
+                setIsAdding(songExists);
+            } else if (isPlay && currentMusic.id !== currentSongId) {
+                console.log('3')
+
+                setIsPlaying(false);
+                setIsAdding(songExists);
+            } 
+            setIsAdding(songExists);
+        }
+    }, [currentMusic, songs, currentSongId]);
+
     const tabsItems = [
         {
             key: '1',
@@ -109,11 +184,18 @@ function MusicDetail({ data = {} }) {
         },
     ];
 
-    return (publicMusic?.length > 0 &&  id === '0') || id !== '0'? (
+    return (publicMusic?.length > 0 && id === '0') || id !== '0' ? (
         <div className={cx('container')}>
             <div className={cx('header')}>
-                <div>
-                    <Image className={cx('avatar-music')} src={currentMusic?.avatarResponse.url} />
+                <div className={cx('relative')}>
+                    <Image
+                        className={cx('avatar-music', isPlaying ? 'rotate-center' : 'rotate-center-pause')}
+                        src={currentMusic?.avatarResponse.url}
+                    />
+                    <div className={cx('icon-state')}>
+                        {isPlaying ? <AudioLoading /> : <BsPlayCircle className={cx('pause-icon')} />}
+                    </div>
+                    <div className={cx('modal-avatar', isPlaying ? 'rotate-center' : 'rotate-center-pause')}></div>
                 </div>
                 <div className={cx('info')}>
                     <h2 className={cx('info-name')}>{currentMusic?.title}</h2>
@@ -164,7 +246,7 @@ function MusicDetail({ data = {} }) {
                             <Image className={cx('account-img')} src={currentMusic?.avatarResponse.url} />
                             <div className={cx('account-name')}>{currentMusic?.nickName}</div>
                         </div>
-                        <ItemMusic data={publicMusic} detailMusic={true}/>
+                        <ItemMusic data={publicMusic} detailMusic={true} />
                     </div>
                 </div>
             </div>
