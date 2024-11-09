@@ -2,9 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { Tabs, Row, Empty, Typography } from 'antd';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faPause, faHeart as faHeartSolid, faMusic, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import {
+    faPlay,
+    faPause,
+    faHeart as faHeartSolid,
+    faMusic,
+    faMinus,
+    faPlus,
+    faUser,
+} from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartRegular, faComments } from '@fortawesome/free-regular-svg-icons';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import ItemMusic from '../ViewProfile/ItemMusic/ItemMusic';
 import { UserAuth } from '../Store';
@@ -21,9 +30,10 @@ const { BsPlayCircle } = icons;
 
 function MusicDetail({ data = {} }) {
     const { id } = useParams();
+    const navigate = useNavigate();
 
     const { userAuth, tokenStr } = UserAuth();
-    const [activeKey, setActiveKey] = useState('1');
+    const [activeKey, setActiveKey] = useState(localStorage.getItem('selectedMusicKey') || 'nav1');
     const [publicMusic, setPublicMusic] = useState([]);
     const [currentMusic, setCurrentMusic] = useState();
     const [status, setStatus] = useState(false);
@@ -45,9 +55,8 @@ function MusicDetail({ data = {} }) {
     } = UserMusic();
 
     useEffect(() => {
-        console.log(!status)
+        console.log(!status);
         if (currentSongId === currentMusic?.id && !status) {
-            
             setIsPlaying(!isPlaying);
         }
         setStatus(false);
@@ -57,7 +66,7 @@ function MusicDetail({ data = {} }) {
         if (currentMusic) {
             const songExists = songs.some((song) => song.id === currentMusic.id);
             if (!songExists && !isPlaying) {
-                console.log('a')
+                console.log('a');
                 setPriorityMusic(true);
                 addSong(currentMusic);
                 setStatus(true);
@@ -67,19 +76,18 @@ function MusicDetail({ data = {} }) {
         }
 
         if (!isPlaying && currentSongId !== currentMusic.id) {
-            console.log('b')
+            console.log('b');
             setCurrentSongId(currentMusic.id);
             setAutoPlay(true);
-            
+            setIsPlay(true);
             setStatus(false);
-
         } else if (!isPlaying && currentSongId === currentMusic.id) {
-            console.log('c')
+            console.log('c');
             audio.play();
             setStatus(true);
             setIsPlay(true);
         } else {
-            console.log('d')
+            console.log('d');
             audio.pause();
             setStatus(true);
             setIsPlay(false);
@@ -101,8 +109,12 @@ function MusicDetail({ data = {} }) {
         }
         setIsAdding(!isAdding);
     };
+    useEffect(() => {
+        localStorage.setItem('selectedMusicKey', 'nav1');
+    }, [currentMusic]);
     const handleTabChange = (key) => {
         setActiveKey(key);
+        localStorage.setItem('selectedMusicKey', key);
     };
 
     useEffect(() => {
@@ -137,42 +149,55 @@ function MusicDetail({ data = {} }) {
 
     useEffect(() => {
         if (currentMusic) {
-      
             const songExists = songs.some((song) => song.id === currentMusic.id);
 
             if (!songExists) {
-                console.log('1')
+                console.log('1');
                 setIsPlaying(false);
                 setIsAdding(songExists);
             } else if (isPlay && currentMusic.id === currentSongId) {
-                console.log('2')
+                console.log('2');
                 setIsPlay(true);
                 setIsPlaying(true);
                 setIsAdding(songExists);
             } else if (isPlay && currentMusic.id !== currentSongId) {
-                console.log('3')
+                console.log('3');
 
                 setIsPlaying(false);
                 setIsAdding(songExists);
-            } 
+            }
             setIsAdding(songExists);
         }
     }, [currentMusic, songs, currentSongId]);
 
+    const handleUser = () => {
+        navigate(`/profile/${currentMusic?.idUser}`);
+    };
+
     const tabsItems = [
         {
-            key: '1',
+            key: 'nav1',
             label: (
-                <span className={cx({ 'menu-item-selected': activeKey === '1', 'menu-item': activeKey !== '1' })}>
+                <span
+                    className={cx({
+                        'menu-item-selected': activeKey === '1',
+                        'menu-item-detail': activeKey !== 'nav1',
+                    })}
+                >
                     <FontAwesomeIcon icon={faMusic} /> Lời nhạc
                 </span>
             ),
             children: <div className={cx('lyric')}>{currentMusic?.lyrics}</div>,
         },
         {
-            key: '2',
+            key: 'nav2',
             label: (
-                <span className={cx({ 'menu-item-selected': activeKey === '2', 'menu-item': activeKey !== '2' })}>
+                <span
+                    className={cx({
+                        'menu-item-selected': activeKey === '2',
+                        'menu-item-detail': activeKey !== 'nav2',
+                    })}
+                >
                     <FontAwesomeIcon icon={faComments} /> Bình luận
                 </span>
             ),
@@ -233,7 +258,7 @@ function MusicDetail({ data = {} }) {
             <div className={cx('content')}>
                 <div className={cx('tab')}>
                     <Tabs
-                        defaultActiveKey="1"
+                        defaultActiveKey="nav1"
                         activeKey={activeKey}
                         onChange={handleTabChange}
                         items={tabsItems}
@@ -245,6 +270,14 @@ function MusicDetail({ data = {} }) {
                         <div className={cx('account-user')}>
                             <Image className={cx('account-img')} src={currentMusic?.avatarResponse.url} />
                             <div className={cx('account-name')}>{currentMusic?.nickName}</div>
+                            <div className={cx('account-profile')}>
+                                <FontAwesomeIcon
+                                    title={'Trang cá nhân'}
+                                    className={cx('icon')}
+                                    icon={faUser}
+                                    onClick={handleUser}
+                                />
+                            </div>
                         </div>
                         <ItemMusic data={publicMusic} detailMusic={true} />
                     </div>

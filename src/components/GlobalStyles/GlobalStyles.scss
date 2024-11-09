@@ -30,6 +30,10 @@
     --music-user-header: #aeaaaa;
     --music-music-item: #e7e7e7c5;
     --user-background: #fff;
+
+    //Comment
+    --background-comment: #fff;
+    --border-comment: 1px solid #ddd;
 }
 @keyframes spin {
     from {
@@ -61,6 +65,10 @@
     --music-user-header: #231b2e;
     --music-music-item: #130c1c;
     --user-background: #2f2534;
+
+    //Comment
+    --background-comment: #130c1c;
+    --border-comment: none;
 }
 * {
     margin: 0;

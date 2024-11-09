@@ -4,6 +4,7 @@
     margin: auto;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 8rem;
 }
 
 .header {
@@ -23,7 +24,7 @@
     font-size: 3rem;
 }
 .area-button {
-    margin-top: 1.5rem
+    margin-top: 1.5rem;
 }
 .icon-music {
     margin-right: 8px;
@@ -52,28 +53,29 @@
 .lyric {
     font-size: 1.5rem;
     padding: 0 2rem;
+    color: var(--black);
 }
-.account {  
+.account {
     position: relative;
     padding: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 10px;  
+    margin-bottom: 10px;
     margin-top: -10%;
     flex: 0.5;
 }
 .position {
     position: absolute;
     top: 0;
-    left: 0; 
+    left: 0;
     right: 0;
     min-height: 50rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    background: var( --user-background);
+    background: var(--user-background);
     border-radius: 1rem;
 }
-.account-user {  
+.account-user {
     width: 100%;
     display: flex;
     align-items: center;
@@ -94,7 +96,13 @@
     font-weight: bold;
     color: var(--black);
 }
-
+.account-profile {
+    display: flex;
+    flex: 1;
+    justify-content: end;
+    margin-right: 2rem;
+    cursor: pointer;
+}
 /* Hiệu ứng quay */
 @keyframes rotate-center {
     0% {
@@ -171,4 +179,14 @@
     color: white;
     z-index: 1;
 }
+.menu-item-detail {
+    color: var(--black) ;
 
+}
+
+:global {
+    :where(.css-dev-only-do-not-override-98ntnt).ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+        color: var(--primary);
+
+    }
+}

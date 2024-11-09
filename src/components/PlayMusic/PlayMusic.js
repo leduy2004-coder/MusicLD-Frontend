@@ -224,14 +224,14 @@ const PlayMusic = () => {
     };
     useEffect(() => {
         if (priorityMusic && songs.length === 1) {
-            console.log("A")
+            console.log('A');
             setCurrentSongId(songs[songs.length - 1].id);
 
             if (audio) audio.pause();
 
             setIsPlay(true);
         } else if (priorityMusic) {
-            console.log("B")
+            console.log('B');
             setCurrentSongId(songs[songs.length - 1].id);
 
             if (audio) audio.pause();
@@ -239,7 +239,7 @@ const PlayMusic = () => {
                 setIsPlay(true);
             }, 50);
         } else if (songs.length > 0) {
-            console.log("C")
+            console.log('C');
 
             setCurrentSongId(songs[0].id);
         }
@@ -253,6 +253,11 @@ const PlayMusic = () => {
             localStorage.setItem('selectedKey', 'nav2');
         }
     };
+
+    const handleDetailMusic = () => {
+        if (currentSongId) navigate(`/music/${currentSongId}`);
+    };
+
     return (
         <div className={cx('play-music')}>
             <div className={cx('play_control')}>
@@ -324,7 +329,7 @@ const PlayMusic = () => {
                 </div>
                 <div className={cx('volume')}>
                     <div className={cx('el_hover')}>
-                        <BiWindows size={27} style={{ fontWeight: 200 }} />
+                        <BiWindows size={27} style={{ fontWeight: 200 }} onClick={handleDetailMusic} />
                     </div>
                     <div className={cx('volume_zone')}>
                         <BsFillVolumeUpFill size={27} />

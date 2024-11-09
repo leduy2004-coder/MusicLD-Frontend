@@ -14,7 +14,7 @@ export const getComment = async (id, token) => {
 
 export const removeComment = async (id, token) => {
     try {
-        const res = await callPath.post(`comment/delete`, null, token, {
+        const res = await callPath.deleted(`comment/delete`, token, {
             params: {
                 id,
             },
@@ -29,7 +29,7 @@ export const removeComment = async (id, token) => {
 export const addComment = async (content, parentId, musicId, token) => {
     try {
         const res = await callPath.post('comment/insert', { content, parentId, musicId }, token);
-        return res;
+        return res.data;
     } catch (err) {
         return { errorCode: err.response.status };
     }

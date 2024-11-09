@@ -1,5 +1,9 @@
 import { useState } from 'react';
+import classNames from 'classnames/bind';
 
+import styles from './Comment.module.scss';
+
+const cx = classNames.bind(styles);
 const CommentForm = ({ handleSubmit, submitLabel, hasCancelButton = false, handleCancel, initialText = '' }) => {
     const [text, setText] = useState(initialText);
     const isTextareaDisabled = text.length === 0;
@@ -8,17 +12,27 @@ const CommentForm = ({ handleSubmit, submitLabel, hasCancelButton = false, handl
         handleSubmit(text);
         setText('');
     };
+    const onCancel = () => {
+        setText('');
+        if (handleCancel) {
+            handleCancel();
+        }
+    };
     return (
         <form onSubmit={onSubmit}>
-            <textarea className="comment-form-textarea" value={text} onChange={(e) => setText(e.target.value)} />
-            <button className="comment-form-button" disabled={isTextareaDisabled}>
-                {submitLabel}
-            </button>
-            {hasCancelButton && (
-                <button type="button" className="comment-form-button comment-form-cancel-button" onClick={handleCancel}>
-                    Xóa
+            <textarea className={cx('comment-form-textarea')} value={text} onChange={(e) => setText(e.target.value)} />
+            <div className={cx('button-area')}>
+                <button className={cx('comment-form-button')} disabled={isTextareaDisabled}>
+                    {submitLabel}
                 </button>
-            )}
+                <button
+                    type="button"
+                    className={cx('comment-form-cancel-button')}
+                    onClick={onCancel}
+                >
+                    Hủy
+                </button>
+            </div>
         </form>
     );
 };

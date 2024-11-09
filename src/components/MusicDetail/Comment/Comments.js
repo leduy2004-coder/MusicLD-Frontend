@@ -1,23 +1,30 @@
 import { useEffect, useState } from 'react';
+import classNames from 'classnames/bind';
 
 import config from '~/services';
 import { UserAuth, UserNotify } from '~/components/Store';
 import Comment from './Comment';
+import styles from './Comment.module.scss';
 import CommentForm from './CommentForm';
 
+const cx = classNames.bind(styles);
+
+
 const Comments = ({currentMusicId }) => {
-    const { tokenStr,userAuth, avatar  } = UserAuth();
+    const { tokenStr,userAuth  } = UserAuth();
     const { setInfoNotify } = UserNotify();
 
     const [backendComments, setBackendComments] = useState([]);
     const [activeComment, setActiveComment] = useState(null);
     const rootComments = backendComments.filter((backendComment) => backendComment.parentId === null);
+    console.log(rootComments)
     const getReplies = (commentId) =>
         backendComments
             .filter((backendComment) => backendComment.parentId === commentId)
             .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
     const addComment = async (text, parentId) => {
         const data = await config.addComment(text, parentId, currentMusicId, tokenStr);
+        console.log(data)
         if (data.errorCode) {
             setInfoNotify({
                 content: 'Bình luận thất bại. Hãy thử lại !!',
@@ -26,7 +33,7 @@ const Comments = ({currentMusicId }) => {
                 type: 'error',
             });
         } else {
-            setBackendComments([data, ...backendComments]);
+            setBackendComments([data.result, ...backendComments]);
             setActiveComment(null);
         }
     };
@@ -43,7 +50,7 @@ const Comments = ({currentMusicId }) => {
         } else {
             const updatedBackendComments = backendComments.map((backendComment) => {
                 if (backendComment.id === commentId) {
-                    return { ...backendComment, body: text };
+                    return { ...backendComment, content: text };
                 }
                 return backendComment;
             });
@@ -71,10 +78,13 @@ const Comments = ({currentMusicId }) => {
     };
 
     useEffect(() => {
-        const fetchComments = async (currentMusicId,tokenStr) => {
+        const fetchComments = async () => {
+            if (!currentMusicId || !tokenStr) return; 
+    
             try {
-              console.log(currentMusicId)
                 const data = await config.getComment(currentMusicId, tokenStr);
+                console.log(data);
+                
                 if (data.errorCode) {
                     setInfoNotify({
                         content: 'Hiển thị bình luận thất bại. Hãy thử lại !!',
@@ -83,7 +93,7 @@ const Comments = ({currentMusicId }) => {
                         type: 'error',
                     });
                 } else {
-                    setBackendComments(data);
+                    setBackendComments(data.result);
                 }
             } catch (error) {
                 console.error('Error fetching comments:', error);
@@ -95,16 +105,16 @@ const Comments = ({currentMusicId }) => {
                 });
             }
         };
-
+    
         fetchComments();
     }, [currentMusicId, tokenStr]);
+    
 
     return (
-        <div className="comments">
-            <h3 className="comments-title">Bình luận</h3>
-            <div className="comment-form-title">Nhập vào đây</div>
+        <div className={cx('comments')}>
+            <div className={cx('comment-form-title')}>Nhập vào đây</div>
             <CommentForm submitLabel="Gửi" handleSubmit={addComment} />
-            <div className="comments-container">
+            <div className={cx('comments-container')}>
                 {rootComments.map((rootComment) => (
                     <Comment
                         key={rootComment.id}
@@ -116,7 +126,6 @@ const Comments = ({currentMusicId }) => {
                         deleteComment={deleteComment}
                         updateComment={updateComment}
                         currentUserId={userAuth?.id}
-                        avatarUser ={avatar}
                     />
                 ))}
             </div>
