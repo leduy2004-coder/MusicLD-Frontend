@@ -8,7 +8,7 @@ import {
     getAllRequest,
     checkFollow
 } from './followService';
-import { getDetailSong, uploadMusic, getPlaylist,getPlaylistByAccess, removeMusic, updateMusic } from './musicService';
+import { getDetailSong, uploadMusic, getPlaylist,getPlaylistByAccess, removeMusic, updateMusic ,likeMusic,unLikeMusic} from './musicService';
 import { search, getUser,updateUser, getTopUser } from './userService.js';
 import {getComment, addComment, updateComment, removeComment} from './commentService';
 const config = {
@@ -39,6 +39,9 @@ const config = {
     updateComment,
     removeComment,
     addComment,
+    likeMusic,
+    unLikeMusic,
+
 };
 
 export default config;

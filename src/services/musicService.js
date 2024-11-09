@@ -1,4 +1,3 @@
-
 import * as callPath from '../utils/httpRequest';
 
 export const getDetailSong = async (id, token) => {
@@ -63,5 +62,26 @@ export const updateMusic = async (formData, token) => {
         return res.data;
     } catch (err) {
         return { errCode: err.response.status };
+    }
+};
+
+export const likeMusic = async (userId, musicId, token) => {
+    try {
+        const res = await callPath.post('music/like', null, token, {
+            params: { userId, musicId },
+        });
+        return res.data;
+    } catch (error) {
+        return { errorCode: error.response };
+    }
+};
+export const unLikeMusic = async (userId, musicId, token) => {
+    try {
+        const res = await callPath.post('music/un-like', null, token, {
+            params: { userId, musicId },
+        });
+        return res.data;
+    } catch (error) {
+        return { errorCode: error.response };
     }
 };

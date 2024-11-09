@@ -39,7 +39,9 @@ function MusicDetail({ data = {} }) {
     const [status, setStatus] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false); // Trạng thái phát nhạc
     const [isLiked, setIsLiked] = useState(false); // Trạng thái thích
+    const [countLike, setCountLike] = useState(0); 
     const [isAdding, setIsAdding] = useState(false); // Trạng thái đang thêm nhạc
+    const { setInfoNotify } = UserNotify();
 
     const {
         addSong,
@@ -96,9 +98,35 @@ function MusicDetail({ data = {} }) {
         setIsPlaying(!isPlaying);
     };
 
-    const handleToggleLike = () => {
-        setIsLiked(!isLiked); // Đổi trạng thái thích
+    const handleToggleLike = async () => {  
+        
+        if (isLiked) {
+            const data = await config.unLikeMusic(userAuth.id, currentMusic.id, tokenStr);
+            console.log(data)
+            if(data){
+                setCountLike(countLike-1)
+                setInfoNotify({
+                    content: 'Đã hủy thích nhạc !!',
+                    delay: 1500,
+                    isNotify: true,
+                    type: 'success',
+                });
+            }
+        } else {
+            const musicData = await config.likeMusic(userAuth.id, currentMusic.id, tokenStr);
+            if(musicData){
+                setCountLike(countLike+1)
+                setInfoNotify({
+                    content: 'Đã thích nhạc !!',
+                    delay: 1500,
+                    isNotify: true,
+                    type: 'success',
+                });
+            }
+        }
+        setIsLiked(!isLiked);  // Đảo ngược trạng thái "liked"
     };
+    
 
     const handleAddMusic = () => {
         const songIndex = songs.findIndex((song) => song.id === currentMusic.id);
@@ -111,12 +139,13 @@ function MusicDetail({ data = {} }) {
     };
     useEffect(() => {
         localStorage.setItem('selectedMusicKey', 'nav1');
+        setIsLiked(currentMusic?.like)
+        setCountLike(currentMusic?.countLike)
     }, [currentMusic]);
     const handleTabChange = (key) => {
         setActiveKey(key);
         localStorage.setItem('selectedMusicKey', key);
     };
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -133,6 +162,7 @@ function MusicDetail({ data = {} }) {
                     const listMusic = await config.getPlaylistByAccess(userAuth.id, tokenStr, 'PUBLIC');
                     setPublicMusic(listMusic.result);
                 }
+                
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -225,7 +255,7 @@ function MusicDetail({ data = {} }) {
                 <div className={cx('info')}>
                     <h2 className={cx('info-name')}>{currentMusic?.title}</h2>
                     <span style={{ opacity: '0.5' }}>Sáng tác: {currentMusic?.nickName}</span>
-                    <span style={{ opacity: '0.5' }}>10 người yêu thích</span>
+                    <span style={{ opacity: '0.5' }}>{countLike} người yêu thích</span>
                     <div className={cx('area-button')}>
                         <Button
                             primary
@@ -273,7 +303,7 @@ function MusicDetail({ data = {} }) {
                             <div className={cx('account-profile')}>
                                 <FontAwesomeIcon
                                     title={'Trang cá nhân'}
-                                    className={cx('icon')}
+                                    className={cx('icon-profile')}
                                     icon={faUser}
                                     onClick={handleUser}
                                 />
