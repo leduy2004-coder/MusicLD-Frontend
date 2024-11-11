@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { AuthProvider, NotifyProvider, MusicProvider } from './components/Store';
+import { AuthProvider, NotifyProvider, MusicProvider, FormProvider } from './components/Store';
 import App from '~/App';
 import reportWebVitals from './reportWebVitals';
 import GlobalStyles from '~/components/GlobalStyles';
@@ -11,11 +11,13 @@ root.render(
     // <React.StrictMode>
     <NotifyProvider>
         <AuthProvider>
-            <MusicProvider>
-                <GlobalStyles>
-                    <App />
-                </GlobalStyles>
-            </MusicProvider>
+            <FormProvider>
+                <MusicProvider>
+                    <GlobalStyles>
+                        <App />
+                    </GlobalStyles>
+                </MusicProvider>
+            </FormProvider>
         </AuthProvider>
     </NotifyProvider>,
     // </React.StrictMode>,

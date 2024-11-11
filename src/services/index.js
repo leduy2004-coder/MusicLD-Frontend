@@ -8,9 +8,10 @@ import {
     getAllRequest,
     checkFollow
 } from './followService';
-import { getDetailSong, uploadMusic, getPlaylist,getPlaylistByAccess, removeMusic, updateMusic ,likeMusic,unLikeMusic} from './musicService';
+import { getDetailSong, uploadMusic, getPlaylist,getPlaylistByAccess, removeMusic, updateMusic ,likeMusic,unLikeMusic,getCountMusic} from './musicService';
 import { search, getUser,updateUser, getTopUser } from './userService.js';
 import {getComment, addComment, updateComment, removeComment} from './commentService';
+import { getVNPay } from './paymentService';
 const config = {
     login,
     logout,
@@ -41,6 +42,8 @@ const config = {
     addComment,
     likeMusic,
     unLikeMusic,
+    getCountMusic,
+    getVNPay,
 
 };
 

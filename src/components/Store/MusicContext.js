@@ -28,6 +28,7 @@ export function MusicProvider({ children }) {
     const trackref = useRef();
     const [isShow, setIsShow] = useState(false);
     const [priorityMusic, setPriorityMusic] = useState(false);
+    const [isLiked, setIsLiked] = useState(false); // Trạng thái thích
 
     // Hàm thêm bài hát mới
     const addSong = (newSong) => {
@@ -126,7 +127,9 @@ export function MusicProvider({ children }) {
         isShow,
         setIsShow,
         priorityMusic,
-        setPriorityMusic
+        setPriorityMusic,
+        isLiked,
+        setIsLiked,
     };
 
     return <VideoContext.Provider value={value}>{children}</VideoContext.Provider>;

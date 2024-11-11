@@ -23,6 +23,7 @@ export function AuthProvider({ children }) {
     const [openFullVideo, setOpenFullVideo] = useState(false);
     const [openFormDelete, setOpenFormDelete] = useState(false);
     const [openFormAvatar, setOpenFormAvatar] = useState(false);
+    const [openFormNotifyPayment, setOpenFormNotifyPayment] = useState(false);
     const [dataForm, setDataForm] = useState({});
 
     const [tokenStr, setTokenStr] = useState('');
@@ -59,6 +60,8 @@ export function AuthProvider({ children }) {
         setDataForm,
         openFormAvatar,
         setOpenFormAvatar,
+        openFormNotifyPayment,
+        setOpenFormNotifyPayment
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

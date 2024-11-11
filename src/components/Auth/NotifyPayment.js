@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './Auth.module.scss';
 
 import { UserAuth } from '../Store/AuthContext';
+import { useFormContext } from '../Store/FormContext';
 import Button from '../Button';
 import { Wrapper } from '../Popper';
 import config from '../../services';
@@ -10,60 +11,43 @@ import { UserNotify } from '../Store';
 
 const cx = classNames.bind(styles);
 
-function LogOut() {
+function NotifyPayment() {
     const navigate = useNavigate();
 
-    const { tokenStr, setOpenFormLogout } = UserAuth();
+    const { tokenStr, setOpenFormNotifyPayment } = UserAuth();
+    const {resetFormData } = useFormContext();
+
     const { setInfoNotify } = UserNotify();
 
     const handleCloseForm = () => {
-        setOpenFormLogout(false);
+        resetFormData();
+        setOpenFormNotifyPayment(false);
     };
 
-    const handleLogout = async () => {
-  
-        const data = await config.logout(tokenStr);
-        if (data.errorCode) {
-            setInfoNotify({
-                content: 'Đăng xuất thất bại. Vui lòng thử lại!',
-                delay: 1500,
-                isNotify: true,
-                type: 'error'
-            });
-            setOpenFormLogout(false);
-        } else {
-            setInfoNotify({
-                content: 'Đăng xuất thành công!',
-                delay: 1500,
-                isNotify: true,
-                type: 'success'
-            });
-
-            setTimeout(() => {
-                localStorage.clear()
-                window.location.reload();
-            }, [300]);
-        }
+    const handleRedirect = async () => {
+        const data = await config.getVNPay(15000, 'NCB', tokenStr);
+        if (data && data.paymentUrl) window.location.href = data.paymentUrl;
     };
-    
+
     return (
         <div className={cx('form-container')}>
             <Wrapper className={cx('form-logout')}>
                 <div className={cx('logout-content')}>
-                    <h1 className={cx('title-logout')}>Bạn có chắc chắn muốn đăng xuất?</h1>
+                    <h1 className={cx('title-logout')}>Bạn chỉ được đăng 2 bài miễn phí </h1>
+                    <span>Hãy thanh toán 15000 để đăng bài tiếp theo</span>
                     <div className={cx('btn-primary')}>
                         <Button onClick={handleCloseForm} className={cx('btn-form-logout')} large outline>
                             Hủy
                         </Button>
                         <Button
-                            onClick={handleLogout}
+                            onClick={handleRedirect}
                             className={cx('btn-form-logout', {
                                 'logout-btn': true,
                             })}
                             large
                             outline
                         >
-                            Đăng xuất
+                            Thanh toán
                         </Button>
                     </div>
                 </div>
@@ -72,4 +56,4 @@ function LogOut() {
     );
 }
 
-export default LogOut;
+export default NotifyPayment;

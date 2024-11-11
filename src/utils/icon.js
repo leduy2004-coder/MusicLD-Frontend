@@ -12,7 +12,7 @@ import {
 import { AiOutlineLineChart, AiOutlineSearch, AiFillHeart, AiOutlineHeart, AiOutlineUser } from 'react-icons/ai';
 import { MdLibraryMusic } from 'react-icons/md';
 import { LuRadio } from 'react-icons/lu';
-import { FaArrowLeft, FaArrowRight, FaPlay } from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight, FaPlay, FaUser } from 'react-icons/fa';
 import { BiDotsHorizontalRounded, BiSkipNext, BiSkipPrevious, BiWindows, BiSolidPlaylist } from 'react-icons/bi';
 import { CiRepeat } from 'react-icons/ci';
 import { PiShuffleLight } from 'react-icons/pi';
@@ -32,6 +32,7 @@ const icons = {
     AiOutlineSearch,
     AiFillHeart,
     AiOutlineHeart,
+    AiFillHeart,
     BiDotsHorizontalRounded,
     BiSkipNext,
     BiSkipPrevious,
@@ -55,6 +56,7 @@ const icons = {
     BsPlayCircleFill,
     FaPlay,
     AiOutlineUser,
-    FaInfoCircle 
+    FaInfoCircle,
+    FaUser
 };
 export default icons;

@@ -9,10 +9,13 @@ import styles from './PlayMusic.module.scss';
 import Image from '../Image';
 import { UserMusic } from '../Store';
 import Menu from '../Popper/Menu';
+import { UserAuth } from '../Store';
+import { UserNotify } from '~/components/Store';
 
 const cx = classNames.bind(styles);
 const {
     AiOutlineHeart,
+    AiFillHeart,
     BiDotsHorizontalRounded,
     BiSkipNext,
     BiSkipPrevious,
@@ -25,6 +28,7 @@ const {
     BsRepeat1,
     BiSolidPlaylist,
     FaInfoCircle,
+    FaUser,
 } = icons;
 
 let intervalID;
@@ -55,12 +59,16 @@ const PlayMusic = () => {
         priorityMusic,
         setPriorityMusic,
         setAutoPlay,
+        isLiked,
+        setIsLiked
     } = UserMusic();
 
     const onChangeValue = (value) => {
         setVolumes(value / 100);
         if (audio) audio.volume = value / 100;
     };
+    const { userAuth, tokenStr } = UserAuth();
+    const { setInfoNotify } = UserNotify();
 
     useEffect(() => {
         const fetchDetailSong = async () => {
@@ -73,7 +81,8 @@ const PlayMusic = () => {
                     runTimeref.current.style.cssText = `right: ${100}%`;
                 } else {
                     setSongInfo(res);
-
+                    console.log(res)
+                    setIsLiked(res?.like)
                     const newAudio = new Audio(res.url);
                     newAudio.volume = volumes;
                     setAudio(newAudio);
@@ -253,6 +262,20 @@ const PlayMusic = () => {
             localStorage.setItem('selectedKey', 'nav2');
         }
     };
+    const handleLikeMusic = async () => {
+        if (currentSongId && !isLiked) {
+            const musicData = await config.likeMusic(userAuth.id, currentSongId, tokenStr);
+            if (musicData) {
+                setInfoNotify({
+                    content: 'Đã thích nhạc !!',
+                    delay: 1200,
+                    isNotify: true,
+                    type: 'success',
+                });
+            }
+            setIsLiked(!isLiked)
+        }
+    };
 
     const handleDetailMusic = () => {
         if (currentSongId) navigate(`/music/${currentSongId}`);
@@ -270,12 +293,13 @@ const PlayMusic = () => {
                         <span>{songInfo?.nickName}</span>
                     </div>
                     <div className={cx('like_action')}>
-                        <span>
-                            <AiOutlineHeart size={21} />
+                        <span onClick={handleLikeMusic}>
+                        {isLiked ? <AiFillHeart size={21} color='red' cursor='auto'/> : <AiOutlineHeart size={21} />}
+                            
                         </span>
 
                         <span onClick={handleOpenInfo}>
-                            <FaInfoCircle size={21} />
+                            <FaUser size={21} />
                         </span>
                     </div>
                 </div>

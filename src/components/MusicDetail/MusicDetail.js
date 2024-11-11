@@ -38,7 +38,6 @@ function MusicDetail({ data = {} }) {
     const [currentMusic, setCurrentMusic] = useState();
     const [status, setStatus] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false); // Trạng thái phát nhạc
-    const [isLiked, setIsLiked] = useState(false); // Trạng thái thích
     const [countLike, setCountLike] = useState(0); 
     const [isAdding, setIsAdding] = useState(false); // Trạng thái đang thêm nhạc
     const { setInfoNotify } = UserNotify();
@@ -54,6 +53,8 @@ function MusicDetail({ data = {} }) {
         setIsPlay,
         isPlay,
         setPriorityMusic,
+        isLiked,
+        setIsLiked
     } = UserMusic();
 
     useEffect(() => {

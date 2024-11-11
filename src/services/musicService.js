@@ -20,6 +20,16 @@ export const getPlaylist = async (id, token) => {
         return { errorCode: error.response.status };
     }
 };
+export const getCountMusic = async (userId, token) => {
+    try {
+        const res = await callPath.get('music/get-count', token, {
+            params: { userId },
+        });
+        return res.result;
+    } catch (error) {
+        return { errorCode: error.response.status };
+    }
+};
 export const getPlaylistByAccess = async (id, token, access) => {
     try {
         const res = await callPath.get('music/get-playlist-access', token, {
