@@ -22,14 +22,36 @@ const cx = classNames.bind(styles);
 function DefaultLayout({ children }) {
     const { isShow } = UserMusic();
 
-    const { openFormLogin, openFormLogout, openFormEdit, openFullVideo, openFormDelete, openFormDiscard,openFormNotifyPayment } = UserAuth();
+    const {
+        openFormLogin,
+        openFormLogout,
+        openFormEdit,
+        openFullVideo,
+        openFormDelete,
+        openFormDiscard,
+        openFormNotifyPayment,
+    } = UserAuth();
 
     useEffect(() => {
         document.body.style =
-            openFormLogin || openFormLogout || openFormEdit || openFullVideo || openFormDelete || openFormDiscard || openFormNotifyPayment
+            openFormLogin ||
+            openFormLogout ||
+            openFormEdit ||
+            openFullVideo ||
+            openFormDelete ||
+            openFormDiscard ||
+            openFormNotifyPayment
                 ? 'overflow-y: hidden'
                 : 'overflow-y: overlay';
-    }, [openFormLogin, openFormLogout, openFormEdit, openFullVideo, openFormDelete, openFormDiscard,openFormNotifyPayment]);
+    }, [
+        openFormLogin,
+        openFormLogout,
+        openFormEdit,
+        openFullVideo,
+        openFormDelete,
+        openFormDiscard,
+        openFormNotifyPayment,
+    ]);
 
     return (
         <div className={cx('wrapper')}>
@@ -47,11 +69,18 @@ function DefaultLayout({ children }) {
                     </div>
                 )}
             </div>
-            {(openFormLogin || openFormLogout || openFormEdit || openFormDelete || openFormDiscard || openFormNotifyPayment) && (
+
+            {(openFormLogin ||
+                openFormLogout ||
+                openFormEdit ||
+                openFormDelete ||
+                openFormDiscard ||
+                openFormNotifyPayment) && (
                 <AuthForm>
                     {openFormLogin && <Login />}
                     {openFormLogout && <LogOut />}
-                    {openFormNotifyPayment && <NotifyPayment/>}
+                    {openFormNotifyPayment && <NotifyPayment />}
+
                     {/* {openFormEdit && <FormUpdate />}
                     {openFormDelete && <DeleteForm />}
                     {openFormDiscard && <DiscardForm />} */}

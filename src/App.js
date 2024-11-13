@@ -3,11 +3,15 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { publicRoutes } from '~/routes/routes';
 import DefaultLayout from '~/layouts';
 import PlayMusic from './components/PlayMusic';
+import ChatRoom from './components/ChatRoom';
+import { UserAuth } from './components/Store';
 
 function App() {
     // localStorage.clear()
 
-
+    const {
+        openMessage,
+    } = UserAuth();
     return (
         <Router>
             <div className="App">
@@ -35,6 +39,8 @@ function App() {
                     })}
                 </Routes>
 
+                {openMessage && <ChatRoom />}
+                
                 <PlayMusic />
             </div>
         </Router>

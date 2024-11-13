@@ -1,9 +1,6 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faSignOut,
-    faUser,
-} from '@fortawesome/free-solid-svg-icons';
+import { faSignOut, faUser } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { Link, useNavigate } from 'react-router-dom';
@@ -22,10 +19,9 @@ import { UserAuth } from '~/components/Store';
 
 const cx = classNames.bind(styles);
 
-
 function Header() {
     const navigate = useNavigate();
-    const { userAuth, tokenStr, setOpenFormLogin, avatar } = UserAuth();    
+    const { userAuth, tokenStr, setOpenFormLogin, avatar, setOpenMessage } = UserAuth();
     const MENU_ITEMS = [];
     const userMenu = [
         {
@@ -43,10 +39,14 @@ function Header() {
     const handleFormLogin = () => {
         userAuth && tokenStr ? navigate('/upload') : setOpenFormLogin(true);
     };
+
+    const handleOpenMess = () => {
+        setOpenMessage(true);
+    };
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
-                <Link to='/' className={cx('logo-link')}>
+                <Link to="/" className={cx('logo-link')}>
                     <img src={images.logo} alt="Tiktok" />
                 </Link>
 
@@ -56,20 +56,12 @@ function Header() {
                     <Button onClick={handleFormLogin} className={cx('btn-upload')} outline medium>
                         <AddIcon className={cx('add-icon')} />
                         Đăng
-                        
                     </Button>
                     {userAuth && tokenStr ? (
                         <>
                             <div className={cx('btn-wrapper')}>
-                                <Tippy delay={[0, 200]} content="Message" placement="bottom">
-                                    <button className={cx('action-btn')}>
-                                        <MessageIcon />
-                                    </button>
-                                </Tippy>
-                            </div>
-                            <div className={cx('btn-wrapper')}>
                                 <Tippy delay={[0, 200]} content="Inbox" placement="bottom">
-                                    <button className={cx('action-btn')}>
+                                    <button className={cx('action-btn')} onClick={handleOpenMess}>
                                         <InboxIcon />
                                         <span className={cx('badge')}>12</span>
                                     </button>
@@ -85,11 +77,7 @@ function Header() {
                     )}
                     <Menu items={userAuth && tokenStr ? userMenu : MENU_ITEMS}>
                         {userAuth && tokenStr ? (
-                            <Image
-                                className={cx('user-avatar')}
-                                src={avatar.url}
-                                alt={userAuth.nickName}
-                            />
+                            <   Image className={cx('user-avatar')} src={avatar.url} alt={userAuth.nickName} />
                         ) : (
                             <></>
                         )}
