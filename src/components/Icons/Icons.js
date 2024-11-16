@@ -336,3 +336,60 @@ export const BackIcon = ({ width = '2rem', height = '2rem', className }) => (
         ></path>
     </svg>
 );
+
+export const Logo = ({ width = '150', height = '50', className }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        version="1.1"
+        viewBox="0 0 2048 777"
+        width={width}
+        height={height}
+        className={className}
+    >
+        <path
+            transform="translate(257,267)"
+            d="m0 0h74l11 1 3 5 14 53 8 25 6 24 7 18 5 5 4 6 12 43 5 16 3 13 4-4 10-26 5-18 6-24 4-12 4-7 5-4 5-13 10-35 9-32 7-25 3-7 4-2h88l7 2-1 296-7 1h-53l-5-1v-46l1-70v-68l-4 2-7 19-6 20-5 10-6 10-7 19-9 34-8 28-7 26-5 12-3 4-4 1h-28l-38-1-4-4-6-16-15-53-11-40-9-29-3-10-9-15-10-20-5-6-2-1 2 9 1 12 3 108 1 64-1 1h-65l-1-1v-296z"
+            className="logo-fill"
+        ></path>
+        <path
+            transform="translate(1673,267)"
+            d="m0 0h144l22 2 19 4 16 6 20 9 9 7 7 10 12 23 7 18 4 21 4 29v50l-4 26-5 19-8 18-12 20-8 9-9 6-30 13-15 4-15 2-41 2h-123l-2-2-1-54-1-114-1-72-1-54 1-1zm104 56-39 2-5 1v69l1 112h59l23-1 20-4 10-5 5-4 6-10 5-19 3-16v-64l-4-25-4-11-6-9-8-7-9-4-15-3-23-2z"
+            className="logo-fill"
+        ></path>
+        <path
+            transform="translate(946,341)"
+            d="m0 0h68l54 1-2 52-1 2-38-1h-57l-32 1-8 3-2 3-1 9 2 10 4 6 12 2 52 1 22 1 15 3 20 8 10 7 7 9 4 14 2 19v10l-2 19-4 13-4 8-7 8-12 7-15 6-9 2-9 1h-149l-1-2-1-10v-38l2-3 66 1h63l9-2 6-4 5-6 1-5-3-8-8-4-7-1-74-1-24-3-9-3-11-9-7-7-6-10-3-7-2-10-1-10v-17l3-17 6-16 8-13 7-6 11-5 19-6 8-1z"
+            className="logo-fill"
+        ></path>
+        <path
+            transform="translate(626,342)"
+            d="m0 0h62l1 1-1 39v58l1 46 2 15 3 5 6 2 8 1 19 1h27l5-1 1-4 1-59v-104h69l1 1v16l-1 20v106l2 57v20l-3 3-8 1-106-1-27-2-16-3-15-5-10-6-7-8-6-12-6-20-1-6-1-132z"
+            className="logo-fill"
+        ></path>
+        <path
+            transform="translate(1473,267)"
+            d="m0 0h12l17 1 1 1v208l3 10 6 8 11 7 11 4 5 1 80 1 16 1 2 1v54l-1 1h-88l-30-2-23-4-13-5-11-7-8-8-10-15-6-8-8-9-5-10-3-9-1-7-1-70 1-141 2-2z"
+            className="logo-fill"
+        ></path>
+        <path
+            transform="translate(1314,342)"
+            d="m0 0h88l1 1-1 43-1 11-94 1-11 2-10 8-10 14-5 11-3 11v18l3 18 3 6 5 5 12 11 14 7 15 2 44 2 38 1v50l-1 1h-83l-29-2-14-2-15-5-14-8-10-9-11-20-12-15-6-13-2-8-1-11v-27l2-20 3-11 7-14 8-11 13-15 11-13 7-7 8-4 15-4 21-3z"
+            className="logo-fill"
+        ></path>
+        <path
+            transform="translate(1107,342)"
+            d="m0 0h71l2 5v216l-2 2-4 1h-49l-17-1-2-5v-27l1-31v-38l-1-85v-36z"
+            className="logo-fill"
+        ></path>
+        <path
+            transform="translate(1109,267)"
+            d="m0 0h68l3 1v50l-1 9-1 1h-70l-2-2v-57z"
+            className="logo-fill"
+        ></path>
+        <path
+            transform="translate(1662,268)"
+            d="m0 0h8v122l-1 82v93l-4-2-1-54-1-114-1-72-1-54z"
+            className="logo-fill"
+        ></path>
+    </svg>
+);

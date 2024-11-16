@@ -7,6 +7,8 @@ const images = {
     rankNumber5: require('~/assets/images/five.png'),
     rankNumber6: require('~/assets/images/six.png'),
     noImage: require('~/assets/images/no-image.png'),
+    banner1: require('~/assets/images/banner1.png'),
+    banner2: require('~/assets/images/banner2.png'),
 };
 
 export default images;

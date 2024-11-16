@@ -60,7 +60,7 @@ const PlayMusic = () => {
         setPriorityMusic,
         setAutoPlay,
         isLiked,
-        setIsLiked
+        setIsLiked,
     } = UserMusic();
 
     const onChangeValue = (value) => {
@@ -81,8 +81,8 @@ const PlayMusic = () => {
                     runTimeref.current.style.cssText = `right: ${100}%`;
                 } else {
                     setSongInfo(res);
-                    console.log(res)
-                    setIsLiked(res?.like)
+                    console.log(res);
+                    setIsLiked(res?.like);
                     const newAudio = new Audio(res.url);
                     newAudio.volume = volumes;
                     setAudio(newAudio);
@@ -101,6 +101,7 @@ const PlayMusic = () => {
                     setCrSecond(0);
                     runTimeref.current.style.cssText = `right: ${100}%`;
                 }
+                setIsLiked(false);
             }
         };
         fetchDetailSong();
@@ -273,7 +274,7 @@ const PlayMusic = () => {
                     type: 'success',
                 });
             }
-            setIsLiked(!isLiked)
+            setIsLiked(!isLiked);
         }
     };
 
@@ -294,8 +295,11 @@ const PlayMusic = () => {
                     </div>
                     <div className={cx('like_action')}>
                         <span onClick={handleLikeMusic}>
-                        {isLiked ? <AiFillHeart size={21} color='red' cursor='auto'/> : <AiOutlineHeart size={21} />}
-                            
+                            {isLiked ? (
+                                <AiFillHeart size={21} color="red" cursor="auto" />
+                            ) : (
+                                <AiOutlineHeart size={21} />
+                            )}
                         </span>
 
                         <span onClick={handleOpenInfo}>
@@ -314,16 +318,16 @@ const PlayMusic = () => {
                         </span>
                         <span>
                             <BiSkipPrevious
-                                size={27}
+                                size={25}
                                 onClick={handlePrevSong}
                                 className={cx(!songs ? 'bur_next' : 'btn_next')}
                             />
                         </span>
                         <span onClick={handlePlayMusic}>
-                            {isPlay ? <FiPauseCircle size={40} /> : <BsPlayCircle size={40} />}
+                            {isPlay ? <FiPauseCircle size={30} /> : <BsPlayCircle size={30} />}
                         </span>
                         <span onClick={handleNextSong} className={cx(!songs ? 'bur_next' : 'btn_next')}>
-                            <BiSkipNext size={27} />
+                            <BiSkipNext size={25} />
                         </span>
                         <span
                             title={

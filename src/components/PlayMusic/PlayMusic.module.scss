@@ -21,8 +21,8 @@
     align-items: center;
 }
 .ava_thumb {
-    width: 64px;
-    height: 64px;
+    width: 50px;
+    height: 50px;
 }
 .ava_thumb img {
     width: 100%;
@@ -58,19 +58,30 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    
 }
 .control {
     display: flex;
     gap: 32px;
     align-items: center;
     justify-content: center;
+
+    span {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+        cursor: pointer;
+      }
 }
+
 .btn_next {
     cursor: pointer;
+ 
 }
 .bur_next {
     opacity: 0.6;
+   
 }
 .isTrue {
     cursor: pointer;

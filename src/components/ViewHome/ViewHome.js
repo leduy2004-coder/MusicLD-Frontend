@@ -3,7 +3,8 @@ import classNames from 'classnames/bind';
 
 import styles from './ViewHome.module.scss';
 import MusicTop from './AccountTop';
-
+import images from '~/assets/images';
+import Image from '../Image';
 const cx = classNames.bind(styles);
 
 function ViewHome() {
@@ -17,19 +18,23 @@ function ViewHome() {
             <div className={cx('card-list')}>
                 <Carousel arrows infinite={false} autoplay>
                     <div>
-                        <Card className={cx('carousel-card')} title="Bài hát 1">
-                            Nội dung bài hát 1
+                        <Card className={cx('carousel-card')}>
+                            <div>
+                                <Image src={images.banner1} />
+                            </div>
                         </Card>
                     </div>
                     <div>
-                        <Card className={cx('carousel-card')} title="Bài hát 2">
-                            Nội dung bài hát 2
+                        <Card className={cx('carousel-card')}>
+                            <div>
+                                <Image src={images.banner2} />
+                            </div>
                         </Card>
                     </div>
                 </Carousel>
             </div>
 
-            <MusicTop/>
+            <MusicTop />
         </div>
     );
 }

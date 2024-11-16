@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { AuthProvider, NotifyProvider, MusicProvider, FormProvider } from './components/Store';
+import { AuthProvider, NotifyProvider, MusicProvider, FormProvider, ChatProvider } from './components/Store';
 import App from '~/App';
 import reportWebVitals from './reportWebVitals';
 import GlobalStyles from '~/components/GlobalStyles';
@@ -10,15 +10,17 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     // <React.StrictMode>
     <NotifyProvider>
-        <AuthProvider>
-            <FormProvider>
-                <MusicProvider>
-                    <GlobalStyles>
-                        <App />
-                    </GlobalStyles>
-                </MusicProvider>
-            </FormProvider>
-        </AuthProvider>
+        <ChatProvider>
+            <AuthProvider>
+                <FormProvider>
+                    <MusicProvider>
+                        <GlobalStyles>
+                            <App />
+                        </GlobalStyles>
+                    </MusicProvider>
+                </FormProvider>
+            </AuthProvider>
+        </ChatProvider>
     </NotifyProvider>,
     // </React.StrictMode>,
 );
