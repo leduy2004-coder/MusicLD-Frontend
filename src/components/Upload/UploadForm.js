@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Upload, Button, Typography, Radio } from 'antd';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import classNames from 'classnames/bind';
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -102,6 +104,7 @@ function UploadForm() {
 
         try {
             setIsLoading(true);
+            console.log(formData);
             const data = await config.uploadMusic(formData, tokenStr);
             if (data.errorCode) {
                 handleUploadError(data.errorCode.data.code);
@@ -208,9 +211,19 @@ function UploadForm() {
                     <Radio value="private">Chỉ người theo dõi mới nghe được</Radio>
                 </Radio.Group>
             </Form.Item>
-            <Form.Item name="lyrics" label="Lời bài hát" rules={[{ required: true, message: 'Vui lòng nhập lời!' }]}>
-                <TextArea rows={4} placeholder="Nhập lời bài hát" />
+
+            <Form.Item
+                name="lyrics"
+                label="Lời bài hát"
+                rules={[{ required: true, message: 'Vui lòng nhập lời bài hát!' }]}
+            >
+                <ReactQuill
+                    theme="snow"
+                    value={form.getFieldValue('lyrics')}
+                    placeholder="Nhập lời bài hát và định dạng..."
+                />
             </Form.Item>
+
             <Form.Item className={cx('Btn-area')}>
                 <Button type="primary" htmlType="submit" className={cx('button')} disabled={isLoading}>
                     {isLoading ? <FontAwesomeIcon className={cx('loading')} icon={faSpinner} /> : <span>Đăng</span>}

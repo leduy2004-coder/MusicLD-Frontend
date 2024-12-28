@@ -25,6 +25,7 @@ const cx = classNames.bind(styles);
 function Header() {
     const navigate = useNavigate();
     const { userAuth, tokenStr, setOpenFormLogin, avatar, setOpenMessage } = UserAuth();
+
     const { getUnreadCount } = useChat();
     const MENU_ITEMS = [];
     const userMenu = [

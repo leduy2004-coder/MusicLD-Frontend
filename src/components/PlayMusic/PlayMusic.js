@@ -73,7 +73,7 @@ const PlayMusic = () => {
     useEffect(() => {
         const fetchDetailSong = async () => {
             if (currentSongId) {
-                const res = await config.getDetailSong(currentSongId);
+                const res = await config.getDetailSong(currentSongId, tokenStr);
                 if (res.errorCode) {
                     setAudio(null);
                     setIsPlay(false);

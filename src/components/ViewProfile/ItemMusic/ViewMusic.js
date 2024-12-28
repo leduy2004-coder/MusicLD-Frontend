@@ -62,7 +62,6 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false, detail
             setOpenFormLogin(true);
         }
     };
-    const handlePlayMusic = () => {};
     const handleAddMusic = (newSong) => {
         addSong(newSong);
     };
@@ -85,7 +84,7 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false, detail
         </Col>
     ) : (
         <Col span={18}>
-            <Card hoverable onClick={playMusic ? handlePlayMusic : undefined}>
+            <Card hoverable onClick={playMusic ? handleDetailMusic : undefined}>
                 <div className={cx(playMusic ? 'card-play' : 'card-body')}>
                     <div className={cx('number')}>{number}</div>
                     <div className={cx('avatar')}>

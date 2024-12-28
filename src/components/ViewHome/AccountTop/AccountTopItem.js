@@ -15,6 +15,7 @@ function MusicTopItem({ data = {}, order }) {
     const navigate = useNavigate();
 
     const handleCardClick = () => {
+        localStorage.setItem('selectedKey', 'nav1');
         navigate(`/profile/${data.id}`);
     };
     const getOrderImage = (order) => {

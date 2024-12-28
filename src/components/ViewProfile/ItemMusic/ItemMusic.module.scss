@@ -103,6 +103,9 @@
     .meta-title, .number {
         color: var(--black);
         font-size: 1.4rem;
+        max-width: 11rem;
+        overflow: hidden;
+        display: block;
     }
 
 }

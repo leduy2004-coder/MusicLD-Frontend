@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Col } from 'antd';
 import { useNavigate } from 'react-router-dom'; // Use useNavigate from react-router-dom
 import PropTypes from 'prop-types';
@@ -15,13 +15,12 @@ const { Meta } = Card;
 const cx = classNames.bind(styles);
 
 function ViewFollower({ data = {}, statusFollow }) {
-    const { tokenStr } = UserAuth();
+    const { userAuth, tokenStr } = UserAuth();
     const [followStatus, setFollowStatus] = useState(statusFollow);
     const navigate = useNavigate();
     const [count, setCount] = useState(0);
 
     const handleFollowAction = (status) => {
-
         const userId = data.id;
         const updateFollowStatus = async () => {
             try {
@@ -37,10 +36,22 @@ function ViewFollower({ data = {}, statusFollow }) {
 
     const handleCardClick = () => {
         if (followStatus !== 'HIDE') {
+            localStorage.removeItem('selectedKey');
             navigate(`/profile/${data.id}`);
         }
     };
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const status = await config.getStatusFollow(data.id, tokenStr);
+                setFollowStatus(status);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        if (statusFollow === 'NONE') fetchData();
+    }, []);
     return (
         <Col
             span={8}

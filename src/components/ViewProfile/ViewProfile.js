@@ -47,11 +47,10 @@ function ViewProfile() {
             fetchProfile();
         }
     }, [id, tokenStr]);
-
     useEffect(() => {
-        localStorage.setItem('selectedKey', 'nav1'); // Đặt giá trị mặc định khi profileUser thay đổi
-    }, [profileUser]);
-
+        const storedSelectedKey = localStorage.getItem('selectedKey') || 'nav1';
+        setSelectedKey(storedSelectedKey);
+    }, [id]);
     const handleMenuClick = (e) => {
         setSelectedKey(e.key); // Cập nhật `selectedKey`
         localStorage.setItem('selectedKey', e.key); // Lưu vào localStorage

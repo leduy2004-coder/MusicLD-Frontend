@@ -45,6 +45,14 @@ export const getAllReceive= async (id, token) => {
         return { Error: error.response };
     }
 };
+export const getStatusFollow = async (id, token) => {
+    try {
+        const res = await callPath.get(`follow/get-status-following/${id}`,token);
+        return res.result;
+    } catch (error) {
+        return { Error: error.response };
+    }
+};
 
 export const checkFollow = async (id,token) => {
     try {

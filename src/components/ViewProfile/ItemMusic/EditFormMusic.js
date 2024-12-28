@@ -1,5 +1,7 @@
 import classNames from 'classnames/bind';
 import React, { useState, useEffect } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { Modal, Form, Input, Button, Upload, Select } from 'antd'; // Imported Select from antd
 import { PlusOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
@@ -28,7 +30,7 @@ function EditFormMusic({ visible, onCancel, musicData, tokenStr, setMusics }) {
             form.setFieldsValue({
                 title: musicData.title,
                 lyrics: musicData.lyrics,
-                access: musicData.access === 'PUBLIC' ? 'public' : 'private'
+                access: musicData.access === 'PUBLIC' ? 'public' : 'private',
             });
         }
     }, [visible, musicData, form]);
@@ -178,11 +180,14 @@ function EditFormMusic({ visible, onCancel, musicData, tokenStr, setMusics }) {
                 <Form.Item
                     name="lyrics"
                     label="Lời bài hát"
-                    rules={[{ required: true, message: 'Vui lòng nhập lời!' }]}
+                    rules={[{ required: true, message: 'Vui lòng nhập lời bài hát!' }]}
                 >
-                    <TextArea placeholder="Nhập lời bài hát" autoSize={{ minRows: 4, maxRows: 8 }} />
+                    <ReactQuill
+                        theme="snow"
+                        value={form.getFieldValue('lyrics')}
+                        placeholder="Nhập lời bài hát và định dạng..."
+                    />
                 </Form.Item>
-
                 <Form.Item className={cx('button-area')}>
                     <Button type="primary" htmlType="submit" disabled={!hasChanges || isLoading}>
                         {isLoading ? <FontAwesomeIcon className={cx('loading')} icon={faSpinner} /> : <span>Lưu</span>}
