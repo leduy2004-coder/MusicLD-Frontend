@@ -7,11 +7,22 @@ import {
     getAllReceive,
     getAllRequest,
     checkFollow,
-    getStatusFollow
+    getStatusFollow,
 } from './followService';
-import { getDetailSong, uploadMusic, getPlaylist,getPlaylistByAccess, removeMusic, updateMusic ,likeMusic,unLikeMusic,getCountMusic} from './musicService';
-import { search, getUser,updateUser, getTopUser } from './userService.js';
-import {getComment, addComment, updateComment, removeComment} from './commentService';
+import {
+    getDetailSong,
+    uploadMusic,
+    getPlaylist,
+    getPlaylistByAccess,
+    removeMusic,
+    updateMusic,
+    likeMusic,
+    unLikeMusic,
+    getCountMusic,
+    getTopMusic,
+} from './musicService';
+import { search, getUser, updateUser, getTopUser } from './userService.js';
+import { getComment, addComment, updateComment, removeComment } from './commentService';
 import { getVNPay } from './paymentService';
 const config = {
     login,
@@ -29,11 +40,12 @@ const config = {
     getStatusFollow,
     getAllRequest,
     getAllReceive,
-    getDetailSong,  
+    getDetailSong,
     uploadMusic,
     getPlaylist,
     updateUser,
     removeMusic,
+    getTopMusic,
     updateMusic,
     getPlaylistByAccess,
     checkFollow,
@@ -46,7 +58,6 @@ const config = {
     unLikeMusic,
     getCountMusic,
     getVNPay,
-
 };
 
 export default config;

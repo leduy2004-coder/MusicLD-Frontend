@@ -78,7 +78,7 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false, detail
                     </div>
 
                     <h3 className={cx('meta-title')}>{data.title}</h3>
-                    <FontAwesomeIcon icon={faPlay} />
+                    <FontAwesomeIcon icon={faPlay} className={cx('icon-play')}/>
                 </div>
             </Card>
         </Col>

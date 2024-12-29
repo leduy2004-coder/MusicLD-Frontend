@@ -4,9 +4,9 @@ import classNames from 'classnames/bind';
 import PropTypes from 'prop-types';
 import { UserAuth } from '~/components/Store';
 import config from '~/services';
-import styles from './AccountTop.module.scss';
+import styles from './MusicTop.module.scss';
 
-import MusicTopItem from './AccountTopItem';
+import MusicTopItem from './MusicTopItem';
 
 const cx = classNames.bind(styles);
 
@@ -18,7 +18,7 @@ function MusicTop() {
         if (tokenStr) {
             const fetchData = async () => {
                 try {
-                    const data = await config.getTopUser(tokenStr);
+                    const data = await config.getTopMusic(tokenStr);
                     if (data.errCode) {
                         console.log(data.errCode);
                     } else {
@@ -37,7 +37,7 @@ function MusicTop() {
         <div>
             {Array.isArray(topUser) && topUser.length > 0 ? (
                 <div className={cx('wrapper')}>
-                    <div className={cx('title')}>Bảng xếp hạng tài khoản</div>
+                    <div className={cx('title')}>Top nhạc thịnh hành</div>
                     <Row gutter={[12, 12]}>
                         {topUser.map((request, index) => (
                             <MusicTopItem key={request.id} data={request} order={index + 1} />
@@ -50,7 +50,7 @@ function MusicTop() {
                         height: 220,
                     }}
                     description={
-                        <Typography.Text style={{ color: 'red', fontSize: 20 }}>Chưa có tài khoản nào</Typography.Text>
+                        <Typography.Text style={{ color: 'red', fontSize: 20 }}>Chưa có nhạc nào</Typography.Text>
                     }
                 />
             )}

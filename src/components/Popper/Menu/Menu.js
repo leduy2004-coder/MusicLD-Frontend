@@ -31,6 +31,7 @@ function Menu({
                     key={index}
                     data={item}
                     onClick={() => {
+                        localStorage.setItem('selectedKey', 'nav1');
                         if (item.component) {
                             setOpenFormLogout(true);
                         } else if (item.avatar) {

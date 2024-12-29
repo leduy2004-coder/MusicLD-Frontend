@@ -2,7 +2,8 @@ import { Card, Carousel } from 'antd';
 import classNames from 'classnames/bind';
 
 import styles from './ViewHome.module.scss';
-import MusicTop from './AccountTop';
+import AccountTop from './AccountTop';
+import MusicTop from './MusicTop';
 import images from '~/assets/images';
 import Image from '../Image';
 const cx = classNames.bind(styles);
@@ -34,6 +35,7 @@ function ViewHome() {
                 </Carousel>
             </div>
 
+            <AccountTop />
             <MusicTop />
         </div>
     );

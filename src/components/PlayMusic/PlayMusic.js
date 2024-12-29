@@ -294,14 +294,15 @@ const PlayMusic = () => {
                         <span>{songInfo?.nickName}</span>
                     </div>
                     <div className={cx('like_action')}>
-                        <span onClick={handleLikeMusic}>
-                            {isLiked ? (
-                                <AiFillHeart size={21} color="red" cursor="auto" />
-                            ) : (
-                                <AiOutlineHeart size={21} />
-                            )}
-                        </span>
-
+                        {userAuth.id !== songInfo?.idUser && (
+                            <span onClick={handleLikeMusic}>
+                                {isLiked ? (
+                                    <AiFillHeart size={21} color="red" cursor="auto" />
+                                ) : (
+                                    <AiOutlineHeart size={21} />
+                                )}
+                            </span>
+                        )}
                         <span onClick={handleOpenInfo}>
                             <FaUser size={21} />
                         </span>

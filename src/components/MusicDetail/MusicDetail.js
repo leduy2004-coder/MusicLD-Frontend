@@ -32,7 +32,7 @@ function MusicDetail({ data = {} }) {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const { userAuth, tokenStr } = UserAuth();
+    const { userAuth, tokenStr, avatar } = UserAuth();
     const [activeKey, setActiveKey] = useState(localStorage.getItem('selectedMusicKey') || 'nav1');
     const [publicMusic, setPublicMusic] = useState([]);
     const [currentMusic, setCurrentMusic] = useState();
@@ -157,8 +157,7 @@ function MusicDetail({ data = {} }) {
                     const listMusic = await config.getPlaylistByAccess(musicData.idUser, tokenStr, 'PUBLIC');
                     setPublicMusic(listMusic.result);
                 } else {
-                    console.log(userAuth.id);
-                    const listMusic = await config.getPlaylistByAccess(userAuth.id, tokenStr, 'PUBLIC');
+                    const listMusic = await config.getPlaylist(userAuth.id, tokenStr);
                     setPublicMusic(listMusic.result);
                 }
             } catch (error) {
@@ -265,12 +264,14 @@ function MusicDetail({ data = {} }) {
                             {isPlaying ? 'Tạm dừng' : 'Phát nhạc'}
                         </Button>
                         <div className={cx('area-icon')}>
-                            <FontAwesomeIcon
-                                title={isLiked ? 'Bỏ thích' : 'Thích'}
-                                className={cx('icon')}
-                                icon={isLiked ? faHeartSolid : faHeartRegular}
-                                onClick={handleToggleLike}
-                            />
+                            {currentMusic?.idUser !== userAuth.id && (
+                                <FontAwesomeIcon
+                                    title={isLiked ? 'Bỏ thích' : 'Thích'}
+                                    className={cx('icon')}
+                                    icon={isLiked ? faHeartSolid : faHeartRegular}
+                                    onClick={handleToggleLike}
+                                />
+                            )}
                             <FontAwesomeIcon
                                 title={isAdding ? 'Bỏ nhạc' : 'Thêm nhạc'}
                                 className={cx('icon')}
@@ -296,7 +297,7 @@ function MusicDetail({ data = {} }) {
                 <div className={cx('account')}>
                     <div className={cx('position')}>
                         <div className={cx('account-user')}>
-                            <Image className={cx('account-img')} src={currentMusic?.avatarResponse.url} />
+                            <Image className={cx('account-img')} src={currentMusic?.userAvatarResponse?.url} />
                             <div className={cx('account-name')}>{currentMusic?.nickName}</div>
                             <div className={cx('account-profile')}>
                                 <FontAwesomeIcon

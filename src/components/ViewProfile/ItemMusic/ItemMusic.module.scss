@@ -143,7 +143,9 @@
     overflow: hidden;
     text-overflow: ellipsis; /* Thêm dấu chấm ba (...) nếu có văn bản bị cắt */
 }
-
+.icon-play {
+    color: var(--black);
+}
 //Edit Form
 :global {
     .ant-modal {
