@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
         setTokenStr(storedToken && isJSON(storedToken) ? JSON.parse(storedToken) : '');
         setUserAuth(storedUserId && isJSON(storedUserId) ? JSON.parse(storedUserId) : '');
         setAvatar(avatarUser && isJSON(avatarUser) ? JSON.parse(avatarUser) : '');
-    }, []);
+    }, [tokenStr]);
 
     const value = {
         isFollowed,
@@ -55,6 +55,7 @@ export function AuthProvider({ children }) {
         openFormDelete,
         setOpenFormDelete,
         tokenStr,
+        setTokenStr,
         userAuth,
         dataForm,
         avatar,

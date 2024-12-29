@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { UserAuth } from '~/components/Store';
 // Tạo instance của Axios
 const httpRequest = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
@@ -11,7 +11,7 @@ const httpRequest = axios.create({
 // Add a response interceptor to handle errors
 let isRefreshing = false;
 let failedQueue = [];
-
+const { setTokenStr } = UserAuth;
 const processQueue = (error, token = null) => {
     failedQueue.forEach((prom) => {
         if (error) {
@@ -33,9 +33,9 @@ httpRequest.interceptors.response.use(
         if (error.response && error.response.status === 401) {
             if (!isRefreshing) {
                 isRefreshing = true;
-
                 try {
                     const refreshToken = JSON.parse(localStorage.getItem('refresh_token'));
+
                     const response = await axios.post(`${process.env.REACT_APP_BASE_URL}v1/auth/refresh-token`, null, {
                         headers: {
                             Authorization: refreshToken,
@@ -44,9 +44,10 @@ httpRequest.interceptors.response.use(
 
                     if (response.status === 200) {
                         const { access_token, refresh_token } = response.data.result;
+
                         localStorage.setItem('access_token', JSON.stringify(`Bearer ${access_token}`));
                         localStorage.setItem('refresh_token', JSON.stringify(`Bearer ${refresh_token}`));
-
+                        setTokenStr(`Bearer ${access_token}`);
                         originalRequest.headers.Authorization = `Bearer ${access_token}`;
                         processQueue(null, access_token);
                         return httpRequest(originalRequest);
@@ -55,7 +56,6 @@ httpRequest.interceptors.response.use(
                     processQueue(error, null);
                     localStorage.clear();
                     window.location.href = '/login';
-                    // console.log('errooooo')
                 } finally {
                     isRefreshing = false;
                 }
@@ -65,6 +65,7 @@ httpRequest.interceptors.response.use(
                 failedQueue.push({ resolve, reject });
             })
                 .then((token) => {
+                    console.log(token);
                     originalRequest.headers.Authorization = `Bearer ${token}`;
                     return httpRequest(originalRequest);
                 })
