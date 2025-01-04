@@ -43,7 +43,7 @@ const Comment = ({
     return (
         <div key={comment.id} className={cx('comment')}>
             <div className={cx('comment-image-container')}>
-                <Image src={comment?.userResponse?.avatar.url} className={cx('img-avatar')} onClick={handleUser} />
+                <Image src={comment?.userResponse?.avatar?.url} className={cx('img-avatar')} onClick={handleUser} />
             </div>
             <div className={cx('comment-right-part')}>
                 <div className={cx('comment-root')}>

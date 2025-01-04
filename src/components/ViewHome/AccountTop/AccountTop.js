@@ -11,27 +11,24 @@ import MusicTopItem from './AccountTopItem';
 const cx = classNames.bind(styles);
 
 function MusicTop() {
-    const { tokenStr } = UserAuth();
     const [topUser, setTopUser] = useState([]);
 
     useEffect(() => {
-        if (tokenStr) {
-            const fetchData = async () => {
-                try {
-                    const data = await config.getTopUser(tokenStr);
-                    if (data.errCode) {
-                        console.log(data.errCode);
-                    } else {
-                        setTopUser(data.result);
-                    }
-                } catch (error) {
-                    console.error('Error fetching data:', error);
+        const fetchData = async () => {
+            try {
+                const data = await config.getTopUser();
+                if (data.errCode) {
+                    console.log(data.errCode);
+                } else {
+                    setTopUser(data.result);
                 }
-            };
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
 
-            fetchData();
-        }
-    }, [tokenStr]);
+        fetchData();
+    }, []);
 
     return (
         <div>

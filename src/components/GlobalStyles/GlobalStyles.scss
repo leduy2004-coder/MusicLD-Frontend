@@ -1,5 +1,11 @@
 @import 'normalize.css';
 // @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap');
+@import "scss/variables";
+
+@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap-icons/font/bootstrap-icons.scss";
+@import "scss/layout/container";
+@import "scss/layout/sidebar";
 
 :root {
     --primary: #fe2c55;
@@ -12,7 +18,7 @@
     --background-music-play: #444041;
     --background-slider: #533e43;
     --background-aside-play: hsl(0deg 0% 88.19% / 86.8%);
-    --font-family: 'ProximaNova', sans-serif;
+    --font-family: 'Poppins', sans-serif;
     //Default Layout
     --default-layout-header-height: 60px;
     --default-layout-play-height: 65px;
@@ -22,7 +28,7 @@
     --animation-loading: spin 1s linear infinite;
 
     //Home
-    --home-title-color: #161823; 
+    --home-title-color: #161823;
     --home-card-in: #f2efef;
     --home-card-out: #c5c0c0;
 
@@ -65,7 +71,7 @@
     --background-music-play: #130c1c;
 
     //Home
-    --home-title-color: #fe2c55; 
+    --home-title-color: #fe2c55;
     --home-card-in: #4b3146;
     --home-card-out: #58224e;
 
@@ -76,7 +82,6 @@
     --home-music-content: #b3b3b3;
     --home-music-more: #999;
     --home-music-line: #374e66;
-
 
     //Music
     --music-user-header: #231b2e;
@@ -135,7 +140,12 @@ a {
     color: var(--text-color);
     text-decoration: none;
 }
-
+p {
+    margin: 0;
+}
+img, svg {
+    vertical-align: unset;
+}
 // Fonts emmbeded
 @font-face {
     font-family: ProximaNova;

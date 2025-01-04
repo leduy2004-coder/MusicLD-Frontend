@@ -1,18 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Tabs, Row, Empty, Typography } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faUserFriends,
-    faUserPlus,
-    faPersonMilitaryToPerson,
-    faCodePullRequest,
-} from '@fortawesome/free-solid-svg-icons';
-import PropTypes from 'prop-types';
+import { Empty, Row, Typography } from 'antd';
 import classNames from 'classnames/bind';
-import styles from './RequestFollow.module.scss';
-import { UserAuth } from '../Store';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import config from '~/services';
-import ViewFollower from '../ViewProfile/ItemFollow/ViewFollower';
+import { UserAuth } from '../Store';
+import styles from './RequestFollow.module.scss';
 import RequestItem from './RequestItem';
 
 const cx = classNames.bind(styles);

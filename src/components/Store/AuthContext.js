@@ -35,7 +35,7 @@ export function AuthProvider({ children }) {
         const storedToken = localStorage.getItem('access_token');
         const storedUserId = localStorage.getItem('user-id');
         const avatarUser = localStorage.getItem('avatar');
-        
+
         setTokenStr(storedToken && isJSON(storedToken) ? JSON.parse(storedToken) : '');
         setUserAuth(storedUserId && isJSON(storedUserId) ? JSON.parse(storedUserId) : '');
         setAvatar(avatarUser && isJSON(avatarUser) ? JSON.parse(avatarUser) : '');
@@ -65,7 +65,7 @@ export function AuthProvider({ children }) {
         openFormNotifyPayment,
         setOpenFormNotifyPayment,
         openMessage,
-        setOpenMessage
+        setOpenMessage,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

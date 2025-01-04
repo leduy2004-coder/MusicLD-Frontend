@@ -18,17 +18,19 @@ function LogOut() {
 
     const handleCloseForm = () => {
         setOpenFormLogout(false);
+        if (window.location.pathname.includes('/login')) {
+            navigate(`/`);
+        }
     };
 
     const handleLogout = async () => {
-  
         const data = await config.logout(tokenStr);
         if (data.errorCode) {
             setInfoNotify({
                 content: 'Đăng xuất thất bại. Vui lòng thử lại!',
                 delay: 1500,
                 isNotify: true,
-                type: 'error'
+                type: 'error',
             });
             setOpenFormLogout(false);
         } else {
@@ -36,16 +38,19 @@ function LogOut() {
                 content: 'Đăng xuất thành công!',
                 delay: 1500,
                 isNotify: true,
-                type: 'success'
+                type: 'success',
             });
 
             setTimeout(() => {
-                localStorage.clear()
+                localStorage.clear();
+                if (window.location.pathname.includes('/login')) {
+                    navigate(`/`);
+                }
                 window.location.reload();
             }, [300]);
         }
     };
-    
+
     return (
         <div className={cx('form-container')}>
             <Wrapper className={cx('form-logout')}>

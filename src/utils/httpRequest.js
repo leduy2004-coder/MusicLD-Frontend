@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { UserAuth } from '~/components/Store';
+import { UserAuth} from '~/components/Store';
+
 // Tạo instance của Axios
 const httpRequest = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
@@ -12,6 +13,7 @@ const httpRequest = axios.create({
 let isRefreshing = false;
 let failedQueue = [];
 const { setTokenStr } = UserAuth;
+
 const processQueue = (error, token = null) => {
     failedQueue.forEach((prom) => {
         if (error) {

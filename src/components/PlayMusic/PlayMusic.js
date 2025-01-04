@@ -294,7 +294,7 @@ const PlayMusic = () => {
                         <span>{songInfo?.nickName}</span>
                     </div>
                     <div className={cx('like_action')}>
-                        {userAuth.id !== songInfo?.idUser && (
+                        {userAuth.id !== songInfo?.idUser && currentSongId && (
                             <span onClick={handleLikeMusic}>
                                 {isLiked ? (
                                     <AiFillHeart size={21} color="red" cursor="auto" />

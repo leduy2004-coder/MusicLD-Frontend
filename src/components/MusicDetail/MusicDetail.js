@@ -58,7 +58,6 @@ function MusicDetail({ data = {} }) {
     } = UserMusic();
 
     useEffect(() => {
-        console.log(!status);
         if (currentSongId === currentMusic?.id && !status) {
             setIsPlaying(!isPlaying);
         }
@@ -235,7 +234,10 @@ function MusicDetail({ data = {} }) {
             ),
         },
     ];
-
+    // Thêm hiệu ứng cuộn trang lên đầu khi component MusicDetail được render
+    useEffect(() => {
+        window.scrollTo(0, 0); 
+    }, []);
     return (publicMusic?.length > 0 && id === '0') || id !== '0' ? (
         <div className={cx('container')}>
             <div className={cx('header')}>

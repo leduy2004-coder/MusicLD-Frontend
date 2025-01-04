@@ -1,5 +1,6 @@
 const routes = {
     home: '/:login?',
+    statistic: '/admin/statistic',
     following: '/following',
     profile: '/profile/:id',
     upload: '/upload',

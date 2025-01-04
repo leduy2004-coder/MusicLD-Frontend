@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './Auth.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 import { Wrapper } from '../Popper';
 import FormPages from './FormPages';
@@ -10,9 +11,13 @@ const cx = classNames.bind(styles);
 
 function Form() {
     const {setOpenFormLogin} = UserAuth();
+    const navigate = useNavigate();
 
     const handleCloseForm = () => {
         setOpenFormLogin(false);
+        if (window.location.pathname.includes('/login')) {
+            navigate(`/`);
+        }
     }
 
     return (

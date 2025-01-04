@@ -24,7 +24,8 @@ import {
 import { search, getUser, updateUser, getTopUser } from './userService.js';
 import { getComment, addComment, updateComment, removeComment } from './commentService';
 import { getVNPay } from './paymentService';
-const config = {
+import {getCountMusicByYear, getStatisticByYear, getTopUserByYear} from './statisticService'
+const config = { 
     login,
     logout,
     register,
@@ -58,6 +59,9 @@ const config = {
     unLikeMusic,
     getCountMusic,
     getVNPay,
+    getCountMusicByYear,
+    getStatisticByYear,
+    getTopUserByYear,
 };
 
 export default config;

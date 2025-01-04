@@ -3,11 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
 import styles from './FormPages.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 import { HidePassIcon, ShowPassIcon } from '~/components/Icons';
 import { UserNotify } from '../../Store';
 import Button from '../../Button';
 import config from '~/services';
+import { UserAuth } from '../../Store';
 
 const cx = classNames.bind(styles);
 
@@ -17,6 +19,8 @@ function LoginWithDefault() {
     const [valuePassword, setValuePassword] = useState('');
     const [showPass, setShowPass] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
+    const { setTokenStr } = UserAuth();
 
     const { setInfoNotify } = UserNotify();
 
@@ -58,6 +62,7 @@ function LoginWithDefault() {
                 setIsLoading(false);
             }, [300]);
         } else {
+
             setInfoNotify({
                 content: 'Đăng nhập thành công',
                 delay: 1500,
@@ -69,9 +74,15 @@ function LoginWithDefault() {
             localStorage.setItem('access_token', JSON.stringify(`Bearer ${data.result.access_token}`));
             localStorage.setItem('refresh_token', JSON.stringify(`Bearer ${data.result.refresh_token}`));
             localStorage.setItem('avatar', JSON.stringify(data.result.userResponse.avatar));
-
+            setTokenStr(localStorage.getItem('access_token'))
             setTimeout(() => {
                 setIsLoading(false);
+                if (data.result.userResponse?.roles?.code === 'ADMIN') {
+                    navigate(`/admin/statistic`);
+                }
+                if (window.location.pathname.includes('/login')) {
+                    navigate(`/`);
+                }
                 window.location.reload();
             }, [300]);
         }
@@ -122,8 +133,8 @@ function LoginWithDefault() {
             </div>
             <Button
                 className={cx('btn-submit')}
-                onClick={!isLoading ? handleLogin : undefined} 
-                disabled={isLoading || disabledSubmitted} 
+                onClick={!isLoading ? handleLogin : undefined}
+                disabled={isLoading || disabledSubmitted}
                 type="submit"
                 primary
                 large

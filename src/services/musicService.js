@@ -96,9 +96,9 @@ export const unLikeMusic = async (userId, musicId, token) => {
     }
 };
 
-export const getTopMusic = async (tokenStr) => {
+export const getTopMusic = async () => {
     try {
-        const res = await callPath.get('music/get-top-music', tokenStr, {});
+        const res = await callPath.get('music/get-top-music', null, {});
         return res;
     } catch (err) {
         return { errCode: err };

@@ -9,22 +9,21 @@ import CommentForm from './CommentForm';
 
 const cx = classNames.bind(styles);
 
-
-const Comments = ({currentMusicId }) => {
-    const { tokenStr,userAuth  } = UserAuth();
+const Comments = ({ currentMusicId }) => {
+    const { tokenStr, userAuth } = UserAuth();
     const { setInfoNotify } = UserNotify();
 
     const [backendComments, setBackendComments] = useState([]);
     const [activeComment, setActiveComment] = useState(null);
     const rootComments = backendComments.filter((backendComment) => backendComment.parentId === null);
-    console.log(rootComments)
+    console.log(rootComments);
     const getReplies = (commentId) =>
         backendComments
             .filter((backendComment) => backendComment.parentId === commentId)
             .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
     const addComment = async (text, parentId) => {
         const data = await config.addComment(text, parentId, currentMusicId, tokenStr);
-        console.log(data)
+        console.log(data);
         if (data.errorCode) {
             setInfoNotify({
                 content: 'Bình luận thất bại. Hãy thử lại !!',
@@ -79,12 +78,12 @@ const Comments = ({currentMusicId }) => {
 
     useEffect(() => {
         const fetchComments = async () => {
-            if (!currentMusicId || !tokenStr) return; 
-    
+            if (!currentMusicId || !tokenStr) return;
+
             try {
                 const data = await config.getComment(currentMusicId, tokenStr);
                 console.log(data);
-                
+
                 if (data.errorCode) {
                     setInfoNotify({
                         content: 'Hiển thị bình luận thất bại. Hãy thử lại !!',
@@ -105,10 +104,9 @@ const Comments = ({currentMusicId }) => {
                 });
             }
         };
-    
+
         fetchComments();
     }, [currentMusicId, tokenStr]);
-    
 
     return (
         <div className={cx('comments')}>

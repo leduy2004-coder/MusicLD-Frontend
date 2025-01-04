@@ -12,6 +12,7 @@ function DiscardForm() {
 
     const handleCloseForm = () => {
         setOpenFormDiscard(false);
+   
     };
 
     return (

@@ -43,9 +43,9 @@ export const updateUser = async (token, nickName, gender, dateOfBirth, id) => {
     }
 };
 
-export const getTopUser = async (tokenStr) => {
+export const getTopUser = async () => {
     try {
-        const res = await callPath.get('users/get-top-user', tokenStr, {});
+        const res = await callPath.get('users/get-top-user', null, {});
         return res;
     } catch (err) {
         return { errCode: err };
