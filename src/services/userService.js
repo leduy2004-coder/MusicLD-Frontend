@@ -10,7 +10,14 @@ export const getUser = async (id, token) => {
         return { errCode: err.response.status };
     }
 };
-
+export const getAllUser = async (token) => {
+    try {
+        const res = await callPath.get('users/get-all', token, {});
+        return res.result;
+    } catch (err) {
+        return { errCode: err.response.status };
+    }
+};
 export const search = async (q, type = 'less') => {
     try {
         const res = await callPath.get('users/search', null, {

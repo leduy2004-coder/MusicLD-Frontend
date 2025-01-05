@@ -45,8 +45,8 @@
 
 .primary {
     color: #fff;
-    background-color: var(--primary);
-    border-color: var(--primary);
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
 
     &:hover {
         border-color: var(--primary);

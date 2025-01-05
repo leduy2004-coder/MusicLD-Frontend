@@ -21,7 +21,7 @@ import {
     getCountMusic,
     getTopMusic,
 } from './musicService';
-import { search, getUser, updateUser, getTopUser } from './userService.js';
+import { search, getUser, updateUser, getTopUser, getAllUser } from './userService.js';
 import { getComment, addComment, updateComment, removeComment } from './commentService';
 import { getVNPay } from './paymentService';
 import {getCountMusicByYear, getStatisticByYear, getTopUserByYear} from './statisticService'
@@ -51,6 +51,7 @@ const config = {
     getPlaylistByAccess,
     checkFollow,
     getTopUser,
+    getAllUser,
     getComment,
     updateComment,
     removeComment,

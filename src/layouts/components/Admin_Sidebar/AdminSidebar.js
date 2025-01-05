@@ -14,22 +14,22 @@ const navigation = [
     {
         title: 'Thống kê',
         href: '/admin/statistic',
-        icon: 'bi bi-speedometer2',
+        icon: 'bi bi-bar-chart-line', 
     },
     {
-        title: 'Quản lí phim',
-        href: '/admin/movie',
-        icon: 'bi bi-layout-split',
+        title: 'Quản lí tài khoản',
+        href: '/admin/user',
+        icon: 'bi bi-person-circle', 
     },
     {
-        title: 'Quản lí lịch chiếu',
-        href: '/admin/schedule',
-        icon: 'bi bi-columns',
+        title: 'Quản lí nhạc',
+        href: '/admin/music',
+        icon: 'bi bi-music-note', 
     },
     {
         title: 'Thông tin',
         href: '/admin/about',
-        icon: 'bi bi-people',
+        icon: 'bi bi-info-circle', 
     },
 ];
 
