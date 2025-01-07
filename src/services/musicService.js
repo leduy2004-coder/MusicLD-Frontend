@@ -61,6 +61,14 @@ export const removeMusic = async (publicIdMusic, publicIdAvatar, id, token) => {
         return { errorCode: error.response };
     }
 };
+export const updateStatusMusic = async (id, token) => {
+    try {
+        const res = await callPath.post('music/update-status', { id }, token);
+        return res.data;
+    } catch (error) {
+        return { errorCode: error.response };
+    }
+};
 
 export const updateMusic = async (formData, token) => {
     try {

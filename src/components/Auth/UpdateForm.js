@@ -69,6 +69,8 @@ function UpdateForm() {
 
         const data = await config.updateUser(
             tokenStr,
+            null,
+            null,
             values.nickName,
             values.gender === 'male', // Chuyển đổi lại thành true/false để lưu vào backend
             values.dob ? values.dob.format('DD/MM/YYYY') : null,

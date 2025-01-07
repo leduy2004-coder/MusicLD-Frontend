@@ -15,7 +15,22 @@ export const uploadAvatar = async (file, token) => {
         return { errorCode: error.response.status };
     }
 };
+export const uploadAvatarUser = async (file,userId, token) => {
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('userId', userId);
 
+    try {
+        const res = await callPath.post('avatar/upload-user', formData,token, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return res.data.result;
+    } catch (error) {
+        return { errorCode: error.response.status };
+    }
+};
 export const getAvatar = async (avatar) => {
     try {
         const res = await callPath.get(

@@ -26,9 +26,7 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false, detail
     const handleDelete = async () => {
         if (userAuth && tokenStr) {
             try {
-                const result = await config.removeMusic(
-                    data.publicId,
-                    data?.avatarResponse?.publicId,
+                const result = await config.updateStatusMusic(
                     data.id,
                     tokenStr,
                 );

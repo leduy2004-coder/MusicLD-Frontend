@@ -5,25 +5,20 @@ import { UserNotify } from '../Store';
 import './form.scss';
 import config from '~/services';
 
-const UpdateUserForm = ({ userId, users, onUsersUpdate }) => {
+const UpdateUserForm = ({ userId, users, onUsersUpdate, setOpenFormAddUser }) => {
     const { setInfoNotify } = UserNotify();
-    const { setOpenFormAddMovie } = UserAuth();
+    const { tokenStr } = UserAuth();
     const [selectedFile, setSelectedFile] = useState(false);
 
-    const [movieDetails, setMovieDetails] = useState({
-        movieTitle: '',
-        releaseDate: '',
-        director: '',
-        ageRequirement: '',
-        duration: '',
-        movieType: '',
-        movieImage: null,
-        movieVideo: '',
-        description: '',
+    const [userDetail, setUserDetail] = useState({
+        username: '',
+        password: '',
+        nickName: '',
+        dateOfBirth: '',
+        avatar: null,
+        gender: false,
         status: false,
     });
-
-    const [typeMovie, setTypeMovie] = useState([]);
 
     useEffect(() => {
         if (!userId) {
@@ -31,7 +26,7 @@ const UpdateUserForm = ({ userId, users, onUsersUpdate }) => {
         }
         const fetchData = async () => {
             try {
-                const data = await config.getMovieById(userId);
+                const data = await config.getUserForAdmin(userId, tokenStr);
                 if (data.errCode) {
                     setInfoNotify({
                         content: 'Lỗi dữ liệu !!',
@@ -41,20 +36,16 @@ const UpdateUserForm = ({ userId, users, onUsersUpdate }) => {
                     });
                 } else {
                     const mappedData = {
-                        movieTitle: data.tenPhim || '',
-                        releaseDate: data.ngayKhoiChieu ? new Date(data.ngayKhoiChieu).toISOString().split('T')[0] : '',
-                        director: data.daoDien || '',
-                        ageRequirement: data.doTuoiYeuCau || '',
-                        duration: data.thoiLuong || '',
-                        movieType: data.maLPhim || '',
-                        movieImage: data.hinhDaiDien || null,
-                        movieVideo: data.video || '',
-                        description: data.moTa || '',
-                        status: data.tinhTrang === 'true' || data.tinhTrang === 1 || data.tinhTrang === true,
+                        username: data.username || '',
+                        nickName: data.nickName || '',
+                        dateOfBirth: data.dateOfBirth ? data.dateOfBirth.split('/').reverse().join('-') : '',
+                        avatar: data.avatar || null,
+                        gender: data.gender,
+                        status: data.status,
                     };
                     setSelectedFile(true);
 
-                    setMovieDetails(mappedData);
+                    setUserDetail(mappedData);
                 }
             } catch (error) {
                 setInfoNotify({
@@ -65,53 +56,24 @@ const UpdateUserForm = ({ userId, users, onUsersUpdate }) => {
                 });
             }
         };
-
-        fetchData();
-    }, [userId]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await config.getAllTypeMovie();
-
-                if (data.errCode) {
-                    setInfoNotify({
-                        content: 'Lỗi dữ liệu !!',
-                        delay: 1500,
-                        isNotify: true,
-                        type: 'error',
-                    });
-                } else {
-                    setTypeMovie(data); // Set data for combobox
-                }
-            } catch (error) {
-                setInfoNotify({
-                    content: 'Lỗi khi lấy dữ liệu từ server !!',
-                    delay: 1500,
-                    isNotify: true,
-                    type: 'error',
-                });
-            }
-        };
-
-        fetchData();
-    }, []);
+        if (tokenStr) fetchData();
+    }, [userId, tokenStr]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setMovieDetails((prev) => ({ ...prev, [name]: value }));
+        setUserDetail((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleFileChange = (e) => {
         setSelectedFile(false);
 
         const { name, files } = e.target;
-        setMovieDetails((prev) => ({ ...prev, [name]: files[0] }));
+        setUserDetail((prev) => ({ ...prev, [name]: files[0] }));
     };
     const handleChangeStatus = (e) => {
         const { name, type, checked } = e.target;
 
-        setMovieDetails((prevDetails) => ({
+        setUserDetail((prevDetails) => ({
             ...prevDetails,
             [name]: type === 'checkbox' ? checked : prevDetails[name], // Duy trì giá trị cũ nếu không phải checkbox
         }));
@@ -119,17 +81,60 @@ const UpdateUserForm = ({ userId, users, onUsersUpdate }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
-            let data;
+            let data, dataAvatar;
             let actionMessage = '';
 
+            // Reformat the date from 'yyyy-MM-dd' to 'dd/MM/yyyy'
+            const formattedDateOfBirth = new Date(userDetail.dateOfBirth);
+            const formattedDate = `${formattedDateOfBirth.getDate().toString().padStart(2, '0')}/${(
+                formattedDateOfBirth.getMonth() + 1
+            )
+                .toString()
+                .padStart(2, '0')}/${formattedDateOfBirth.getFullYear()}`;
+
+            // Update the user details with the formatted date
+            const updatedUserDetail = { ...userDetail, dateOfBirth: formattedDate };
+
             if (userId) {
-                data = await config.updateMovie(userId, movieDetails);
-                actionMessage = 'Cập nhật phim thành công !!';
+                data = await config.updateUser(
+                    tokenStr,
+                    updatedUserDetail.username,
+                    updatedUserDetail.password,
+                    updatedUserDetail.nickName,
+                    updatedUserDetail.gender,
+                    updatedUserDetail.dateOfBirth,
+                    userId,
+                );
+                if (updatedUserDetail.avatar && !selectedFile) {
+                    dataAvatar = await config.uploadAvatarUser(updatedUserDetail.avatar, userId, tokenStr);
+                    console.log(dataAvatar)
+
+                    data = { ...data, avatar: dataAvatar };
+                }else {
+                    data = { ...data, avatar: userDetail.avatar };
+                }
+                actionMessage = 'Cập nhật tài khoản thành công !!';
             } else {
-                data = await config.insertMovie(movieDetails);
-                actionMessage = 'Thêm phim thành công !!';
+                data = await config.addUser(
+                    updatedUserDetail.username,
+                    updatedUserDetail.password,
+                    updatedUserDetail.nickName,
+                    updatedUserDetail.dateOfBirth,
+                    updatedUserDetail.gender,
+                    'USER',
+                );
+
+                if (updatedUserDetail.avatar && !selectedFile) {
+                    dataAvatar = await config.uploadAvatarUser(
+                        updatedUserDetail.avatar,
+                        data.id,
+                        tokenStr,
+                    );
+                    console.log(dataAvatar)
+                    data = { ...data, avatar: dataAvatar };
+                }
+                actionMessage = 'Thêm tài khoản thành công !!';
             }
 
             if (data.errCode) {
@@ -141,13 +146,13 @@ const UpdateUserForm = ({ userId, users, onUsersUpdate }) => {
                 });
                 return;
             }
-
+            console.log(data);
             // Cập nhật danh sách users
             const updatedUsers = userId
-                ? users.map((movie) => (movie.maPhim === userId ? { ...movie, ...data } : movie))
+                ? users.map((user) => (user.id === userId ? { ...user, ...data } : user))
                 : [data, ...(users || [])];
             onUsersUpdate(updatedUsers); // Cập nhật state ở cha
-            setOpenFormAddMovie(false); // Đóng form
+            setOpenFormAddUser(false); // Đóng form
 
             setInfoNotify({
                 content: actionMessage,
@@ -166,192 +171,144 @@ const UpdateUserForm = ({ userId, users, onUsersUpdate }) => {
     };
 
     const handleClose = () => {
-        setOpenFormAddMovie(false);
+        setOpenFormAddUser(false);
     };
 
     return (
-        <div className="background-form">
+        <div className="background-form p-5">
             <Row>
                 <Col>
-                    <Card className="form-card">
+                    <Card className="form-card p-4">
                         <div className="form-content">
-                            <div className="area-close">
-                                <span className="close-btn" onClick={handleClose} role="button" aria-label="Close">
+                            <div className="area-close text-end">
+                                <span className="close-btn fs-3" onClick={handleClose} role="button" aria-label="Close">
                                     &times;
                                 </span>
                             </div>
-                            <CardTitle tag="h4" className="text-center mb-4" style={{ color: 'red' }}>
-                                {userId ? 'Cập nhật phim' : 'Thêm mới phim'}
+                            <CardTitle tag="h2" className="text-center mb-4 fs-1" style={{ color: 'red' }}>
+                                {userId ? 'Cập nhật tài khoản' : 'Thêm mới tài khoản'}
                             </CardTitle>
                             <Form onSubmit={handleSubmit}>
                                 <Row>
-                                    {/* Cột 1 */}
-                                    <Col md={6}>
-                                        {/* Movie Title */}
+                                    <Col>
                                         <FormGroup>
-                                            <Label for="movieTitle">Tên phim</Label>
+                                            <Label for="username" className="fs-3">
+                                                Tài khoản
+                                            </Label>
                                             <Input
                                                 type="text"
-                                                id="movieTitle"
-                                                name="movieTitle"
-                                                value={movieDetails.movieTitle}
+                                                id="username"
+                                                name="username"
+                                                value={userDetail.username}
                                                 onChange={handleChange}
-                                                placeholder="Nhập tên phim"
+                                                placeholder="Nhập tài khoản"
+                                                className="p-3 fs-3"
                                                 required
                                             />
                                         </FormGroup>
-
-                                        {/* Release Date */}
                                         <FormGroup>
-                                            <Label for="releaseDate">Ngày phát hành</Label>
+                                            <Label for="password" className="fs-3">
+                                                {userId ? 'Nhập mật khẩu mới' : 'Mật khẩu'}
+                                            </Label>
+                                            <Input
+                                                type="text"
+                                                id="password"
+                                                name="password"
+                                                value={userDetail.password}
+                                                onChange={handleChange}
+                                                placeholder="Nhập mật khẩu mới"
+                                                className="p-3 fs-3"
+                                            />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <Label for="nickName" className="fs-3">
+                                                Tên tài khoản
+                                            </Label>
+                                            <Input
+                                                type="text"
+                                                id="nickName"
+                                                name="nickName"
+                                                value={userDetail.nickName}
+                                                onChange={handleChange}
+                                                placeholder="Nhập tên tài khoản"
+                                                className="p-3 fs-3"
+                                                required
+                                            />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <Label for="dateOfBirth" className="fs-3">
+                                                Ngày sinh
+                                            </Label>
                                             <Input
                                                 type="date"
-                                                id="releaseDate"
-                                                name="releaseDate"
-                                                value={movieDetails.releaseDate}
+                                                id="dateOfBirth"
+                                                name="dateOfBirth"
+                                                value={userDetail.dateOfBirth}
                                                 onChange={handleChange}
+                                                className="p-3 fs-3"
                                                 required
                                             />
                                         </FormGroup>
-
-                                        {/* Director */}
                                         <FormGroup>
-                                            <Label for="director">Đạo diễn</Label>
+                                            <Label for="gender">Giới tính</Label>
                                             <Input
-                                                type="text"
-                                                id="director"
-                                                name="director"
-                                                value={movieDetails.director}
-                                                onChange={handleChange}
-                                                placeholder="Nhập tên đạo diễn"
-                                                required
-                                            />
-                                        </FormGroup>
-
-                                        {/* Age Requirement */}
-                                        <FormGroup>
-                                            <Label for="ageRequirement">Độ tuổi yêu cầu</Label>
-                                            <Input
-                                                type="number"
-                                                id="ageRequirement"
-                                                name="ageRequirement"
-                                                value={movieDetails.ageRequirement}
-                                                onChange={handleChange}
-                                                placeholder="Nhập độ tuổi yêu cầu"
-                                                required
-                                            />
+                                                type="select"
+                                                id="gender"
+                                                name="gender"
+                                                value={userDetail.gender} // Giá trị hiện tại
+                                                className="p-3 fs-3"
+                                                onChange={handleChange} // Hàm xử lý khi thay đổi
+                                            >
+                                                <option value="">Chọn giới tính</option>
+                                                <option value="true">Nam</option>
+                                                <option value="false">Nữ</option>
+                                            </Input>
                                         </FormGroup>
 
                                         <FormGroup>
-                                            <Label for="status" style={{ marginRight: '10px' }}>
+                                            <Label for="status" className="fs-3 me-3">
                                                 Tình trạng
                                             </Label>
                                             <Input
                                                 type="checkbox"
                                                 id="status"
                                                 name="status"
-                                                checked={movieDetails.status}
-                                                onChange={(e) => handleChangeStatus(e)}
+                                                checked={userDetail.status}
+                                                onChange={handleChangeStatus}
                                             />
                                         </FormGroup>
-                                    </Col>
-
-                                    {/* Cột 2 */}
-                                    <Col md={6}>
-                                        {/* Duration */}
                                         <FormGroup>
-                                            <Label for="duration">Thời lượng (phút)</Label>
-                                            <Input
-                                                type="number"
-                                                id="duration"
-                                                name="duration"
-                                                value={movieDetails.duration}
-                                                onChange={handleChange}
-                                                placeholder="Nhập thời lượng phim"
-                                                required
-                                            />
-                                        </FormGroup>
-
-                                        {/* Movie Type */}
-                                        <FormGroup>
-                                            <Label for="movieType">Loại phim</Label>
-                                            <Input
-                                                type="select"
-                                                id="movieType"
-                                                name="movieType"
-                                                value={movieDetails.movieType}
-                                                onChange={handleChange}
-                                                required
-                                            >
-                                                <option value="">-- Chọn loại phim --</option>
-                                                {typeMovie.map((type) => (
-                                                    <option key={type.maLPhim} value={type.maLPhim}>
-                                                        {type.tenLPhim}
-                                                    </option>
-                                                ))}
-                                            </Input>
-                                        </FormGroup>
-
-                                        {/* Movie Image */}
-                                        <FormGroup>
-                                            <Label for="movieImage">Ảnh bìa phim</Label>
-                                            <div className="file-upload">
-                                                {/* Display the image if available */}
-                                                {movieDetails.movieImage && selectedFile && (
+                                            <Label for="avatar" className="fs-3">
+                                                Ảnh đại diện
+                                            </Label>
+                                            <div className="file-upload mt-2">
+                                                {userDetail.avatar && selectedFile && (
                                                     <img
-                                                        src={movieDetails.movieImage}
-                                                        alt="Movie"
+                                                        src={userDetail?.avatar?.url}
+                                                        alt="Avatar"
+                                                        className="mb-3"
                                                         style={{
-                                                            width: '100px',
-                                                            height: 'auto',
-                                                            marginRight: '15px',
-                                                            marginBottom: '10px',
+                                                            width: '50px',
+                                                            height: '50px',
+                                                            borderRadius: '50%',
                                                         }}
                                                     />
                                                 )}
                                                 <Input
                                                     type="file"
-                                                    id="movieImage"
-                                                    name="movieImage"
+                                                    id="avatar"
+                                                    name="avatar"
                                                     onChange={handleFileChange}
                                                     accept="image/*"
-                                                    required={!movieDetails.movieImage}
+                                                    className="form-control fs-3"
                                                 />
                                             </div>
                                         </FormGroup>
-
-                                        {/* Movie Video */}
-                                        <FormGroup>
-                                            <Label for="movieVideo">Video phim</Label>
-                                            <Input
-                                                type="text"
-                                                placeholder="Lấy url từ youtube"
-                                                id="movieVideo"
-                                                name="movieVideo"
-                                                value={movieDetails.movieVideo}
-                                                onChange={handleChange}
-                                                accept="video/*"
-                                            />
-                                        </FormGroup>
                                     </Col>
                                 </Row>
-
-                                {/* Description */}
-                                <FormGroup>
-                                    <Label for="description">Mô tả</Label>
-                                    <Input
-                                        type="textarea"
-                                        id="description"
-                                        name="description"
-                                        value={movieDetails.description}
-                                        onChange={handleChange}
-                                        placeholder="Nhập mô tả phim"
-                                    />
-                                </FormGroup>
-
-                                <div className="area-btn-submit">
-                                    <Button className="btn-submit" type="submit">
-                                        {userId ? 'Cập nhật phim' : 'Thêm phim'}
+                                <div className="area-btn-submit text-center mt-4">
+                                    <Button className="btn-submit btn-lg" type="submit">
+                                        {userId ? 'Cập nhật tài khoản' : 'Thêm tài khoản'}
                                     </Button>
                                 </div>
                             </Form>

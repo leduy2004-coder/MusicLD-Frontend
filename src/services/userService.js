@@ -1,11 +1,39 @@
 import * as callPath from '../utils/httpRequest';
 
+export const addUser = async (username, password, nickName, dateOfBirth,gender, code) => {
+    try {
+        const res = await callPath.post('users/add-user', {
+            username,
+            password,
+            nickName,
+            dateOfBirth,
+            gender,
+            authType: 'LOCAL', 
+            roles: [{ code: code }], 
+        });
+        return res.data.result;
+    } catch (err) {
+        console.log(err);
+        return { errCode: err.response.status }; 
+    }
+};
+
 export const getUser = async (id, token) => {
     try {
         const res = await callPath.get('users/get-user', token, {
             params: { id },
         });
-        return res;
+        return res.result;
+    } catch (err) {
+        return { errCode: err.response.status };
+    }
+};
+export const getUserForAdmin = async (id, token) => {
+    try {
+        const res = await callPath.get('users/get-user-for-admin', token, {
+            params: { id },
+        });
+        return res.result;
     } catch (err) {
         return { errCode: err.response.status };
     }
@@ -32,19 +60,21 @@ export const search = async (q, type = 'less') => {
     }
 };
 
-export const updateUser = async (token, nickName, gender, dateOfBirth, id) => {
+export const updateUser = async (token, username, password, nickName, gender, dateOfBirth, id) => {
     try {
         const res = await callPath.patch(
             `users/update-user`,
             {
                 id,
+                username,
+                password,
                 nickName,
                 dateOfBirth,
                 gender,
             },
             token,
         );
-        return res.data;
+        return res.data.result;
     } catch (err) {
         return { errCode: err.response.status };
     }
@@ -56,5 +86,16 @@ export const getTopUser = async () => {
         return res;
     } catch (err) {
         return { errCode: err };
+    }
+};
+
+export const deleteUser = async (id, token) => {
+    try {
+        const res = await callPath.deleted('users/delete-user', token, {
+            params: { id },
+        });
+        return res.data; 
+    } catch (err) {
+        return { errCode: err.response?.status || 500, message: err.message };
     }
 };

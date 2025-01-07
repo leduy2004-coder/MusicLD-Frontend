@@ -75,7 +75,9 @@ const AdminUser = () => {
     };
 
     // Lọc phim theo từ khóa tìm kiếm
-    const filteredUsers = users.filter((user) => user.nickName.toLowerCase().includes(search.toLowerCase()));
+    const filteredUsers = users.filter(
+        (user) => user.nickName && user.nickName.toLowerCase().includes(search.toLowerCase()),
+    );
 
     // Phân trang
     const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
@@ -103,12 +105,12 @@ const AdminUser = () => {
         setShowConfirmDelete(true);
     };
 
-    // Hàm xóa phim
+    // Hàm xóa
     const handRemoveUser = async () => {
         if (!userToDelete) return;
 
         try {
-            const data = await config.removeUser(userToDelete);
+            const data = await config.deleteUser(userToDelete, tokenStr);
 
             if (data.errCode) {
                 setInfoNotify({
@@ -118,11 +120,11 @@ const AdminUser = () => {
                     type: 'error',
                 });
             } else {
-                // Lọc bỏ phim bị xóa khỏi danh sách
+                // Lọc bỏ user bị xóa khỏi danh sách
                 const updatedUsers = users.filter((user) => user.id !== userToDelete);
                 setUsers(updatedUsers);
                 setInfoNotify({
-                    content: 'Phim đã được xóa thành công.',
+                    content: 'Tài khoản đã được xóa thành công.',
                     delay: 1500,
                     isNotify: true,
                     type: 'success',
@@ -233,7 +235,7 @@ const AdminUser = () => {
                                                     : 'Không xác định'}
                                             </td>
 
-                                            <td>{user.countFollower}</td>
+                                            <td>{user?.countFollower ?? 0}</td>
                                             <td className="text-center align-middle">
                                                 <span
                                                     className={`badge ${
@@ -334,7 +336,14 @@ const AdminUser = () => {
                 </ModalFooter>
             </Modal>
 
-            {openFormAddUser && <UpdateUserForm userId={userId} users={users} onUsersUpdate={handleUsersUpdate} />}
+            {openFormAddUser && (
+                <UpdateUserForm
+                    userId={userId}
+                    users={users}
+                    onUsersUpdate={handleUsersUpdate}
+                    setOpenFormAddUser={setOpenFormAddUser}
+                />
+            )}
         </div>
     );
 };

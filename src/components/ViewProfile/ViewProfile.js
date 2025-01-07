@@ -39,7 +39,7 @@ function ViewProfile() {
             const fetchProfile = async () => {
                 try {
                     const data = await config.getUser(id, tokenStr);
-                    setProfileUser(data.result);
+                    setProfileUser(data);
                 } catch (error) {
                     console.error('Failed to fetch profile:', error);
                 }
