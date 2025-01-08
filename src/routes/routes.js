@@ -13,6 +13,8 @@ import Profile from '~/pages/Profile';
 import Search from '~/pages/Search';
 import StatisticPage from '~/pages/Admin_Statistic';
 import AdminUserPage from '~/pages/Admin_User';
+import AdminMusicPage from '~/pages/Admin_Music';
+import FormAddMusic from '~/components/FormAdmin/FormAddMusic';
 import Upload from '~/pages/Upload';
 
 const publicRoutes = [
@@ -25,6 +27,8 @@ const publicRoutes = [
     { path: config.routes.music, component: Music, private: true },
     { path: config.routes.statistic, component: StatisticPage, layout: AdminDefaultLayout, private: true, role: 'ADMIN' },
     { path: config.routes.admin_user, component: AdminUserPage, layout: AdminDefaultLayout, private: true, role: 'ADMIN' },
+    { path: config.routes.admin_music, component: AdminMusicPage, layout: AdminDefaultLayout, private: true, role: 'ADMIN' },
+    { path: config.routes.admin_music_add, component: FormAddMusic, layout: AdminDefaultLayout, private: true, role: 'ADMIN' },
 ];
 const privateRoutes = [];
 

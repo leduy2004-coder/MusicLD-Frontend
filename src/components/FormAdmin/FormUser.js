@@ -146,7 +146,6 @@ const UpdateUserForm = ({ userId, users, onUsersUpdate, setOpenFormAddUser }) =>
                 });
                 return;
             }
-            console.log(data);
             // Cập nhật danh sách users
             const updatedUsers = userId
                 ? users.map((user) => (user.id === userId ? { ...user, ...data } : user))

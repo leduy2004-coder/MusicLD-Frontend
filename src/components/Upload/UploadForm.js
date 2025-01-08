@@ -12,12 +12,12 @@ import { UserNotify } from '../Store';
 import { useFormContext } from '../Store/FormContext';
 import { UserAuth } from '../Store/AuthContext';
 import config from '~/services';
-
+import Image from '../Image';
 const { TextArea } = Input;
 const { Title } = Typography;
 const cx = classNames.bind(styles);
 
-function UploadForm() {
+function UploadForm({ user }) {
     const { saveFormData, resetFormData, formData } = useFormContext();
     const [form] = Form.useForm();
     const [avatarList, setAvatarList] = useState([]);
@@ -35,6 +35,7 @@ function UploadForm() {
                     songName: formData.songName,
                     lyrics: formData.lyrics,
                     access: formData.access,
+                    ...(user && { userId: user.id }),
                 });
                 if (formData.avatar) {
                     setAvatarList([formData.avatar]);
@@ -43,6 +44,7 @@ function UploadForm() {
                     setFileList([formData.file]);
                 }
                 try {
+                    let data;
                     setInfoNotify({
                         content: 'Đang đăng nhạc vui lòng chờ !!',
                         delay: 1500,
@@ -50,8 +52,11 @@ function UploadForm() {
                         type: 'success',
                     });
                     setIsLoading(true);
-
-                    const data = await config.uploadMusic(formData, tokenStr);
+                    if (user) {
+                        data = await config.uploadMusicOfAdmin(formData, tokenStr);
+                    } else {
+                        data = await config.uploadMusic(formData, tokenStr);
+                    }
                     if (data.errorCode) {
                         handleUploadError(data.errorCode.data.code);
                     } else {
@@ -94,8 +99,9 @@ function UploadForm() {
         formData.append('file', fileList[0]?.originFileObj);
         formData.append('lyrics', values.lyrics);
         formData.append('access', values.access);
+        if (user) formData.append('userId', user.id);
 
-        if (count > 1) {
+        if (count > 1 && !user) {
             saveFormData(formData);
             setOpenFormNotifyPayment(true);
             setIsStatus(true);
@@ -103,9 +109,19 @@ function UploadForm() {
         }
 
         try {
+            setInfoNotify({
+                content: 'Đang đăng nhạc vui lòng chờ !!',
+                delay: 1500,
+                isNotify: true,
+                type: 'success',
+            });
+            let data;
             setIsLoading(true);
-            console.log(formData);
-            const data = await config.uploadMusic(formData, tokenStr);
+            if (user) {
+                data = await config.uploadMusicOfAdmin(formData, tokenStr);
+            } else {
+                data = await config.uploadMusic(formData, tokenStr);
+            }
             if (data.errorCode) {
                 handleUploadError(data.errorCode.data.code);
             } else {
@@ -149,10 +165,24 @@ function UploadForm() {
     };
 
     return (
-        <Form form={form} layout="vertical" onFinish={handleFinish} className={cx('form')}>
+        <Form form={form} layout="vertical" onFinish={handleFinish} className={cx('form', { 'form-admin': !!user })}>
+            {user && (
+                <div className={cx('user-info')}>
+                    <Image
+                        src={user?.avatar?.url}
+                        className={cx('avatar-user')}
+                        preview={false}
+                        alt="Avatar người dùng"
+                    />
+                    <Title level={5} className={cx('username')}>
+                        Người dùng: {user?.nickName}
+                    </Title>
+                </div>
+            )}
             <Title level={4} className={cx('title')}>
                 Đăng Nhạc
             </Title>
+
             <Form.Item
                 name="songName"
                 label="Tên bài hát"

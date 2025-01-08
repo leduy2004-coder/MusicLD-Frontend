@@ -9,7 +9,10 @@
         border-color: var(--primary);
         background-color: var(--primary);
     }
-    :where(.css-dev-only-do-not-override-98ntnt).ant-upload-wrapper .ant-upload-list .ant-upload-list-item .ant-upload-list-item-name {
+    :where(.css-dev-only-do-not-override-98ntnt).ant-upload-wrapper
+        .ant-upload-list
+        .ant-upload-list-item
+        .ant-upload-list-item-name {
         width: 30rem;
     }
 }
@@ -20,6 +23,9 @@
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), /* Bóng đổ lớn mờ */ 0 6px 6px rgba(0, 0, 0, 0.1);
     min-height: 55rem;
     width: 70%;
+}
+.form-admin {
+    width: 100%;
 }
 .button {
     height: 3.7rem;
@@ -60,4 +66,28 @@
 
 .loading {
     animation: var(--animation-loading);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+
+    .avatar-user {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #1890ff; // Đổi màu nếu cần
+    }
+
+    .username {
+        color: #333;
+        font-weight: 500;
+    }
 }

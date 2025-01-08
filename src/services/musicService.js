@@ -1,5 +1,13 @@
 import * as callPath from '../utils/httpRequest';
 
+export const getAllMusic = async (token) => {
+    try {
+        const res = await callPath.get('music/get-all', token, {});
+        return res.result;
+    } catch (err) {
+        return { errCode: err.response.status };
+    }
+};
 export const getDetailSong = async (id, token) => {
     try {
         const res = await callPath.get('music/get-music', token, {
@@ -52,10 +60,23 @@ export const uploadMusic = async (formData, token) => {
         return { errorCode: error.response };
     }
 };
-
-export const removeMusic = async (publicIdMusic, publicIdAvatar, id, token) => {
+export const uploadMusicOfAdmin = async (formData, token) => {
     try {
-        const res = await callPath.post('music/delete', { publicIdMusic, publicIdAvatar, id }, token);
+        const res = await callPath.post('music/upload-of-admin', formData, token, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        return { errorCode: error.response };
+    }
+};
+export const removeMusic = async (id, token) => {
+    try {
+        const res = await callPath.deleted('music/delete-music', token, {
+            params: { id },
+        });
         return res.data;
     } catch (error) {
         return { errorCode: error.response };

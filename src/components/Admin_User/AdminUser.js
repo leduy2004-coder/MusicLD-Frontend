@@ -24,9 +24,10 @@ import { useNavigate } from 'react-router-dom';
 import config from '~/services';
 import { UserNotify } from '../Store';
 import { UserAuth } from '../Store';
-import UpdateUserForm from '../FormAdmin/FormUpdateUser';
+import UpdateUserForm from '../FormAdmin/FormUser';
 import Image from '../Image';
-const AdminUser = () => {
+const AdminUser = ({ onUserSelect }) => {
+    console.log(onUserSelect);
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState('');
     const [userId, setUserId] = useState('');
@@ -145,6 +146,15 @@ const AdminUser = () => {
     const handleUsersUpdate = (updatedUsers) => {
         setUsers(updatedUsers);
     };
+    const handleRowClick = (user) => {
+        console.log('Selected user user:', user);
+        if (onUserSelect) {
+            onUserSelect(user);
+        } else {
+            console.log('giao dien');
+        }
+    };
+
     return (
         <div>
             {/* Thanh tìm kiếm và nút thêm */}
@@ -165,19 +175,21 @@ const AdminUser = () => {
                         </InputGroupText>
                     </InputGroup>
                 </Col>
-                <Col md="3" className="text-end">
-                    <Button
-                        color="primary"
-                        onClick={handOpenFormAdd}
-                        style={{
-                            fontSize: '15px',
-                            padding: '5px 20px',
-                        }}
-                    >
-                        <FaPlus style={{ fontSize: '12px', marginRight: '8px' }} />
-                        Thêm tài khoản
-                    </Button>
-                </Col>
+                {!onUserSelect && (
+                    <Col md="3" className="text-end">
+                        <Button
+                            color="primary"
+                            onClick={handOpenFormAdd}
+                            style={{
+                                fontSize: '15px',
+                                padding: '5px 20px',
+                            }}
+                        >
+                            <FaPlus style={{ fontSize: '12px', marginRight: '8px' }} />
+                            Thêm tài khoản
+                        </Button>
+                    </Col>
+                )}
             </Row>
 
             <Row>
@@ -198,20 +210,28 @@ const AdminUser = () => {
                             >
                                 <thead>
                                     <tr>
-                                        <th>STT</th>
+                                        {!onUserSelect && <th>STT</th>}
                                         <th>Ảnh đại diện</th>
                                         <th>Tên tài khoản</th>
-                                        <th>Ngày sinh</th>
+                                        {!onUserSelect && <th>Ngày sinh</th>}
                                         <th>Giới tính</th>
                                         <th>Lượng follow</th>
-                                        <th>Tình trạng</th>
-                                        <th>Hành động</th>
+                                        {!onUserSelect && (
+                                            <>
+                                                <th>Tình trạng</th>
+                                                <th>Hành động</th>
+                                            </>
+                                        )}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {currentUsers.map((user, index) => (
-                                        <tr key={user.id || index}>
-                                            <th scope="row">{index + 1}</th>
+                                        <tr
+                                            key={user.id || index}
+                                            onClick={() => handleRowClick(user)}
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            {!onUserSelect && <th scope="row">{index + 1}</th>}
                                             <td>
                                                 <Image
                                                     src={user?.avatar?.url}
@@ -226,7 +246,7 @@ const AdminUser = () => {
                                             </td>
 
                                             <td>{user.nickName}</td>
-                                            <td>{user.dateOfBirth}</td>
+                                            {!onUserSelect && <td>{user.dateOfBirth}</td>}
                                             <td>
                                                 {user.gender === true
                                                     ? 'Nam'
@@ -250,44 +270,51 @@ const AdminUser = () => {
                                                     {user.status === true ? 'Đang hoạt động' : 'Ngừng hoạt động'}
                                                 </span>
                                             </td>
-
-                                            <td className="text-center align-middle">
-                                                <div
-                                                    className="d-flex justify-content-center  align-items-center"
-                                                    style={{ gap: '10px' }}
-                                                >
-                                                    <Button
-                                                        color="info"
-                                                        size="sm"
-                                                        style={{
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            fontSize: '12px',
-                                                            padding: '8px 12px',
-                                                            gap: '5px', // Khoảng cách giữa icon và chữ
-                                                        }}
-                                                        onClick={() => handleViewDetails(user.id)}
+                                            {!onUserSelect && (
+                                                <td className="text-center align-middle">
+                                                    <div
+                                                        className="d-flex justify-content-center  align-items-center"
+                                                        style={{ gap: '10px' }}
                                                     >
-                                                        <FaInfoCircle />
-                                                        Chỉnh sửa
-                                                    </Button>
-                                                    <Button
-                                                        color="danger"
-                                                        size="sm"
-                                                        style={{
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            fontSize: '12px',
-                                                            padding: '8px 12px',
-                                                            gap: '5px', // Khoảng cách giữa icon và chữ
-                                                        }}
-                                                        onClick={() => handleOpenConfirmDelete(user.id)}
-                                                    >
-                                                        <FaTrashAlt />
-                                                        Xóa
-                                                    </Button>
-                                                </div>
-                                            </td>
+                                                        <Button
+                                                            color="info"
+                                                            size="sm"
+                                                            style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                fontSize: '12px',
+                                                                padding: '8px 12px',
+                                                                gap: '5px', // Khoảng cách giữa icon và chữ
+                                                            }}
+                                                            onClick={(event) => {
+                                                                event.stopPropagation(); // Ngăn sự kiện nổi lên
+                                                                handleViewDetails(user.id);
+                                                            }}
+                                                        >
+                                                            <FaInfoCircle />
+                                                            Chỉnh sửa
+                                                        </Button>
+                                                        <Button
+                                                            color="danger"
+                                                            size="sm"
+                                                            style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                fontSize: '12px',
+                                                                padding: '8px 12px',
+                                                                gap: '5px', // Khoảng cách giữa icon và chữ
+                                                            }}
+                                                            onClick={(event) => {
+                                                                event.stopPropagation(); // Ngăn sự kiện nổi lên
+                                                                handleOpenConfirmDelete(user.id);
+                                                            }}
+                                                        >
+                                                            <FaTrashAlt />
+                                                            Xóa
+                                                        </Button>
+                                                    </div>
+                                                </td>
+                                            )}
                                         </tr>
                                     ))}
                                 </tbody>

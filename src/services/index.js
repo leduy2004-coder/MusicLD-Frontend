@@ -1,5 +1,5 @@
 import { login, logout, register, oauth2 } from './authService';
-import { getAvatar, removeAvatar, uploadAvatar,uploadAvatarUser } from './avatarService.js';
+import { getAvatar, removeAvatar, uploadAvatar, uploadAvatarUser } from './avatarService.js';
 import {
     updateRequestFollowUser,
     getAllFollower,
@@ -10,8 +10,10 @@ import {
     getStatusFollow,
 } from './followService';
 import {
+    getAllMusic,
     getDetailSong,
     uploadMusic,
+    uploadMusicOfAdmin,
     getPlaylist,
     getPlaylistByAccess,
     removeMusic,
@@ -22,7 +24,16 @@ import {
     getTopMusic,
     updateStatusMusic,
 } from './musicService';
-import { addUser,search, getUser, updateUser, getTopUser, getAllUser, deleteUser, getUserForAdmin } from './userService.js';
+import {
+    addUser,
+    search,
+    getUser,
+    updateUser,
+    getTopUser,
+    getAllUser,
+    deleteUser,
+    getUserForAdmin,
+} from './userService.js';
 import { getComment, addComment, updateComment, removeComment } from './commentService';
 import { getVNPay } from './paymentService';
 import { getCountMusicByYear, getStatisticByYear, getTopUserByYear } from './statisticService';
@@ -44,8 +55,10 @@ const config = {
     getStatusFollow,
     getAllRequest,
     getAllReceive,
+    getAllMusic,
     getDetailSong,
     uploadMusic,
+    uploadMusicOfAdmin,
     getPlaylist,
     updateUser,
     removeMusic,
