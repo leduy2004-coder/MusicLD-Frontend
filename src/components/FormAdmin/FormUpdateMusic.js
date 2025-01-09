@@ -1,11 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Row, Col, Card, CardTitle, Form, FormGroup, Label, Input, Button } from 'reactstrap';
-import { UserAuth } from '../Store';
+import { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { UserNotify } from '../Store';
-import './form.scss';
+import { Button, Card, CardTitle, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
 import config from '~/services';
+import { UserAuth, UserNotify } from '../Store';
+import './form.scss';
 
 const UpdateMusicForm = ({ musicId, musics, onMusicsUpdate, setOpenFormAddMusic }) => {
     const { setInfoNotify } = UserNotify();
@@ -87,12 +86,12 @@ const UpdateMusicForm = ({ musicId, musics, onMusicsUpdate, setOpenFormAddMusic 
             formData.append('title', musicDetail.title);
             formData.append('fileAvatar', musicDetail.avatar);
             formData.append('lyrics', musicDetail.lyrics);
-            formData.append('publicIdAvatar', musicDetail);
             formData.append('access', musicDetail.access);
+            formData.append('publicIdAvatar', musicDetail);
+            formData.append('status', musicDetail.status);
 
             if (musicId) {
-                data = await config.updateMusic(formData, tokenStr);
-             
+                data = await config.updateMusicOfAdmin(formData, tokenStr);
                 actionMessage = 'Cập nhật nhạc thành công !!';
             }
 
@@ -106,7 +105,7 @@ const UpdateMusicForm = ({ musicId, musics, onMusicsUpdate, setOpenFormAddMusic 
                 return;
             }
             // Cập nhật danh sách musics
-            const updatedMusics = [data, ...(musics || [])];
+            const updatedMusics = musics.map((music) => (music.id === musicId ? { ...music, ...data } : music))
             onMusicsUpdate(updatedMusics); 
             setOpenFormAddMusic(false);
 

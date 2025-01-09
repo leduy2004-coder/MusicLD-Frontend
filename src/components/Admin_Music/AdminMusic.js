@@ -336,7 +336,7 @@ const AdminMusic = () => {
                 <UpdateMusicForm
                     musicId={musicId}
                     musics={musics}
-                    onmMusicsUpdate={handleMusicsUpdate}
+                    onMusicsUpdate={handleMusicsUpdate}
                     setOpenFormAddMusic={setOpenFormAddMusic}
                 />
             )}

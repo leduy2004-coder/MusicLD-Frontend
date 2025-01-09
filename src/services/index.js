@@ -23,6 +23,7 @@ import {
     getCountMusic,
     getTopMusic,
     updateStatusMusic,
+    updateMusicOfAdmin,
 } from './musicService';
 import {
     addUser,
@@ -64,6 +65,7 @@ const config = {
     removeMusic,
     getTopMusic,
     updateStatusMusic,
+    updateMusicOfAdmin,
     updateMusic,
     getPlaylistByAccess,
     checkFollow,

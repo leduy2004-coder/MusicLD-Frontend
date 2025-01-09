@@ -1,31 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { FaInfoCircle, FaPlus, FaTrashAlt } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import {
-    Row,
-    Col,
+    Button,
     Card,
     CardBody,
     CardTitle,
-    CardSubtitle,
-    Button,
+    Col,
     Input,
     InputGroup,
     InputGroupText,
+    Modal,
+    ModalBody,
+    ModalFooter,
+    ModalHeader,
     Pagination,
     PaginationItem,
     PaginationLink,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Table,
+    Row,
+    Table
 } from 'reactstrap';
-import { FaPlus, FaTrashAlt, FaInfoCircle } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
 import config from '~/services';
-import { UserNotify } from '../Store';
-import { UserAuth } from '../Store';
 import UpdateUserForm from '../FormAdmin/FormUser';
 import Image from '../Image';
+import { UserAuth, UserNotify } from '../Store';
 const AdminUser = ({ onUserSelect }) => {
     console.log(onUserSelect);
     const [users, setUsers] = useState([]);
@@ -55,7 +53,12 @@ const AdminUser = ({ onUserSelect }) => {
                         type: 'error',
                     });
                 } else {
-                    setUsers(data.reverse());
+                    if (onUserSelect) {
+                        const filteredAndReversedUsers = data.filter((user) => user.status === true).reverse();
+                        setUsers(filteredAndReversedUsers);
+                    } else {
+                        setUsers(data.reverse());
+                    }
                 }
             } catch (error) {
                 setInfoNotify({

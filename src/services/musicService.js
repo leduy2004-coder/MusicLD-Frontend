@@ -103,7 +103,18 @@ export const updateMusic = async (formData, token) => {
         return { errCode: err.response.status };
     }
 };
-
+export const updateMusicOfAdmin = async (formData, token) => {
+    try {
+        const res = await callPath.patch(`music/update-music-of-admin`, formData, token, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return res.data.result;
+    } catch (err) {
+        return { errCode: err.response.status };
+    }
+};
 export const likeMusic = async (userId, musicId, token) => {
     try {
         const res = await callPath.post('music/like', null, token, {

@@ -1,9 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Row, Col, Card, CardTitle, Form, FormGroup, Label, Input, Button } from 'reactstrap';
-import { UserAuth } from '../Store';
-import { UserNotify } from '../Store';
-import './form.scss';
+import { useEffect, useState } from 'react';
+import { Button, Card, CardTitle, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
 import config from '~/services';
+import { UserAuth, UserNotify } from '../Store';
+import './form.scss';
 
 const UpdateUserForm = ({ userId, users, onUsersUpdate, setOpenFormAddUser }) => {
     const { setInfoNotify } = UserNotify();

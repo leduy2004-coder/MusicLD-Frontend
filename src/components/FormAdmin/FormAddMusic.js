@@ -1,13 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Row, Col, Card, CardTitle, Form, FormGroup, Label, Input, Button } from 'reactstrap';
-import { UserAuth } from '../Store';
-import ReactQuill from 'react-quill';
+import { useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
-import { UserNotify } from '../Store';
-import './form.scss';
-import config from '~/services';
 import AdminUser from '../Admin_User';
+import { UserAuth, UserNotify } from '../Store';
 import UploadForm from '../Upload';
+import './form.scss';
 
 const FormAddMusic = () => {
     const { setInfoNotify } = UserNotify();

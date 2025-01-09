@@ -91,3 +91,9 @@
         font-weight: 500;
     }
 }
+
+button[type=submit] {
+    background-color: var(--primary);
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
