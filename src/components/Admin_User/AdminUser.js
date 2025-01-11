@@ -25,7 +25,6 @@ import UpdateUserForm from '../FormAdmin/FormUser';
 import Image from '../Image';
 import { UserAuth, UserNotify } from '../Store';
 const AdminUser = ({ onUserSelect }) => {
-    console.log(onUserSelect);
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState('');
     const [userId, setUserId] = useState('');
@@ -154,7 +153,7 @@ const AdminUser = ({ onUserSelect }) => {
         if (onUserSelect) {
             onUserSelect(user);
         } else {
-            console.log('giao dien');
+            navigate(`/admin/user/detail/${user.id}`);
         }
     };
 

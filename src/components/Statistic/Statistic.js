@@ -38,7 +38,6 @@ function Statistic() {
                 config.getTopUserByYear(year, tokenStr),
                 config.getStatisticByYear(year, tokenStr),
             ]);
-
             if (musicData.errCode || topUserData.errCode || statisticData.errCode) {
                 setInfoNotify({
                     content: 'Lỗi dữ liệu !!',

@@ -28,7 +28,7 @@ function ItemMusic({ data, playMusic = false, detailMusic = false }) {
                 try {
                     if (data?.id) {
                         const musicsData = await config.getPlaylist(data.id, tokenStr);
-                        setMusics(musicsData.result);
+                        setMusics(musicsData);
                     }
                 } catch (error) {
                     console.error('Error fetching data:', error);

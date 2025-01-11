@@ -157,7 +157,7 @@ function MusicDetail({ data = {} }) {
                     setPublicMusic(listMusic.result);
                 } else {
                     const listMusic = await config.getPlaylist(userAuth.id, tokenStr);
-                    setPublicMusic(listMusic.result);
+                    setPublicMusic(listMusic);
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);

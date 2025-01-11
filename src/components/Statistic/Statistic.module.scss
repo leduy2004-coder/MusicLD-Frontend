@@ -1,0 +1,7 @@
+.clickable-row {
+    cursor: pointer; /* Thay đổi con trỏ chuột thành pointer khi di chuột qua */
+}
+
+.clickable-row:hover {
+    background-color: #e6f7ff; /* Màu nền thay đổi khi hover */
+}

@@ -23,7 +23,7 @@ export const getPlaylist = async (id, token) => {
         const res = await callPath.get('music/get-playlist', token, {
             params: { id },
         });
-        return res;
+        return res.result;
     } catch (error) {
         return { errorCode: error.response.status };
     }
