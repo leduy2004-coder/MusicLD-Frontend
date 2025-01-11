@@ -115,6 +115,14 @@ export const updateMusicOfAdmin = async (formData, token) => {
         return { errCode: err.response.status };
     }
 };
+export const getAllUserLike = async (musicId, token) => {
+    try {
+        const res = await callPath.get('music/get-user-like', token, { params: { musicId } });
+        return res.result;
+    } catch (err) {
+        return { errCode: err.response.status };
+    }
+};
 export const likeMusic = async (userId, musicId, token) => {
     try {
         const res = await callPath.post('music/like', null, token, {

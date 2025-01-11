@@ -1,0 +1,39 @@
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+
+.lyrics-section {
+    margin-top: 24px;
+}
+.lyrics-container {
+    background: #f9f9f9;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.author-info-container {
+    background: #f9f9f9;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-size: 1.5rem;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+.author-avatar {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 12px;
+}
+
+.author-details {
+    text-align: left;
+    p {
+        margin: 4px 0;
+    }
+}

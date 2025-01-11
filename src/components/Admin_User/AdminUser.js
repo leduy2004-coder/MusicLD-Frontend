@@ -149,7 +149,6 @@ const AdminUser = ({ onUserSelect }) => {
         setUsers(updatedUsers);
     };
     const handleRowClick = (user) => {
-        console.log('Selected user user:', user);
         if (onUserSelect) {
             onUserSelect(user);
         } else {

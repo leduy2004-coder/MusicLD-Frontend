@@ -42,7 +42,7 @@ const AdminUserDetail = () => {
 
     return (
         <div className={cx('admin-user-detail')}>
-            <Button type="text" icon={<ArrowLeftOutlined />} onClick={onBack} className={cx('back-button')}>
+            <Button icon={<ArrowLeftOutlined />} onClick={onBack} className={cx('back-button')} type="primary">
                 Quay lại
             </Button>
             {userDetail && (

@@ -145,6 +145,9 @@ const AdminMusic = () => {
     const handleMusicsUpdate = (updatedMusics) => {
         setMusics(updatedMusics);
     };
+    const handleRowClick = (music) => {
+        navigate(`/admin/music/detail/${music.id}`);
+    };
     return (
         <div>
             {/* Thanh tìm kiếm và nút thêm */}
@@ -211,7 +214,11 @@ const AdminMusic = () => {
                                 </thead>
                                 <tbody>
                                     {currentMusics.map((music, index) => (
-                                        <tr key={music.id || index}>
+                                        <tr
+                                            key={music.id || index}
+                                            onClick={() => handleRowClick(music)}
+                                            style={{ cursor: 'pointer' }}
+                                        >
                                             <th scope="row">{index + 1}</th>
                                             <td>
                                                 <Image
@@ -262,7 +269,10 @@ const AdminMusic = () => {
                                                             padding: '8px 12px',
                                                             gap: '5px', // Khoảng cách giữa icon và chữ
                                                         }}
-                                                        onClick={() => handleViewDetails(music.id)}
+                                                        onClick={(event) => {
+                                                            event.stopPropagation(); // Ngăn sự kiện nổi lên
+                                                            handleViewDetails(music.id);
+                                                        }}
                                                     >
                                                         <FaInfoCircle />
                                                         Chỉnh sửa
@@ -277,7 +287,10 @@ const AdminMusic = () => {
                                                             padding: '8px 12px',
                                                             gap: '5px', // Khoảng cách giữa icon và chữ
                                                         }}
-                                                        onClick={() => handleOpenConfirmDelete(music.id)}
+                                                        onClick={(event) => {
+                                                            event.stopPropagation(); // Ngăn sự kiện nổi lên
+                                                            handleOpenConfirmDelete(music.id);
+                                                        }}
                                                     >
                                                         <FaTrashAlt />
                                                         Xóa
