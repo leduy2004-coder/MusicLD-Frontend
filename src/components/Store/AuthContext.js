@@ -1,19 +1,10 @@
-import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import React, { useContext, useState } from 'react';
 const AuthContext = React.createContext();
 
 export function UserAuth() {
     return useContext(AuthContext);
 }
-
-const isJSON = (str) => {
-    try {
-        JSON.parse(str);
-    } catch (e) {
-        return false;
-    }
-    return true;
-};
 
 export function AuthProvider({ children }) {
     const [isFollowed, setIsFollowed] = useState(false);
@@ -26,20 +17,11 @@ export function AuthProvider({ children }) {
     const [openFormNotifyPayment, setOpenFormNotifyPayment] = useState(false);
     const [openMessage, setOpenMessage] = useState(false);
     const [dataForm, setDataForm] = useState({});
+    const [tokenStr, setTokenStr] = useState(() => JSON.parse(localStorage.getItem('access_token')) ?? '');
 
-    const [tokenStr, setTokenStr] = useState('');
-    const [userAuth, setUserAuth] = useState('');
-    const [avatar, setAvatar] = useState('');
-
-    useEffect(() => {
-        const storedToken = localStorage.getItem('access_token');
-        const storedUserId = localStorage.getItem('user-id');
-        const avatarUser = localStorage.getItem('avatar');
-
-        setTokenStr(storedToken && isJSON(storedToken) ? JSON.parse(storedToken) : '');
-        setUserAuth(storedUserId && isJSON(storedUserId) ? JSON.parse(storedUserId) : '');
-        setAvatar(avatarUser && isJSON(avatarUser) ? JSON.parse(avatarUser) : '');
-    }, [tokenStr]);
+    // const tokenStr = JSON.parse(localStorage.getItem('access_token')) ?? '';
+    const userAuth = JSON.parse(localStorage.getItem('user')) ?? '';
+    const avatar = JSON.parse(localStorage.getItem('avatar')) ?? '';
 
     const value = {
         isFollowed,
@@ -68,7 +50,11 @@ export function AuthProvider({ children }) {
         setOpenMessage,
     };
 
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+    return (
+        <AuthContext.Provider value={value}>
+            {children} 
+        </AuthContext.Provider>
+    );
 }
 
 AuthProvider.propTypes = {

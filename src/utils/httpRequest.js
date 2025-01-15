@@ -1,6 +1,4 @@
 import axios from 'axios';
-import { UserAuth} from '~/components/Store';
-
 // Tạo instance của Axios
 const httpRequest = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
@@ -8,12 +6,8 @@ const httpRequest = axios.create({
         'Content-Type': 'application/json',
     },
 });
-
-// Add a response interceptor to handle errors
 let isRefreshing = false;
-let failedQueue = [];
-const { setTokenStr } = UserAuth;
-
+let failedQueue = []; // Giữ danh sách các request bị lỗi do token hết hạn
 const processQueue = (error, token = null) => {
     failedQueue.forEach((prom) => {
         if (error) {
@@ -49,9 +43,9 @@ httpRequest.interceptors.response.use(
 
                         localStorage.setItem('access_token', JSON.stringify(`Bearer ${access_token}`));
                         localStorage.setItem('refresh_token', JSON.stringify(`Bearer ${refresh_token}`));
-                        setTokenStr(`Bearer ${access_token}`);
                         originalRequest.headers.Authorization = `Bearer ${access_token}`;
                         processQueue(null, access_token);
+                        window.location.reload();
                         return httpRequest(originalRequest);
                     }
                 } catch (error) {
@@ -75,7 +69,6 @@ httpRequest.interceptors.response.use(
                     return Promise.reject(err);
                 });
         }
-
         return Promise.reject(error);
     },
 );

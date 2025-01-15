@@ -1,0 +1,82 @@
+.song-info {
+    margin: 2rem;
+    text-align: center;
+}
+
+.song-avatar {
+    width: 100px; /* Đặt kích thước avatar */
+    height: 100px;
+    border-radius: 50%; /* Làm tròn avatar */
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.song-title {
+    margin: 0;
+}
+
+.song-likes {
+    font-size: 14px;
+    color: #999;
+}
+
+.comments-section {
+    margin-top: 20px;
+    padding: 16px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.comments-title {
+    margin-bottom: 16px;
+    color: #595959;
+}
+
+.comment-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.avatar-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #1890ff;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 12px;
+}
+
+.comment-author {
+    font-size: 14px;
+    color: #333;
+}
+
+.comment-content {
+    color: #595959;
+    font-size: 14px;
+}
+
+.comment-item {
+    display: flex;
+    flex-direction: column; /* Đặt các phần tử theo chiều dọc */
+    justify-content: space-between; /* Đảm bảo có không gian giữa các phần tử */
+    align-items: normal !important;
+}
+
+.comment-actions {
+    margin-top: 10px; /* Đảm bảo có khoảng cách giữa nội dung bình luận và các nút */
+    display: flex;
+    justify-content: flex-start; /* Căn trái hoặc bạn có thể căn giữa nếu muốn */
+}
+
+.edit-button,
+.delete-button {
+    margin-right: 10px; /* Để tạo khoảng cách giữa 2 nút */
+}

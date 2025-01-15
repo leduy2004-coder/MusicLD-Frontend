@@ -20,7 +20,6 @@ function LoginWithDefault() {
     const [showPass, setShowPass] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const { setTokenStr } = UserAuth();
 
     const { setInfoNotify } = UserNotify();
 
@@ -70,11 +69,10 @@ function LoginWithDefault() {
                 type: 'success',
             });
 
-            localStorage.setItem('user-id', JSON.stringify(data.result.userResponse));
+            localStorage.setItem('user', JSON.stringify(data.result.userResponse));
             localStorage.setItem('access_token', JSON.stringify(`Bearer ${data.result.access_token}`));
             localStorage.setItem('refresh_token', JSON.stringify(`Bearer ${data.result.refresh_token}`));
             localStorage.setItem('avatar', JSON.stringify(data.result.userResponse.avatar));
-            setTokenStr(localStorage.getItem('access_token'))
             setTimeout(() => {
                 setIsLoading(false);
                 if (data.result.userResponse?.roles?.code === 'ADMIN') {

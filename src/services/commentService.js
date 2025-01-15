@@ -1,8 +1,23 @@
 import * as callPath from '../utils/httpRequest';
 
+export const getAllComments = async (token) => {
+    try {
+        const res = await callPath.get('comment/get-all-root', token, {});
+        return res.result;
+    } catch (error) {
+        return { errorCode: error.response.status };
+    }
+};
+export const getAllCommentsByRoot = async (commentId, token) => {
+    try {
+        const res = await callPath.get('comment/get-all-by-root', token, { params: { commentId } });
+        return res.result;
+    } catch (error) {
+        return { errorCode: error.response.status };
+    }
+};
 export const getComment = async (id, token) => {
     try {
-        console.log(id)
         const res = await callPath.get('comment/get-all-by-music', token, {
             params: { id },
         });

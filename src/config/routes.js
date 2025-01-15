@@ -2,6 +2,8 @@ const routes = {
     home: '/:login?',
     statistic: '/admin/statistic',
     admin_music: '/admin/music',
+    admin_comment: '/admin/comment',
+    admin_comment_detail: '/admin/comment/detail/:id',
     admin_music_add: '/admin/music/add',
     admin_music_detail: '/admin/music/detail/:id',
     admin_user: '/admin/user',

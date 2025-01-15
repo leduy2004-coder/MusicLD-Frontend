@@ -33,7 +33,7 @@ function ViewProfile() {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-
+    
     useEffect(() => {
         if (tokenStr) {
             const fetchProfile = async () => {

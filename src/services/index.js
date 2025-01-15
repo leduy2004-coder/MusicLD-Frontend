@@ -36,7 +36,7 @@ import {
     deleteUser,
     getUserForAdmin,
 } from './userService.js';
-import { getComment, addComment, updateComment, removeComment } from './commentService';
+import { getAllComments,getComment, addComment, updateComment, removeComment,getAllCommentsByRoot } from './commentService';
 import { getVNPay } from './paymentService';
 import { getCountMusicByYear, getStatisticByYear, getTopUserByYear } from './statisticService';
 const config = {
@@ -74,6 +74,8 @@ const config = {
     getAllUser,
     deleteUser,
     getUserForAdmin,
+    getAllComments,
+    getAllCommentsByRoot,
     getComment,
     updateComment,
     removeComment,

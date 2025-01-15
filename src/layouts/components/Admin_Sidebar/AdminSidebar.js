@@ -27,9 +27,9 @@ const navigation = [
         icon: 'bi bi-music-note', 
     },
     {
-        title: 'Thông tin',
-        href: '/admin/about',
-        icon: 'bi bi-info-circle', 
+        title: 'Quản lí bình luận',
+        href: '/admin/comment',
+        icon: 'bi bi-chat-dots', 
     },
 ];
 
@@ -41,20 +41,6 @@ const AdminSidebar = () => {
     let location = useLocation();
     const { setInfoNotify } = UserNotify();
     const { userAuth, tokenStr, avatar } = UserAuth();
-
-    // useEffect(() => {
-    //     if (tokenStr) {
-    //         const fetchProfile = async () => {
-    //             try {
-    //                 const data = await config.getUser(id, tokenStr);
-    //                 setProfileAdmin(data.result);
-    //             } catch (error) {
-    //                 console.error('Failed to fetch profile:', error);
-    //             }
-    //         };
-    //         fetchProfile();
-    //     }
-    // }, [tokenStr]);
 
     const handleLogout = () => {
         setInfoNotify({

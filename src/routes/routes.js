@@ -14,7 +14,9 @@ import Search from '~/pages/Search';
 import StatisticPage from '~/pages/Admin_Statistic';
 import AdminUserPage from '~/pages/Admin_User';
 import AdminMusicPage from '~/pages/Admin_Music';
+import AdminCommentPage from '~/pages/Admin_Comment';
 import FormAddMusic from '~/components/FormAdmin/FormAddMusic';
+import AdminCommentDetail from '~/components/Admin_Comment/AdminCommentDetail';
 import Upload from '~/pages/Upload';
 import AdminUserDetail from '~/components/Admin_User/AdminUserDetail';
 import AdminMusicDetail from '~/components/Admin_Music/AdminMusicDetail';
@@ -65,6 +67,20 @@ const publicRoutes = [
     {
         path: config.routes.admin_user_detail,
         component: AdminUserDetail,
+        layout: AdminDefaultLayout,
+        private: true,
+        role: 'ADMIN',
+    },
+    {
+        path: config.routes.admin_comment,
+        component: AdminCommentPage,
+        layout: AdminDefaultLayout,
+        private: true,
+        role: 'ADMIN',
+    },
+    {
+        path: config.routes.admin_comment_detail,
+        component: AdminCommentDetail,
         layout: AdminDefaultLayout,
         private: true,
         role: 'ADMIN',
