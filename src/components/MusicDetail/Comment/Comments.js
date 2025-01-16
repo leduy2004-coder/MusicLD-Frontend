@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
+import { Modal, message } from 'antd';
 
 import config from '~/services';
 import { UserAuth, UserNotify } from '~/components/Store';
@@ -16,14 +17,14 @@ const Comments = ({ currentMusicId }) => {
     const [backendComments, setBackendComments] = useState([]);
     const [activeComment, setActiveComment] = useState(null);
     const rootComments = backendComments.filter((backendComment) => backendComment.parentId === null);
-    console.log(rootComments);
+
     const getReplies = (commentId) =>
         backendComments
             .filter((backendComment) => backendComment.parentId === commentId)
             .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
     const addComment = async (text, parentId) => {
         const data = await config.addComment(text, parentId, currentMusicId, tokenStr);
-        console.log(data);
+
         if (data.errorCode) {
             setInfoNotify({
                 content: 'Bình luận thất bại. Hãy thử lại !!',
@@ -58,22 +59,41 @@ const Comments = ({ currentMusicId }) => {
         }
     };
     const deleteComment = async (commentId) => {
-        if (window.confirm('Are you sure you want to remove comment?')) {
-            const data = await config.removeComment(commentId, tokenStr);
-            if (data.errorCode) {
-                setInfoNotify({
-                    content: 'Xóa thất bại. Hãy thử lại !!',
-                    delay: 1700,
-                    isNotify: true,
-                    type: 'error',
-                });
-            } else {
-                const updatedBackendComments = backendComments.filter(
-                    (backendComment) => backendComment.id !== commentId,
-                );
-                setBackendComments(updatedBackendComments);
-            }
-        }
+        Modal.confirm({
+            title: 'Bạn có chắc chắn muốn xóa bình luận này?',
+            content: 'Hành động này sẽ không thể hoàn tác.',
+            okText: 'Xóa',
+            cancelText: 'Hủy',
+            okType: 'danger',
+            onOk: async () => {
+                try {
+                    const data = await config.removeComment(commentId, tokenStr);
+                    if (data.errorCode) {
+                        setInfoNotify({
+                            content: 'Xóa bình luận thất bại. Hãy thử lại!',
+                            delay: 1700,
+                            isNotify: true,
+                            type: 'error',
+                        });
+                    } else {
+                        const updatedBackendComments = backendComments.filter(
+                            (backendComment) => backendComment.id !== commentId,
+                        );
+                        setBackendComments(updatedBackendComments);
+                        message.success('Xóa bình luận thành công!');
+                    }
+                } catch (error) {
+                    console.error('Error deleting comment:', error);
+                    setInfoNotify({
+                        content: 'Có lỗi xảy ra. Vui lòng thử lại sau.',
+                        delay: 1700,
+                        isNotify: true,
+                        type: 'error',
+                    });
+                }
+            },
+  
+        });
     };
 
     useEffect(() => {
@@ -82,7 +102,6 @@ const Comments = ({ currentMusicId }) => {
 
             try {
                 const data = await config.getComment(currentMusicId, tokenStr);
-                console.log(data);
 
                 if (data.errorCode) {
                     setInfoNotify({

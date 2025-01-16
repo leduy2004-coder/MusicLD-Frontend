@@ -79,7 +79,13 @@ const AdminUserDetail = () => {
                             className={cx('music-list')}
                             dataSource={userMusic}
                             renderItem={(item) => (
-                                <List.Item key={item.id} className={cx('music-item')}>
+                                <List.Item
+                                    key={item.id}
+                                    className={cx('music-item')}
+                                    onClick={() =>
+                                        window.open(`/admin/music/detail/${item?.id}`, '_blank')
+                                    }
+                                >
                                     <List.Item.Meta
                                         avatar={
                                             <Image

@@ -71,7 +71,6 @@
 }
 
 .comment-actions {
-    margin-top: 10px; /* Đảm bảo có khoảng cách giữa nội dung bình luận và các nút */
     display: flex;
     justify-content: flex-start; /* Căn trái hoặc bạn có thể căn giữa nếu muốn */
 }
@@ -79,4 +78,9 @@
 .edit-button,
 .delete-button {
     margin-right: 10px; /* Để tạo khoảng cách giữa 2 nút */
+}
+.comment-children {
+    margin-left: 20px;
+    border-left: 1px solid #ddd;
+    padding-left: 10px;
 }

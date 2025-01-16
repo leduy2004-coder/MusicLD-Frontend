@@ -28,7 +28,7 @@ const AdminCommentDetail = () => {
                     console.log(response);
 
                     const dataAuthor = await config.getDetailSong(response?.[0]?.musicId, tokenStr);
-                    setComments(response);
+                    setComments(buildCommentTree(response));
                     setAuthor(dataAuthor);
                     console.log(author);
                 } catch (error) {
@@ -39,30 +39,140 @@ const AdminCommentDetail = () => {
             fetchData();
         }
     }, [id, tokenStr]);
+    const buildCommentTree = (comments) => {
+        const commentMap = {};
+        const rootComments = [];
 
-    const handleDeleteComment = async (commentId) => {
-        try {
-            await config.removeComment(commentId, tokenStr);
-            message.success('Xóa bình luận thành công');
-            setComments((prev) => ({
-                ...prev,
-                comments: prev.comments.filter((comment) => comment.id !== commentId),
-            }));
-        } catch (error) {
-            message.error('Không thể xóa bình luận');
-        }
+        // Tạo một map để dễ dàng truy xuất bình luận theo ID
+        comments.forEach((comment) => {
+            commentMap[comment.id] = { ...comment, children: [] };
+        });
+
+        // Xây dựng cây bình luận
+        comments.forEach((comment) => {
+            if (comment.parentId === null) {
+                // Là bình luận gốc
+                rootComments.push(commentMap[comment.id]);
+            } else {
+                // Thêm bình luận con vào danh sách `children` của bình luận cha
+                const parentComment = commentMap[comment.parentId];
+                if (parentComment) {
+                    parentComment.children.push(commentMap[comment.id]);
+                }
+            }
+        });
+
+        return rootComments;
+    };
+
+    const renderComments = (comments) =>
+        comments.map((comment) => (
+            <div key={comment.id} className={cx('comment-item')}>
+                <List.Item
+                    className={cx('comment-item')}
+                    onClick={() => window.open(`/admin/user/detail/${comment.userResponse?.id}`, '_blank')}
+                >
+                    <List.Item.Meta
+                        avatar={<Image src={comment.userResponse?.avatar?.url} className={cx('avatar-placeholder')} />}
+                        title={
+                            <Text strong className={cx('comment-author')}>
+                                {comment.userResponse?.nickName || 'Không xác định'}
+                            </Text>
+                        }
+                        description={<Text className={cx('comment-content')}>{comment.content}</Text>}
+                    />
+                </List.Item>
+                <div className={cx('comment-actions')}>
+                    <Button
+                        icon={<EditOutlined />}
+                        type="text"
+                        className={cx('edit-button')}
+                        onClick={() => {
+                            setEditingComment(comment);
+                            setNewContent(comment.content);
+                        }}
+                    >
+                        Sửa
+                    </Button>
+                    <Button
+                        icon={<DeleteOutlined />}
+                        type="text"
+                        danger
+                        className={cx('delete-button')}
+                        onClick={() => handleDeleteComment(comment.id)}
+                    >
+                        Xóa
+                    </Button>
+                </div>
+                {/* Hiển thị các bình luận con */}
+                {comment.children?.length > 0 && (
+                    <div className={cx('comment-children')}>{renderComments(comment.children)}</div>
+                )}
+            </div>
+        ));
+    const removeComment = (commentId, comments) => {
+        return comments
+            .filter((comment) => comment.id !== commentId) // Loại bỏ bình luận có id cần xóa
+            .map((comment) => {
+                // Nếu bình luận có children, đệ quy để xóa trong children
+                if (comment.children && comment.children.length > 0) {
+                    comment.children = removeComment(commentId, comment.children);
+                }
+                return comment;
+            });
+    };
+
+    const handleDeleteComment = (commentId) => {
+        Modal.confirm({
+            title: 'Xác nhận xóa bình luận',
+            content: 'Bạn có chắc chắn muốn xóa bình luận này không?',
+            okText: 'Xóa',
+            okType: 'danger',
+            cancelText: 'Hủy',
+            onOk: async () => {
+                try {
+                    // Gọi API xóa bình luận
+                    await config.removeComment(commentId, tokenStr);
+
+                    // Cập nhật lại cây bình luận sau khi xóa
+                    setComments((prevComments) => {
+                        const updatedComments = removeComment(commentId, prevComments);
+
+                        // Kiểm tra nếu không còn bình luận nào
+                        if (updatedComments.length === 0) {
+                            navigate('/admin/comment');
+                        }
+
+                        return updatedComments;
+                    });
+
+                    message.success('Xóa bình luận thành công');
+                } catch (error) {
+                    message.error('Không thể xóa bình luận');
+                }
+            },
+        });
+    };
+
+    const updateCommentTree = (comments, commentId, newContent) => {
+        return comments.map((comment) => {
+            if (comment.id === commentId) {
+                return { ...comment, content: newContent };
+            }
+            if (comment.children && comment.children.length > 0) {
+                return { ...comment, children: updateCommentTree(comment.children, commentId, newContent) };
+            }
+            return comment;
+        });
     };
 
     const handleEditComment = async () => {
         try {
-            await config.updateComment({ content: newContent }, editingComment.id, tokenStr);
+            await config.updateComment(newContent, editingComment.id, tokenStr);
             message.success('Cập nhật bình luận thành công');
-            setComments((prev) => ({
-                ...prev,
-                comments: prev.comments.map((comment) =>
-                    comment.id === editingComment.id ? { ...comment, content: newContent } : comment,
-                ),
-            }));
+
+            // Cập nhật nội dung bình luận trong cây
+            setComments((prevComments) => updateCommentTree(prevComments, editingComment.id, newContent));
             setEditingComment(null);
             setNewContent('');
         } catch (error) {
@@ -102,54 +212,7 @@ const AdminCommentDetail = () => {
                 <Title level={4} className={cx('comments-title')}>
                     Chi tiết bình luận
                 </Title>
-                <List
-                    className={cx('comment-list')}
-                    dataSource={comments || []} // Fallback to an empty array if comments is null
-                    renderItem={(comment) => (
-                        <List.Item key={comment.id} className={cx('comment-item')}>
-                            <List.Item.Meta
-                                avatar={
-                                    <Image
-                                        src={comment?.userResponse?.avatar?.url}
-                                        className={cx('avatar-placeholder')}
-                                        onClick={() =>
-                                            window.open(`/admin/user/detail/${comment?.userResponse?.id}`, '_blank')
-                                        }
-                                    />
-                                }
-                                title={
-                                    <Text strong className={cx('comment-author')}>
-                                        {comment?.userResponse.nickName || 'Không xác định'}
-                                    </Text>
-                                }
-                                description={<Text className={cx('comment-content')}>{comment.content}</Text>}
-                            />
-                            {/* Di chuyển các nút xuống dưới */}
-                            <div className={cx('comment-actions')}>
-                                <Button
-                                    icon={<EditOutlined />}
-                                    type="text"
-                                    className={cx('edit-button')}
-                                    onClick={() => {
-                                        setEditingComment(comment);
-                                        setNewContent(comment.content);
-                                    }}
-                                >
-                                    Sửa
-                                </Button>
-                                <Button
-                                    icon={<DeleteOutlined />}
-                                    type="text"
-                                    danger
-                                    className={cx('delete-button')}
-                                    onClick={() => handleDeleteComment(comment.id)}
-                                >
-                                    Xóa
-                                </Button>
-                            </div>
-                        </List.Item>
-                    )}
-                />
+                <List className={cx('comment-list')}>{comments && renderComments(comments)}</List>
             </div>
 
             {/* Modal chỉnh sửa bình luận */}
@@ -163,7 +226,6 @@ const AdminCommentDetail = () => {
                     <Input.TextArea value={newContent} onChange={(e) => setNewContent(e.target.value)} rows={4} />
                 </Modal>
             )}
- 
         </div>
     );
 };

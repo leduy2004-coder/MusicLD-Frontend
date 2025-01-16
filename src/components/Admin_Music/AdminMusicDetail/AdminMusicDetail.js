@@ -48,7 +48,7 @@ const AdminMusicDetail = () => {
         navigate('/admin/music');
     };
     const handleUserClick = (userId) => {
-        navigate(`/admin/user/detail/${userId}`);
+        window.open(`/admin/user/detail/${userId}`, '_blank')
     };
 
     return (
