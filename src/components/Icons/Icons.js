@@ -15,12 +15,12 @@ export const UploadIcon = ({ width = '3.2rem', height = '3.2rem', className }) =
     </svg>
 );
 
-export const MessageIcon = ({ width = '2.6rem', height = '2.6rem', className }) => (
+export const MessageIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
     <svg
         className={className}
         width={width}
         height={height}
-        viewBox="0 0 48 48"
+        viewBox="0 0 60 60"
         fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
     >
@@ -82,6 +82,7 @@ export const HomeIcon = ({ width = '3.2rem', height = '3.2rem', className }) => 
         ></path>
     </svg>
 );
+
 
 export const HomeActiveIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
     <svg
@@ -194,7 +195,7 @@ export const AddIcon = ({ width = '2rem', height = '2rem', className }) => (
         ></path>
     </svg>
 );
-export const SideBarIcon = ({ width = '3.5rem', height = '3.5rem', className ,onClick}) => (
+export const SideBarIcon = ({ width = '3.5rem', height = '3.5rem', className, onClick }) => (
     <svg
         onClick={onClick}
         className={className}
@@ -228,7 +229,6 @@ export const ScrollOnTop = ({ width = '1.6rem', height = '1.6rem', className }) 
     </svg>
 );
 
-
 export const CloseIcon = ({ width = '2.55rem', height = '2.55rem', className }) => (
     <svg
         className={className}
@@ -259,7 +259,6 @@ export const HidePassIcon = ({ width = '2rem', height = '2rem', className }) => 
         <path d="M15 25c0-.68.08-1.35.24-1.98l9.74 9.73A8.02 8.02 0 0 1 15 25Z"></path>
     </svg>
 );
-
 
 export const PerSonIcon = ({ width = '2rem', height = '2rem', className }) => (
     <svg
@@ -381,11 +380,7 @@ export const Logo = ({ width = '150', height = '50', className }) => (
             d="m0 0h71l2 5v216l-2 2-4 1h-49l-17-1-2-5v-27l1-31v-38l-1-85v-36z"
             className="logo-fill"
         ></path>
-        <path
-            transform="translate(1109,267)"
-            d="m0 0h68l3 1v50l-1 9-1 1h-70l-2-2v-57z"
-            className="logo-fill"
-        ></path>
+        <path transform="translate(1109,267)" d="m0 0h68l3 1v50l-1 9-1 1h-70l-2-2v-57z" className="logo-fill"></path>
         <path
             transform="translate(1662,268)"
             d="m0 0h8v122l-1 82v93l-4-2-1-54-1-114-1-72-1-54z"

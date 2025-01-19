@@ -1,11 +1,11 @@
 @import 'normalize.css';
 // @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap');
-@import "scss/variables";
+@import 'scss/variables';
 
-@import "~bootstrap/scss/bootstrap";
-@import "~bootstrap-icons/font/bootstrap-icons.scss";
-@import "scss/layout/container";
-@import "scss/layout/sidebar";
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap-icons/font/bootstrap-icons.scss';
+@import 'scss/layout/container';
+@import 'scss/layout/sidebar';
 
 :root {
     --primary: #fe2c55;
@@ -128,7 +128,9 @@ html *::-webkit-scrollbar-track {
     border-radius: 0;
     background-color: rgba(0, 0, 0, 0);
 }
-
+.svg-inline--fa {
+    vertical-align: 0em;
+}
 button,
 input,
 [tabindex] {
@@ -143,7 +145,8 @@ a {
 p {
     margin: 0;
 }
-img, svg {
+img,
+svg {
     vertical-align: unset;
 }
 // Fonts emmbeded

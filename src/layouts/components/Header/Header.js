@@ -1,31 +1,26 @@
-import React, { useState } from 'react';
-import classNames from 'classnames/bind';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOut, faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
+import classNames from 'classnames/bind';
 import { Link, useNavigate } from 'react-router-dom';
+import 'tippy.js/dist/tippy.css';
 
 import Button from '~/components/Button';
-import styles from './Header.module.scss';
-import images from '~/assets/images';
-import Menu from '~/components/Popper/Menu';
-import { AddIcon, InboxIcon, MessageIcon } from '~/components/Icons';
-import { useChat } from '~/components/Store/ChatContext';
+import { AddIcon, InboxIcon, Logo } from '~/components/Icons';
 import Image from '~/components/Image';
+import Menu from '~/components/Popper/Menu';
+import { useChat } from '~/components/Store/ChatContext';
 import Search from '../Search';
-import { Logo } from '~/components/Icons';
+import styles from './Header.module.scss';
 // import Grid from 'antd/es/card/Grid';
-import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
 import { UserAuth } from '~/components/Store';
-import icons from '~/utils/icon';
+import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
 
 const cx = classNames.bind(styles);
 
 function Header() {
     const navigate = useNavigate();
     const { userAuth, tokenStr, setOpenFormLogin, avatar, setOpenMessage } = UserAuth();
-
     const { getUnreadCount } = useChat();
     const MENU_ITEMS = [];
     const userMenu = [

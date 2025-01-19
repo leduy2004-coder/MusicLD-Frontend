@@ -9,6 +9,7 @@ const images = {
     noImage: require('~/assets/images/no-image.png'),
     banner1: require('~/assets/images/banner1.png'),
     banner2: require('~/assets/images/banner2.png'),
+    chatBox: require('~/assets/images/chatbox.png'),
 };
 
 export default images;

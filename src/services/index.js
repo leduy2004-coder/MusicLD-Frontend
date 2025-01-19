@@ -36,9 +36,17 @@ import {
     deleteUser,
     getUserForAdmin,
 } from './userService.js';
-import { getAllComments,getComment, addComment, updateComment, removeComment,getAllCommentsByRoot } from './commentService';
+import {
+    getAllComments,
+    getComment,
+    addComment,
+    updateComment,
+    removeComment,
+    getAllCommentsByRoot,
+} from './commentService';
 import { getVNPay } from './paymentService';
 import { getCountMusicByYear, getStatisticByYear, getTopUserByYear } from './statisticService';
+import { chat } from './chatService';
 const config = {
     login,
     logout,
@@ -88,6 +96,7 @@ const config = {
     getCountMusicByYear,
     getStatisticByYear,
     getTopUserByYear,
+    chat,
 };
 
 export default config;

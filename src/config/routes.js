@@ -17,6 +17,7 @@ const routes = {
     payment: '/api/payment/vn-pay-callback',
     login: '/login',
     music: '/music/:id',
+    chat: '/chatBox',
 };
 
 export default routes;

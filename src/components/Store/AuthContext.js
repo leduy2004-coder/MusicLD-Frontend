@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
+
 const AuthContext = React.createContext();
 
 export function UserAuth() {
@@ -17,11 +18,28 @@ export function AuthProvider({ children }) {
     const [openFormNotifyPayment, setOpenFormNotifyPayment] = useState(false);
     const [openMessage, setOpenMessage] = useState(false);
     const [dataForm, setDataForm] = useState({});
-    const [tokenStr, setTokenStr] = useState(() => JSON.parse(localStorage.getItem('access_token')) ?? '');
+    const [tokenStr, setTokenStr] = useState(() => {
+        const token = localStorage.getItem('access_token');
+        return token ? JSON.parse(token) : ''; // default to '' if the token doesn't exist
+    });
 
-    // const tokenStr = JSON.parse(localStorage.getItem('access_token')) ?? '';
-    const userAuth = JSON.parse(localStorage.getItem('user')) ?? '';
-    const avatar = JSON.parse(localStorage.getItem('avatar')) ?? '';
+    const userAuth = (() => {
+        try {
+            const user = localStorage.getItem('user');
+            return user ? JSON.parse(user) : {}; // default to empty object if the user doesn't exist
+        } catch (error) {
+            return {}; // return empty object in case of an error while parsing
+        }
+    })();
+
+    const avatar = (() => {
+        try {
+            const avatarData = localStorage.getItem('avatar');
+            return avatarData ? JSON.parse(avatarData) : {}; // default to empty object if the avatar doesn't exist
+        } catch (error) {
+            return {}; // return empty object in case of an error while parsing
+        }
+    })();
 
     const value = {
         isFollowed,
@@ -50,11 +68,7 @@ export function AuthProvider({ children }) {
         setOpenMessage,
     };
 
-    return (
-        <AuthContext.Provider value={value}>
-            {children} 
-        </AuthContext.Provider>
-    );
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 AuthProvider.propTypes = {

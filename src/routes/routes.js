@@ -20,7 +20,7 @@ import AdminCommentDetail from '~/components/Admin_Comment/AdminCommentDetail';
 import Upload from '~/pages/Upload';
 import AdminUserDetail from '~/components/Admin_User/AdminUserDetail';
 import AdminMusicDetail from '~/components/Admin_Music/AdminMusicDetail';
-
+import ChatBoxPage from '~/pages/ChatBox';
 const publicRoutes = [
     { path: config.routes.home, component: Home },
     { path: config.routes.following, component: Following },
@@ -29,6 +29,7 @@ const publicRoutes = [
     { path: config.routes.search, component: Search, layout: null },
     { path: config.routes.oauth2, component: OAuth2Success },
     { path: config.routes.music, component: Music, private: true },
+    { path: config.routes.chat, component: ChatBoxPage},
     {
         path: config.routes.statistic,
         component: StatisticPage,
