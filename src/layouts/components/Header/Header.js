@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import 'tippy.js/dist/tippy.css';
 
 import Button from '~/components/Button';
-import { AddIcon, InboxIcon, Logo } from '~/components/Icons';
+import { AddIcon, InboxIcon, Logo, MessageIcon } from '~/components/Icons';
 import Image from '~/components/Image';
 import Menu from '~/components/Popper/Menu';
 import { useChat } from '~/components/Store/ChatContext';
@@ -44,11 +44,14 @@ function Header() {
     const handleOpenMess = () => {
         setOpenMessage(true);
     };
+    const handleOpenChat = () => {
+        navigate('/chatBox');
+    };
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
                 <Link to="/" className={cx('logo-link')}>
-                    <Logo className={cx('logo')}/>
+                    <Logo className={cx('logo')} />
                     {/* <img src={images.logo} alt="Tiktok" className={cx('logo')} /> */}
                 </Link>
 
@@ -57,7 +60,7 @@ function Header() {
                 <div className={cx('actions')}>
                     <Button onClick={handleFormLogin} className={cx('btn-upload')} outline medium>
                         <AddIcon className={cx('add-icon')} />
-                        Đăng
+                        Đăng nhạc
                     </Button>
                     {userAuth && tokenStr ? (
                         <>
@@ -68,12 +71,17 @@ function Header() {
                                         <span className={cx('badge')}>{getUnreadCount()} </span>
                                     </button>
                                 </Tippy>
+                                <Tippy delay={[0, 200]} content="Gemini" placement="bottom">
+                                    <button className={cx('action-btn')} onClick={handleOpenChat}>
+                                        <MessageIcon />
+                                    </button>
+                                </Tippy>
                             </div>
                         </>
                     ) : (
                         <>
                             <Button onClick={handleFormLogin} primary medium>
-                                Log in
+                                Đăng nhập
                             </Button>
                         </>
                     )}

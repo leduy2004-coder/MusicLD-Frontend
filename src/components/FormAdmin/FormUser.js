@@ -103,6 +103,7 @@ const UpdateUserForm = ({ userId, users, onUsersUpdate, setOpenFormAddUser }) =>
                     updatedUserDetail.nickName,
                     updatedUserDetail.gender,
                     updatedUserDetail.dateOfBirth,
+                    updatedUserDetail.status,
                     userId,
                 );
                 if (updatedUserDetail.avatar && !selectedFile) {
@@ -122,6 +123,7 @@ const UpdateUserForm = ({ userId, users, onUsersUpdate, setOpenFormAddUser }) =>
                     updatedUserDetail.dateOfBirth,
                     updatedUserDetail.gender,
                     'USER',
+                    tokenStr
                 );
 
                 if (updatedUserDetail.avatar && !selectedFile) {

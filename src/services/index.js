@@ -47,6 +47,7 @@ import {
 import { getVNPay } from './paymentService';
 import { getCountMusicByYear, getStatisticByYear, getTopUserByYear } from './statisticService';
 import { chat } from './chatService';
+import {verifyAccount, generateOtp} from './emailService'
 const config = {
     login,
     logout,
@@ -97,6 +98,8 @@ const config = {
     getStatisticByYear,
     getTopUserByYear,
     chat,
+    verifyAccount,
+    generateOtp
 };
 
 export default config;

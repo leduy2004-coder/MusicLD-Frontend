@@ -1,20 +1,24 @@
 import * as callPath from '../utils/httpRequest';
 
-export const addUser = async (username, password, nickName, dateOfBirth,gender, code) => {
+export const addUser = async (username, password, nickName, dateOfBirth, gender, code, token) => {
     try {
-        const res = await callPath.post('users/add-user', {
-            username,
-            password,
-            nickName,
-            dateOfBirth,
-            gender,
-            authType: 'LOCAL', 
-            roles: [{ code: code }], 
-        });
+        const res = await callPath.post(
+            'users/add-user',
+            {
+                username,
+                password,
+                nickName,
+                dateOfBirth,
+                gender,
+                authType: 'LOCAL',
+                roles: [{ code: code }],
+            },
+            token,
+        );
         return res.data.result;
     } catch (err) {
         console.log(err);
-        return { errCode: err.response.status }; 
+        return { errCode: err.response.status };
     }
 };
 
@@ -60,7 +64,7 @@ export const search = async (q, type = 'less') => {
     }
 };
 
-export const updateUser = async (token, username, password, nickName, gender, dateOfBirth, id) => {
+export const updateUser = async (token, username, password, nickName, gender, dateOfBirth, status, id) => {
     try {
         const res = await callPath.patch(
             `users/update-user`,
@@ -71,6 +75,7 @@ export const updateUser = async (token, username, password, nickName, gender, da
                 nickName,
                 dateOfBirth,
                 gender,
+                status,
             },
             token,
         );
@@ -94,8 +99,9 @@ export const deleteUser = async (id, token) => {
         const res = await callPath.deleted('users/delete-user', token, {
             params: { id },
         });
-        return res.data; 
+        return res.data;
     } catch (err) {
         return { errCode: err.response?.status || 500, message: err.message };
     }
 };
+

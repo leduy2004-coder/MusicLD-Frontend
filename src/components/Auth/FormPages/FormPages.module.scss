@@ -188,7 +188,7 @@
 
 .btn-submit {
     min-height: 48px;
-    margin-top: 21px;
+    margin-top: 15px;
     width: 100%;
 }
 
@@ -214,4 +214,11 @@
     .ant-select-focused:where(.css-dev-only-do-not-override-98ntnt).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer) .ant-select-selector {
         border-color: var(--primary);
     }
+}
+
+.required {
+    font-size: 1.5rem;
+    text-align: center;
+    color: var(--primary);
+    margin-top: 8px;
 }
