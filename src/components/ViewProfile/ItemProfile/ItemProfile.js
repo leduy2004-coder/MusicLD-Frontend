@@ -17,15 +17,15 @@ const style = {
     textAlign: 'center',
 };
 function ItemProfile({ data = {} }) {
-    const { userAuth, tokenStr, setOpenFormEdit, avatar } = UserAuth();
+    const { userAuth, tokenStr, setOpenFormEdit, avatar, setOpenFormChangePass } = UserAuth();
 
     const handleOpenFormUpdate = () => {
         setOpenFormEdit(true);
     };
     const handleOpenFormChangePassword = () => {
-        setOpenFormEdit(true);
+        setOpenFormChangePass(true);
     };
-    
+
     const userMenu = [
         {
             icon: <FontAwesomeIcon icon={faUpload} />,
@@ -103,10 +103,11 @@ function ItemProfile({ data = {} }) {
                         <Btn onClick={handleOpenFormUpdate} className={cx('btn-upload')} outline medium>
                             Cập nhật thông tin
                         </Btn>
-
-                        <Btn onClick={handleOpenFormChangePassword} className={cx('btn-upload')} outline medium>
-                            Đổi mật khẩu
-                        </Btn>
+                        {userAuth.email && (
+                            <Btn onClick={handleOpenFormChangePassword} className={cx('btn-upload')} outline medium>
+                                Đổi mật khẩu
+                            </Btn>
+                        )}
                     </div>
                 )}
             </Divider>

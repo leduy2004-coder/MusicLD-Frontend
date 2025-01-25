@@ -35,6 +35,7 @@ import {
     getAllUser,
     deleteUser,
     getUserForAdmin,
+    changePassword
 } from './userService.js';
 import {
     getAllComments,
@@ -99,7 +100,8 @@ const config = {
     getTopUserByYear,
     chat,
     verifyAccount,
-    generateOtp
+    generateOtp,
+    changePassword
 };
 
 export default config;

@@ -8,6 +8,7 @@ import { UserAuth } from '../../components/Store/AuthContext';
 import UploadAvatar from '~/components/Auth/UploadAvatar';
 import LogOut from '../../components/Auth/LogOut';
 import FormUpdate from '../../components/Auth/UpdateForm';
+import ChangePasswordForm from '~/components/Auth/ChangePasswordForm';
 import AuthForm from '../../components/Auth';
 import Notify from '~/components/Notify';
 import Login from '../../components/Auth/Login';
@@ -19,14 +20,14 @@ function HeaderOnly({ children }) {
     const { isShow } = UserMusic();
 
 
-    const { openFormEdit, openFormAvatar, openFormLogout, openFormLogin } = UserAuth();
+    const { openFormEdit,openFormChangePass, openFormAvatar, openFormLogout, openFormLogin } = UserAuth();
 
     useEffect(() => {
         document.body.style =
-            openFormEdit || openFormAvatar || openFormLogout || openFormLogin
+            openFormEdit || openFormAvatar || openFormLogout || openFormLogin ||openFormChangePass
                 ? 'overflow-y: hidden'
                 : 'overflow-y: overlay';
-    }, [openFormEdit, openFormAvatar, openFormLogout, openFormLogin]);
+    }, [openFormEdit, openFormAvatar, openFormLogout, openFormLogin, openFormChangePass]);
 
     return (
         <div className={cx('wrapper')}>
@@ -43,9 +44,10 @@ function HeaderOnly({ children }) {
                     </div>
                 )}
             </div>
-            {(openFormEdit || openFormAvatar || openFormLogout || openFormLogin) && (
+            {(openFormEdit || openFormAvatar || openFormLogout || openFormLogin ||openFormChangePass) && (
                 <AuthForm>
                     {openFormEdit && <FormUpdate />}
+                    {openFormChangePass && <ChangePasswordForm />}
                     {openFormAvatar && <UploadAvatar />}
                     {openFormLogout && <LogOut />}
                     {openFormLogin && <Login />}

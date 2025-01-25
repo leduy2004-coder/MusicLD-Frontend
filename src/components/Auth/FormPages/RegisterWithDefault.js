@@ -57,7 +57,7 @@ function RegisterWithDefault() {
         setIsLoading(true);
 
         // Gửi OTP qua email
-        const otpResponse = await config.generateOtp(email);
+        const otpResponse = await config.generateOtp(email, 'REGISTER');
         if (otpResponse.errCode) {
             message.error('Gửi mã OTP thất bại. Vui lòng thử lại!');
             setIsLoading(false);
@@ -78,7 +78,7 @@ function RegisterWithDefault() {
         setIsLoading(true);
 
         const { email, account, password, nickName, date, gender } = formValues;
-        const verifyResponse = await config.verifyAccount(email, otp);
+        const verifyResponse = await config.verifyAccount(email, otp, 'REGISTER');
         if (verifyResponse.errorCode === 1019) {
             message.error('Mã OTP đã hết hạn!');
             setIsLoading(false);

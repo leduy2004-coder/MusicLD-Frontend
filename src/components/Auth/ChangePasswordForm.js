@@ -1,104 +1,121 @@
 import classNames from 'classnames/bind';
 import styles from './Auth.module.scss';
-import React, { useEffect, useState } from 'react';
-import { Form, Input, Select, DatePicker } from 'antd';
-import moment from 'moment';
+import React, { useState } from 'react';
+import { Form, Input, Modal, message } from 'antd';
 
 import Button from '../Button';
 import { Wrapper } from '../Popper';
-import config from '~/services';
 import { UserNotify } from '../Store';
 import { UserAuth } from '../Store';
 import { CloseTabs } from '../Control';
-
-const { Option } = Select;
-const formItemLayout = {
-    labelCol: {
-        xs: {
-            span: 24,
-        },
-        sm: {
-            span: 6,
-        },
-    },
-    wrapperCol: {
-        xs: {
-            span: 24,
-        },
-        sm: {
-            span: 14,
-        },
-    },
-};
-
+import config from '~/services';
 const cx = classNames.bind(styles);
 
 function ChangePasswordForm() {
-    const { userAuth, tokenStr, setOpenFormChangePass } = UserAuth();
+    const { tokenStr, setOpenFormChangePass, userAuth } = UserAuth();
     const [form] = Form.useForm();
-    const [isDisabled, setIsDisabled] = useState(true);
     const { setInfoNotify } = UserNotify();
-
-    // Thiết lập giá trị mặc định của form
-    useEffect(() => {
-        form.setFieldsValue({
-            nickName: userAuth.nickName,
-            gender: userAuth.gender === undefined ? undefined : userAuth.gender ? 'male' : 'female',
-            dob: userAuth.dateOfBirth ? moment(userAuth.dateOfBirth, 'DD/MM/YYYY') : null,
-        });
-    }, [form, userAuth]);
-
-    // Kiểm tra xem có sự thay đổi nào không
-    const hasChanges = (values) => {
-        return (
-            values.nickName !== userAuth.nickName ||
-            (values.gender === 'male' ? true : false) !== userAuth.gender || // Chuyển đổi lại thành true/false để so sánh
-            (values.dob && values.dob.format('DD/MM/YYYY') !== userAuth.dateOfBirth)
-        );
-    };
+    const [isDisabled, setIsDisabled] = useState(true);
+    const [isOtpModalVisible, setIsOtpModalVisible] = useState(false);
+    const [otp, setOtp] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [formValues, setFormValues] = useState(null);
 
     // Theo dõi sự thay đổi của form
-    const onFormValuesChange = (changedValues, allValues) => {
-        setIsDisabled(!hasChanges(allValues)); // Kích hoạt hoặc vô hiệu hóa nút "Lưu" dựa trên thay đổi
+    const onFormValuesChange = (_, allValues) => {
+        const { currentPassword, newPassword, confirmPassword } = allValues;
+
+        // Kích hoạt nút "Lưu" nếu tất cả trường hợp lệ
+        setIsDisabled(!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword);
     };
 
-    const handleUpdateUser = async (values) => {
-        if (!hasChanges(values)) {
-            return;
-        }
-
-        const data = await config.updateUser(
-            tokenStr,
-            null,
-            null,
-            values.nickName,
-            values.gender === 'male', // Chuyển đổi lại thành true/false để lưu vào backend
-            values.dob ? values.dob.format('DD/MM/YYYY') : null,
-            userAuth.id,
-        );
-        if (data.errCode) {
+    const handleUpdatePassword = async (values) => {
+        const { newPassword, confirmPassword } = values;
+        setFormValues(values);
+        // Kiểm tra nếu mật khẩu mới và mật khẩu xác nhận không khớp
+        if (newPassword !== confirmPassword) {
             setInfoNotify({
-                content: 'Cập nhật thất bại. Hãy thử lại !!',
+                content: 'Mật khẩu mới không khớp. Hãy thử lại!',
                 delay: 1500,
                 isNotify: true,
                 type: 'error',
             });
-        } else {
-            setInfoNotify({
-                content: 'Cập nhật thành công',
-                delay: 1500,
-                isNotify: true,
-                type: 'success',
-            });
-            localStorage.setItem('user-id', JSON.stringify(data.result));
+            return;
         }
-        setTimeout(() => {
-            window.location.reload();
-        }, [300]);
+        console.log(userAuth);
+        // Gửi OTP qua email
+        const otpResponse = await config.generateOtp(userAuth.email, 'CHANGE-PASSWORD');
+        if (otpResponse.errCode) {
+            message.error('Gửi mã OTP thất bại. Vui lòng thử lại!');
+            setIsLoading(false);
+            return;
+        }
+        setInfoNotify({
+            content: 'Đã gửi mã vào mail của bạn !!',
+            delay: 1300,
+            isNotify: true,
+            type: 'success',
+        });
+        // Hiển thị modal nhập OTP
+        setIsOtpModalVisible(true);
     };
 
     const handleCloseForm = () => {
         setOpenFormChangePass(false);
+    };
+
+    const handleVerifyOtp = async () => {
+        setIsLoading(true);
+        // Gọi API xác minh OTP và xử lý kết quả
+
+        const verifyResponse = await config.verifyAccount(null, otp, 'CHANGE-PASSWORD');
+        if (verifyResponse.errorCode === 1019) {
+            message.error('Mã OTP đã hết hạn!');
+            setIsLoading(false);
+            setIsOtpModalVisible(false);
+            return;
+        }
+        if (verifyResponse.result === false) {
+            message.error('Mã OTP không chính xác!');
+            setIsLoading(false);
+            return;
+        }
+        // Gửi yêu cầu cập nhật mật khẩu
+        const response = await config.changePassword(
+            tokenStr,
+            formValues.currentPassword,
+            formValues.newPassword,
+            formValues.confirmPassword,
+        );
+
+        if (response.errCode) {
+            if (response.errCode === 1005) {
+                setInfoNotify({
+                    content: 'Tài khoản không tồn tại !!',
+                    delay: 1500,
+                    isNotify: true,
+                    type: 'error',
+                });
+            }
+            if (response.errCode === 1017) {
+                setInfoNotify({
+                    content: 'Mật khẩu sai vui lòng nhập lại !!',
+                    delay: 1500,
+                    isNotify: true,
+                    type: 'error',
+                });
+            }
+        } else {
+            setInfoNotify({
+                content: 'Đổi mật khẩu thành công!',
+                delay: 1500,
+                isNotify: true,
+                type: 'success',
+            });
+            setIsLoading(false);
+
+            setOpenFormChangePass(false);
+        }
     };
 
     return (
@@ -106,40 +123,77 @@ function ChangePasswordForm() {
             <section className={cx('modal-update')}>
                 <Wrapper className={cx('main')}>
                     <header className={cx('header-update')}>
-                        <h1 className={cx('header-title')}>Cập nhật thông tin</h1>
+                        <h1 className={cx('header-title')}>Đổi mật khẩu</h1>
                         <div>
                             <CloseTabs onClick={handleCloseForm} />
                         </div>
                     </header>
                     <Form
-                        {...formItemLayout}
                         form={form}
                         style={{
                             maxWidth: 800,
-                            padding: '50px 0',
+                            padding: '50px 50px',
                         }}
-                        onValuesChange={onFormValuesChange} // Gọi hàm khi giá trị form thay đổi
-                        onFinish={handleUpdateUser}
+                        layout="vertical"
+                        onValuesChange={onFormValuesChange}
+                        onFinish={handleUpdatePassword}
                     >
-                        <Form.Item label="NickName" name="nickName">
-                            <Input />
+                        <Form.Item
+                            label="Mật khẩu hiện tại"
+                            name="currentPassword"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng nhập mật khẩu hiện tại!',
+                                },
+                            ]}
+                        >
+                            <Input.Password placeholder="Nhập mật khẩu hiện tại" />
                         </Form.Item>
 
-                        <Form.Item name="gender" label="Giới tính">
-                            <Select placeholder="Chọn giới tính" allowClear>
-                                <Option value="male">Nam</Option>
-                                <Option value="female">Nữ</Option>
-                            </Select>
+                        <Form.Item
+                            label="Mật khẩu mới"
+                            name="newPassword"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng nhập mật khẩu mới!',
+                                },
+                                {
+                                    min: 6,
+                                    message: 'Mật khẩu mới phải có ít nhất 6 ký tự!',
+                                },
+                            ]}
+                        >
+                            <Input.Password placeholder="Nhập mật khẩu mới" />
                         </Form.Item>
 
-                        <Form.Item label="Ngày sinh" name="dob">
-                            <DatePicker format="DD/MM/YYYY" />
+                        <Form.Item
+                            label="Nhập lại mật khẩu mới"
+                            name="confirmPassword"
+                            dependencies={['newPassword']}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng nhập lại mật khẩu mới!',
+                                },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || getFieldValue('newPassword') === value) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('Mật khẩu mới không khớp!'));
+                                    },
+                                }),
+                            ]}
+                        >
+                            <Input.Password placeholder="Nhập lại mật khẩu mới" />
                         </Form.Item>
 
                         <Form.Item
                             wrapperCol={{
-                                offset: 40,
-                                span: 24,
+                                offset: 8,
+                                span: 16,
                             }}
                         >
                             <div className={cx('footer-update')}>
@@ -148,7 +202,7 @@ function ChangePasswordForm() {
                                 </Button>
                                 <Button
                                     htmlType="submit"
-                                    disabled={isDisabled} // Vô hiệu hóa nút "Lưu" nếu không có thay đổi
+                                    disabled={isDisabled}
                                     primary
                                     medium
                                     className={cx('btn-form-update')}
@@ -160,6 +214,21 @@ function ChangePasswordForm() {
                     </Form>
                 </Wrapper>
             </section>
+
+            {/* Modal nhập OTP */}
+            <Modal
+                title="Nhập mã OTP"
+                visible={isOtpModalVisible}
+                onOk={handleVerifyOtp}
+                okText="Xác nhận"
+                cancelText="Hủy"
+                confirmLoading={isLoading}
+                onCancel={() => setIsOtpModalVisible(false)}
+                maskClosable={false} // Ngăn đóng modal khi nhấn ra bên ngoài
+            >
+                <p>Vui lòng nhập mã OTP 6 chữ số đã được gửi đến email của bạn:</p>
+                <Input placeholder="Nhập mã OTP" maxLength={6} value={otp} onChange={(e) => setOtp(e.target.value)} />
+            </Modal>
         </div>
     );
 }

@@ -84,7 +84,22 @@ export const updateUser = async (token, username, password, nickName, gender, da
         return { errCode: err.response.status };
     }
 };
-
+export const changePassword = async (token, currentPassword, newPassword, confirmationPassword) => {
+    try {
+        const res = await callPath.patch(
+            `users/change-password`,
+            {
+                currentPassword,
+                newPassword,
+                confirmationPassword
+            },
+            token,
+        );
+        return res.data.result;
+    } catch (err) {
+        return { errCode: err.response.data.code };
+    }
+};
 export const getTopUser = async () => {
     try {
         const res = await callPath.get('users/get-top-user', null, {});
