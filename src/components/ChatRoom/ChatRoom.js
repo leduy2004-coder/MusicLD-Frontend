@@ -34,7 +34,7 @@ const ChatRoom = () => {
     const isSending = useRef(false);
 
     const connect = useCallback(() => {
-        let Sock = new SockJS(`${process.env.REACT_APP_BACKEND_URL}/ws`);
+        let Sock = new SockJS(`${process.env.REACT_APP_BASE_URL}/ws`);
         stompClient = over(Sock);
         const connectHeaders = {
             Authorization: tokenStr,
