@@ -17,7 +17,14 @@ export const login = async (username, password) => {
 export const register = async (email,username, password, nickName, dateOfBirth,gender, code) => {
     try {
         const res = await callPath.post('users/register', {
-            
+            email,
+            username,
+            password,
+            nickName,
+            dateOfBirth,
+            gender,
+            authType: 'LOCAL', 
+            roles: [{ code: code }], 
         });
         return res.data;
     } catch (err) {

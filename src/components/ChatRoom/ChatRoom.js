@@ -34,14 +34,15 @@ const ChatRoom = () => {
     const isSending = useRef(false);
 
     const connect = useCallback(() => {
-        let Sock = new SockJS('http://localhost:8080/ws');
+        let Sock = new SockJS(`${process.env.REACT_APP_BACKEND_URL}/ws`);
         stompClient = over(Sock);
         const connectHeaders = {
             Authorization: tokenStr,
         };
-
+    
         stompClient.connect(connectHeaders, onConnected, onError);
     }, [tokenStr]);
+    
 
     useEffect(() => {
         if (userAuth?.nickName) {
