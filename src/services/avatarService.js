@@ -55,7 +55,7 @@ export const getAvatar = async (avatar) => {
 export const removeAvatar = async (publicId,token) => {
     try {
         const res = await callPath.post(
-            `avatar/delete`,
+            `avatar/update-status`,
             null,
             token,
             {

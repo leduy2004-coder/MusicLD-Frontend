@@ -61,7 +61,6 @@ function LoginWithDefault() {
                 setIsLoading(false);
             }, [300]);
         } else {
-
             setInfoNotify({
                 content: 'Đăng nhập thành công',
                 delay: 1500,
@@ -93,6 +92,16 @@ function LoginWithDefault() {
             setDisabledSubmited(false);
         }
     }, [valueAccount, valuePassword]);
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Ngăn chặn hành động mặc định
+
+            // Kiểm tra xem cả hai input đã có dữ liệu chưa
+            if (valueAccount.trim() && valuePassword.trim()) {
+                handleLogin(e); // Gọi hàm đăng nhập nếu hợp lệ
+            }
+        }
+    };
 
     return (
         <form action="" method="POST" className={cx('login-inner')}>
@@ -107,6 +116,7 @@ function LoginWithDefault() {
                             value={valueAccount}
                             onChange={handleChangeValueAccount}
                             type="text"
+                            onKeyDown={handleKeyDown}
                             placeholder="Số điện thoại / Email"
                         />
                     </div>
@@ -118,6 +128,7 @@ function LoginWithDefault() {
                             onChange={handleChangeValuePassword}
                             type={showPass ? 'text' : 'password'}
                             placeholder="Mật khẩu"
+                            onKeyDown={handleKeyDown}
                             autoComplete="on"
                         />
                         <div className={cx('control-pass')} onClick={handleShowPass}>

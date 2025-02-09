@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Card, Col, Popconfirm, message } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAdd, faEdit, faRemove,faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faEdit, faRemove, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 import { UserMusic, UserNotify } from '../../Store';
 import config from '~/services';
@@ -25,12 +25,8 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false, detail
 
     const handleDelete = async () => {
         if (userAuth && tokenStr) {
-            
             try {
-                const result = await config.updateStatusMusic(
-                    data.id,
-                    tokenStr,
-                );
+                const result = await config.updateStatusMusic(data.id, tokenStr);
 
                 if (result.errCode) {
                     setInfoNotify({
@@ -77,7 +73,7 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false, detail
                     </div>
 
                     <h3 className={cx('meta-title')}>{data.title}</h3>
-                    <FontAwesomeIcon icon={faPlay} className={cx('icon-play')}/>
+                    <FontAwesomeIcon icon={faPlay} className={cx('icon-play')} />
                 </div>
             </Card>
         </Col>
@@ -99,7 +95,10 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false, detail
                                 medium
                                 primary
                                 className={cx('button-edit')}
-                                onClick={() => handleAddMusic(data)}
+                                onClick={(e) => {
+                                    e.stopPropagation(); // Ngăn chặn sự kiện click của Card
+                                    handleAddMusic(data);
+                                }}
                             >
                                 Thêm vào list nhạc
                             </Btn>
@@ -110,7 +109,10 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false, detail
                                     medium
                                     primary
                                     className={cx('button-edit')}
-                                    onClick={() => setIsEditVisible(true)}
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // Ngăn chặn sự kiện click của Card
+                                        setIsEditVisible(true);
+                                    }}
                                 >
                                     Chỉnh sửa
                                 </Btn>
@@ -118,7 +120,10 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false, detail
                                 {/* Wrap "Delete" button in Popconfirm */}
                                 <Popconfirm
                                     title="Bạn có chắc chắn muốn xóa bài hát này không?"
-                                    onConfirm={handleDelete}
+                                    onConfirm={(e) => {
+                                        e.stopPropagation(); // Ngăn chặn sự kiện click của Card
+                                        handleDelete();
+                                    }}
                                     okText="Có"
                                     cancelText="Không"
                                 >
@@ -127,6 +132,7 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false, detail
                                         outline
                                         medium
                                         className={cx('button-delete')}
+                                        onClick={(e) => e.stopPropagation()}
                                     >
                                         Xóa
                                     </Btn>

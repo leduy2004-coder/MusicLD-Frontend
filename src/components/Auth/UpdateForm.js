@@ -74,6 +74,7 @@ function UpdateForm() {
             values.nickName,
             values.gender === 'male', // Chuyển đổi lại thành true/false để lưu vào backend
             values.dob ? values.dob.format('DD/MM/YYYY') : null,
+            true,
             userAuth.id,
         );
         if (data.errCode) {

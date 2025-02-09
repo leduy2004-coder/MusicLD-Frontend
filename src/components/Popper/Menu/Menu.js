@@ -57,7 +57,6 @@ function Menu({
 
     const handleRemove = async (publicId, tokenStr) => {
         const data = await config.removeAvatar(publicId, tokenStr);
-
         if (data.errCode) {
             setInfoNotify({
                 content: 'Xóa thất bại. Hãy thử lại !!',
@@ -74,6 +73,7 @@ function Menu({
             });
             localStorage.removeItem('avatar');
         }
+
         setTimeout(() => {
             window.location.reload();
         }, [300]);
