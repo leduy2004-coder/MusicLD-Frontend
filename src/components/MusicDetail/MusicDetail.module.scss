@@ -187,9 +187,6 @@
 
 }
 
-:global {
-    :where(.css-dev-only-do-not-override-98ntnt).ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-        color: var(--primary);
-
-    }
+:global(:where(.css-dev-only-do-not-override-98ntnt).ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn) {
+    color: var(--primary);
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Col, Popconfirm, message } from 'antd';
+import { Form, Card, Col, Modal, message } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd, faEdit, faRemove, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
@@ -17,6 +17,7 @@ import EditFormMusic from './EditFormMusic';
 const cx = classNames.bind(styles);
 
 function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false, detailMusic = false }) {
+    const [form] = Form.useForm();
     const { tokenStr, userAuth, setOpenFormLogin } = UserAuth();
     const { setInfoNotify } = UserNotify();
     const [isEditVisible, setIsEditVisible] = useState(false);
@@ -63,6 +64,17 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false, detail
     const handleDetailMusic = () => {
         navigate(`/music/${data.id}`);
     };
+
+    const confirmDelete = (e) => {
+        e.stopPropagation(); // Ngăn chặn sự kiện click của Card
+        Modal.confirm({
+            title: 'Bạn có chắc chắn muốn xóa bài hát này không?',
+            onOk: handleDelete,
+            okText: 'Có',
+            cancelText: 'Không',
+        });
+    };
+
     return detailMusic ? (
         <Col span={18}>
             <Card hoverable onClick={handleDetailMusic}>
@@ -118,37 +130,29 @@ function ViewMusic({ data = {}, number = 0, setMusics, playMusic = false, detail
                                 </Btn>
 
                                 {/* Wrap "Delete" button in Popconfirm */}
-                                <Popconfirm
-                                    title="Bạn có chắc chắn muốn xóa bài hát này không?"
-                                    onConfirm={(e) => {
-                                        e.stopPropagation(); // Ngăn chặn sự kiện click của Card
-                                        handleDelete();
-                                    }}
-                                    okText="Có"
-                                    cancelText="Không"
+                                <Btn
+                                    leftIcon={<FontAwesomeIcon icon={faRemove} />}
+                                    outline
+                                    medium
+                                    className={cx('button-delete')}
+                                    onClick={confirmDelete}
                                 >
-                                    <Btn
-                                        leftIcon={<FontAwesomeIcon icon={faRemove} />}
-                                        outline
-                                        medium
-                                        className={cx('button-delete')}
-                                        onClick={(e) => e.stopPropagation()}
-                                    >
-                                        Xóa
-                                    </Btn>
-                                </Popconfirm>
+                                    Xóa
+                                </Btn>
                             </>
                         )}
                     </div>
                 </div>
             </Card>
-            <EditFormMusic
-                visible={isEditVisible}
-                onCancel={() => setIsEditVisible(false)}
-                musicData={data}
-                tokenStr={tokenStr}
-                setMusics={setMusics}
-            />
+            {isEditVisible && (
+                <EditFormMusic
+                    visible
+                    onCancel={() => setIsEditVisible(false)}
+                    musicData={data}
+                    tokenStr={tokenStr}
+                    setMusics={setMusics}
+                />
+            )}
         </Col>
     );
 }

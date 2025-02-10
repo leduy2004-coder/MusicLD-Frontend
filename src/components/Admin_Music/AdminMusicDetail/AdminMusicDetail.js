@@ -21,6 +21,7 @@ const AdminMusicDetail = () => {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const quillRef = React.useRef(null);
 
     useEffect(() => {
         if (tokenStr) {
@@ -48,7 +49,7 @@ const AdminMusicDetail = () => {
         navigate('/admin/music');
     };
     const handleUserClick = (userId) => {
-        window.open(`/admin/user/detail/${userId}`, '_blank')
+        window.open(`/admin/user/detail/${userId}`, '_blank');
     };
 
     return (
@@ -98,6 +99,7 @@ const AdminMusicDetail = () => {
                                 <div className={cx('lyrics-container')}>
                                     <Title level={4}>Lời bài hát</Title>
                                     <ReactQuill
+                                        ref={quillRef}
                                         value={musicDetail?.lyrics || 'Không có lời bài hát.'}
                                         readOnly
                                         theme="bubble"

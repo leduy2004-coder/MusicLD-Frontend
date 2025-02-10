@@ -8,21 +8,22 @@ import GlobalStyles from '~/components/GlobalStyles';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    // <React.StrictMode>
-    <NotifyProvider>
-        <ChatProvider>
-            <AuthProvider>
-                <FormProvider>
-                    <MusicProvider>
-                        <GlobalStyles>
-                            <App />
-                        </GlobalStyles>
-                    </MusicProvider>
-                </FormProvider>
-            </AuthProvider>
-        </ChatProvider>
-    </NotifyProvider>,
-    // </React.StrictMode>,
+    <React.StrictMode>
+        <NotifyProvider>
+            <ChatProvider>
+                <AuthProvider>
+                    <FormProvider>
+                        <MusicProvider>
+                            <GlobalStyles>
+                                <App />
+                            </GlobalStyles>
+                        </MusicProvider>
+                    </FormProvider>
+                </AuthProvider>
+            </ChatProvider>
+        </NotifyProvider>
+        ,
+    </React.StrictMode>,
 );
 
 // If you want to start measuring performance in your app, pass a function
