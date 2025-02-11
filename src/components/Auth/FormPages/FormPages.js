@@ -13,12 +13,12 @@ const data = [
     {
         icon: <FacebookIcon />,
         title: 'Tiếp tục với Facebook',
-        to: 'http://localhost:8080/oauth2/authorization/facebook',
+        to: `${process.env.REACT_APP_BASE_URL}/oauth2/authorization/facebook`,
     },
     {
         icon: <GoogleIcon />,
         title: 'Tiếp tục với Google',
-        to: 'http://localhost:8080/oauth2/authorization/google',
+        to: `${process.env.REACT_APP_BASE_URL}/oauth2/authorization/google`,
     },
 ];
 
