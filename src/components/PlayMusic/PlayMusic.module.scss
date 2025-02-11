@@ -191,18 +191,18 @@
 }
 
 :global {
-    :where(.css-dev-only-do-not-override-98ntnt).ant-slider .ant-slider-track {
+    .ant-slider .ant-slider-track {
         background-color: var(--primary);
     }
-    :where(.css-dev-only-do-not-override-98ntnt).ant-slider:hover .ant-slider-track {
+    .ant-slider:hover .ant-slider-track {
         background-color: #ff9669;
     }
-    :where(.css-dev-only-do-not-override-98ntnt).ant-slider .ant-slider-handle:hover::after,
-    :where(.css-dev-only-do-not-override-98ntnt).ant-slider .ant-slider-handle:active::after,
-    :where(.css-dev-only-do-not-override-98ntnt).ant-slider .ant-slider-handle:focus::after {
+    .ant-slider .ant-slider-handle:hover::after,
+    .ant-slider .ant-slider-handle:active::after,
+    .ant-slider .ant-slider-handle:focus::after {
         box-shadow: 0 0 0 2.5px #ff1616;
     }
-    :where(.css-dev-only-do-not-override-98ntnt).ant-slider .ant-slider-handle::after {
+    .ant-slider .ant-slider-handle::after {
         box-shadow: 0 0 0 2.5px #ff1616;
     }
 }

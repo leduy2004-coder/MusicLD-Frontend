@@ -1,11 +1,11 @@
 :global {
-    :where(.css-dev-only-do-not-override-98ntnt).ant-btn-primary {
+    .ant-btn-primary {
         background: var(--primary);
     }
-    :where(.css-dev-only-do-not-override-98ntnt).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+    .ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
         background: #ea8484;
     }
-    :where(.css-dev-only-do-not-override-98ntnt).ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
+    .ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
         color: var(--primary);
         border-color: var(--primary);
     }
@@ -66,21 +66,21 @@
     justify-content: center;
     margin-top: 1rem;
     :global {
-        :where(.css-dev-only-do-not-override-98ntnt).ant-col-18 {
+        .ant-col-18 {
             flex: none;
             max-width: 100%;
         }
-        :where(.css-dev-only-do-not-override-98ntnt).ant-card-bordered {
+        .ant-card-bordered {
             border: none;
         }
-        :where(.css-dev-only-do-not-override-98ntnt).ant-row {
+        .ant-row {
             display: flex;
             justify-content: center;
             row-gap: 10px !important;
             flex-flow: row wrap;
             min-width: 0;
         }
-        :where(.css-dev-only-do-not-override-98ntnt).ant-card .ant-card-body {
+        .ant-card .ant-card-body {
             border-radius: 0 0 8px 8px;
             min-width: 22rem;
         }
@@ -153,7 +153,7 @@
         min-height: 10rem !important;
         top: 2rem;
     }
-    :where(.css-dev-only-do-not-override-98ntnt).ant-form-item .ant-form-item-control-input-content {
+    .ant-form-item .ant-form-item-control-input-content {
         text-align: end;
         padding: 0 1rem;
     }

@@ -2,14 +2,14 @@
     .ant-form-item-required {
         font-size: 2rem !important;
     }
-    :where(.css-dev-only-do-not-override-98ntnt).ant-form-item .ant-form-item-control-input-content {
+    .ant-form-item .ant-form-item-control-input-content {
         text-align: start;
     }
-    :where(.css-dev-only-do-not-override-98ntnt).ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
+    .ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
         border-color: var(--primary);
         background-color: var(--primary);
     }
-    :where(.css-dev-only-do-not-override-98ntnt).ant-upload-wrapper
+    .ant-upload-wrapper
         .ant-upload-list
         .ant-upload-list-item
         .ant-upload-list-item-name {
