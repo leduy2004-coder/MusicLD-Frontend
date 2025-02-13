@@ -34,23 +34,26 @@ const ChatRoom = () => {
     const isSending = useRef(false);
 
     const connect = useCallback(() => {
+        console.log('connect');
         let Sock = new SockJS(`${process.env.REACT_APP_BASE_URL}/ws`);
         stompClient = over(Sock);
         const connectHeaders = {
             Authorization: tokenStr,
         };
-    
+
         stompClient.connect(connectHeaders, onConnected, onError);
     }, [tokenStr]);
-    
+
+    const isConnected = useRef(false);
 
     useEffect(() => {
-        if (userAuth?.nickName) {
+        if (userAuth?.nickName && !isConnected.current) {
             setUserData((prevState) => ({
                 ...prevState,
                 username: userAuth.nickName,
             }));
             connect();
+            isConnected.current = true;
         }
     }, [userAuth, connect]);
 
@@ -123,6 +126,8 @@ const ChatRoom = () => {
     };
 
     const sendValue = () => {
+        console.log('send');
+
         if (stompClient && userData.message && !isSending.current) {
             isSending.current = true;
             const chatMessage = {

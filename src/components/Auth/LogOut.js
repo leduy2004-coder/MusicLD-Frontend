@@ -42,7 +42,12 @@ function LogOut() {
             });
 
             setTimeout(() => {
-                localStorage.clear();
+                Object.keys(localStorage).forEach((key) => {
+                    if (key !== 'publicChats' && key !== 'userData' && key !== 'theme') {
+                        localStorage.removeItem(key);
+                    }
+                });
+
                 if (window.location.pathname.includes('/login')) {
                     navigate(`/`);
                 }
